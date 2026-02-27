@@ -95,8 +95,8 @@ function App() {
 
   const renderWelcome = () => (
     <div className="welcome-screen">
-      <h1>🔬 CADFD Learning Tool</h1>
-      <h2>Computer-Assisted Drug Formulation Design for NLCs</h2>
+      <h1>🧬 LipidLogic</h1>
+      <h2>Rational NLC Design Through Computational Prediction</h2>
       
       <div className="welcome-content">
         <p className="subtitle">
@@ -130,7 +130,7 @@ function App() {
         <div className="about-section">
           <h3>About This Tool</h3>
           <p>
-            This tool implements the Computer-Assisted Drug Formulation Design (CADFD) 
+            LipidLogic implements the Computer-Assisted Drug Formulation Design (CADFD) 
             framework for predicting optimal NLC formulations based on three competing 
             hypotheses:
           </p>
@@ -154,7 +154,7 @@ function App() {
         <button onClick={() => setMode('welcome')} className="back-button">
           ← Back to Home
         </button>
-        <h2>Sandbox Mode - Explore Formulation Predictions</h2>
+        <h2>LipidLogic - Explore Formulation Predictions</h2>
       </div>
       
       <div className="sandbox-container">
@@ -331,7 +331,7 @@ function App() {
         <button onClick={() => setMode('welcome')} className="back-button">
           ← Back to Home
         </button>
-        <h2>Tutorial Mode - Coming Soon!</h2>
+        <h2>LipidLogic Tutorial - Coming Soon!</h2>
       </div>
       <div className="coming-soon">
         <p>Interactive tutorials are under development.</p>

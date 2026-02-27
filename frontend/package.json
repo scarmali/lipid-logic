@@ -1,7 +1,7 @@
 {
-  "name": "cadfd-learning-tool",
+  "name": "lipidlogic",
   "version": "1.0.0",
-  "description": "Computer-Assisted Drug Formulation Design for NLCs",
+  "description": "LipidLogic - Rational NLC Design Through Computational Prediction",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",

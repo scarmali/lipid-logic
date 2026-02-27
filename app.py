@@ -1,6 +1,6 @@
 """
-CADFD Learning Tool - Flask Backend
-Computer-Assisted Drug Formulation Design for NLCs
+LipidLogic - Flask Backend
+Rational NLC Design Through Computational Prediction
 """
 
 from flask import Flask, request, jsonify
@@ -445,7 +445,7 @@ if __name__ == '__main__':
     import os
     
     print("=" * 70)
-    print("CADFD Learning Tool - Backend Server")
+    print("LipidLogic - Backend Server")
     print("=" * 70)
     print("\nStarting Flask server...")
     print("API endpoints:")
