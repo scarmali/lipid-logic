@@ -73,16 +73,10 @@ function App() {
     setLoading(false);
   };
 
+  /* ---------- UI COMPONENTS ---------- */
+
   const Card = ({ children, highlight }) => (
-    <div
-      style={{
-        background: "#FFFFFF",
-        padding: "20px",
-        borderRadius: "16px",
-        boxShadow: "0 6px 20px rgba(0,0,0,0.05)",
-        borderLeft: highlight ? "6px solid #2FA4A9" : "none",
-      }}
-    >
+    <div className={`card ${highlight ? "card-highlight" : ""}`}>
       {children}
     </div>
   );
@@ -170,15 +164,21 @@ function App() {
     );
   };
 
+  /* ---------- SCREENS ---------- */
+
   if (mode === "welcome") {
     return (
-      <div className="container">
-        <h1>🧬 LipidLogic</h1>
-        <p className="subtitle">
-          Rational NLC Design Through Computational Prediction
-        </p>
+      <div className="app-container">
+        <div className="main-header">
+          <div className="hero-content">
+            <h1 className="hero-title">🧬 LipidLogic</h1>
+            <p className="hero-subtitle">
+              Rational NLC Design Through Computational Prediction
+            </p>
+          </div>
+        </div>
 
-        <Card>
+        <div className="card">
           <p>
             Explore how drugs distribute within lipid nanoparticles using
             computational prediction.
@@ -186,35 +186,45 @@ function App() {
           <button className="button" onClick={() => setMode("sandbox")}>
             Enter Sandbox Mode
           </button>
-        </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="app-container">
+    <div>
+      {/* HERO HEADER */}
+      <div className="main-header">
+        <div className="hero-content">
 
-      <div className="header">
-        <button className="button" onClick={() => setMode("welcome")}>
-          ← Back
-        </button>
+          <button className="button" onClick={() => setMode("welcome")}>
+            ← Back
+          </button>
 
-        <h1>Lipid Logic – Drug Distribution Explorer</h1>
-        <p className="subtitle">
-          Where does your drug want to live?
-        </p>
+          <h1 className="hero-title">
+            Lipid Logic – Drug Distribution Explorer
+          </h1>
+
+          <p className="hero-subtitle">
+            Where does your drug want to live?
+          </p>
+
+        </div>
       </div>
 
-      <div className="main-grid">
+      {/* MAIN APP */}
+      <div className="app-container">
+        <div className="main-grid">
 
-        <div className="left-panel">
-          {renderInputs()}
+          <div className="left-panel">
+            {renderInputs()}
+          </div>
+
+          <div className="right-panel">
+            {results && renderOutputs()}
+          </div>
+
         </div>
-
-        <div className="right-panel">
-          {results && renderOutputs()}
-        </div>
-
       </div>
     </div>
   );

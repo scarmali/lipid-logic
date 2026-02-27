@@ -1,23 +1,24 @@
+/* BASE */
 body {
   margin: 0;
-  font-family: Inter, sans-serif;
-  background: red !important;
+  font-family: 'Inter', sans-serif;
+  background: #f8fafb;
+  color: #0f2537;
 }
 
-/* HERO */
-.hero {
-  background: linear-gradient(135deg, #2F5FA9, #3B82F6);
-  border-radius: 16px;
-  padding: 40px 30px;
+/* HEADER (THIS is the magic) */
+.main-header {
+  background: linear-gradient(135deg, #1e3a5f, #2d5aa0, #4a90b8);
   color: white;
-  margin-bottom: 24px;
+  padding: 60px 20px 50px;
+  margin-bottom: 40px;
   position: relative;
   overflow: hidden;
 }
 
-/* subtle grid overlay */
-.hero::after {
-  content: "";
+/* grid overlay */
+.main-header::before {
+  content: '';
   position: absolute;
   inset: 0;
   background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
@@ -25,60 +26,52 @@ body {
   background-size: 40px 40px;
 }
 
-.hero-inner {
+.hero-content {
   position: relative;
-  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
 }
 
-.hero h1 {
-  font-size: 32px;
-  margin-bottom: 8px;
+.hero-title {
+  font-size: 36px;
+  margin-bottom: 16px;
+  font-weight: 600;
 }
 
-.hero p {
-  font-size: 18px;
+.hero-subtitle {
   opacity: 0.9;
 }
 
-.hero span {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-/* HEADER */
-.header {
-  margin-bottom: 20px;
-}
-
-.subtitle {
-  color: #64748B;
-}
-
-/* LAYOUT */
+/* MAIN LAYOUT */
 .app-container {
-  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .main-grid {
   display: grid;
-  grid-template-columns: 380px 1fr;
-  gap: 24px;
+  grid-template-columns: 360px 1fr;
+  gap: 30px;
+  align-items: start;
 }
 
-.left-panel,
-.right-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* CARDS */
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
 
 /* BUTTON */
 .button {
-  background: #2FA4A9;
+  background: linear-gradient(135deg, #2d5aa0, #4a90b8);
   color: white;
-  border: none;
-  padding: 10px;
+  padding: 12px;
   border-radius: 10px;
+  border: none;
   cursor: pointer;
 }
 
@@ -90,22 +83,24 @@ body {
 }
 
 .formulation-tile {
-  padding: 14px;
+  padding: 16px;
   border-radius: 12px;
-  border: 1px solid #E5E7EB;
-  cursor: pointer;
+  border: 1px solid #e1ecf4;
   text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .formulation-tile:hover {
-  border-color: #2FA4A9;
+  transform: translateY(-2px);
+  border-color: #4a90b8;
 }
 
 /* GAUGE */
 .gauge {
   height: 10px;
   border-radius: 10px;
-  background: linear-gradient(to right, #3B82F6, #A855F7, #F97316);
+  background: linear-gradient(to right, #3b82f6, #a855f7, #f97316);
   position: relative;
 }
 
@@ -115,6 +110,6 @@ body {
   width: 18px;
   height: 18px;
   background: white;
-  border: 3px solid #1F2937;
+  border: 3px solid #1f2937;
   border-radius: 50%;
 }
