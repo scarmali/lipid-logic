@@ -1,5 +1,45 @@
 /* CADFD Learning Tool - Styles */
 
+body {
+  background: #F7F9FB;
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.subtitle {
+  color: #64748B;
+  margin-bottom: 20px;
+}
+
+.button {
+  background: #2FA4A9;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #E5E7EB;
+  margin-bottom: 12px;
+}
+
 :root {
   --primary-color: #2563eb;
   --primary-dark: #1e40af;
