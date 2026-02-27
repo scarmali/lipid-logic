@@ -64,19 +64,32 @@ def predict():
     logp = float(data.get('drug_logp', 0))
     hsp = data.get('drug_hsp', {'delta_d': 0, 'delta_p': 0, 'delta_h': 0})
     
-    # 1. Weights based on spatial heterogeneity (Source 167-169)
+    # 1. Weights based on spatial heterogeneity & Lipophilicity
     if logp > 5.0:
         # High lipophilicity: prioritize core polarity and Type I structures
         weights = {'h1': 0.1, 'h2': 0.3, 'h3': 0.6}
         category, strategy = "Highly Lipophilic", "Core-loading priority"
+        confidence = 5 # In your validated range
+        
     elif 3.0 <= logp <= 5.0:
         # Moderate lipophilicity: prioritize interfacial accommodation
         weights = {'h1': 0.2, 'h2': 0.1, 'h3': 0.7}
         category, strategy = "Moderately Lipophilic", "Interfacial-loading priority"
-    else:
+        confidence = 5 # In your validated range
+        
+    elif 2.0 <= logp < 3.0:
         # Low lipophilicity: relies on bulk thermodynamic gradient
         weights = {'h1': 0.6, 'h2': 0.2, 'h3': 0.2}
         category, strategy = "Low Lipophilicity", "Thermodynamic gradient focus"
+        confidence = 3 # Outside main validation but still "lipid-loving"
+        
+    else: # This handles logp < 2.0
+        # Hydrophilic drugs: The gradient is irrelevant/negative
+        # We focus entirely on the surfactant shell as a "trap" (Hypothesis 3)
+        weights = {'h1': 0.05, 'h2': 0.05, 'h3': 0.9}
+        category = "Hydrophilic / Low Lipophilicity"
+        strategy = "Surface Retention Focus (High risk of leaching)"
+        confidence = 1  # 1-star
 
     # 2. Confidence Rating (Source 177)
     confidence = 5 if 4.0 <= logp <= 5.5 else 3 if 3.0 <= logp <= 6.0 else 1
