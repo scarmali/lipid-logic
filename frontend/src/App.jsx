@@ -15,22 +15,18 @@ function App() {
 
   const validationDrugs = {
     pyrene: {
-      name: "Pyrene",
       logp: 5.19,
       hsp: { delta_d: 20.4, delta_p: 5.0, delta_h: 3.5 },
     },
     nile_red: {
-      name: "Nile Red",
       logp: 4.0,
       hsp: { delta_d: 19.8, delta_p: 6.5, delta_h: 5.2 },
     },
     curcumin: {
-      name: "Curcumin",
       logp: 3.29,
       hsp: { delta_d: 21.2, delta_p: 7.4, delta_h: 9.1 },
     },
     ibuprofen: {
-      name: "Ibuprofen",
       logp: 3.97,
       hsp: { delta_d: 18.0, delta_p: 5.5, delta_h: 8.5 },
     },
@@ -77,30 +73,102 @@ function App() {
     setLoading(false);
   };
 
-  const StarRating = ({ stars }) => (
-    <div style={{ fontSize: "18px", color: "#2FA4A9" }}>
-      {[1, 2, 3, 4, 5].map((i) => (
-        <span key={i} style={{ opacity: i <= stars ? 1 : 0.2 }}>
-          ★
-        </span>
-      ))}
-    </div>
-  );
-
   const Card = ({ children, highlight }) => (
     <div
       style={{
         background: "#FFFFFF",
-        padding: "24px",
+        padding: "20px",
         borderRadius: "16px",
-        marginBottom: "20px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+        boxShadow: "0 6px 20px rgba(0,0,0,0.05)",
         borderLeft: highlight ? "6px solid #2FA4A9" : "none",
       }}
     >
       {children}
     </div>
   );
+
+  const renderInputs = () => (
+    <>
+      <Card>
+        <h3>Drug</h3>
+
+        <select
+          value={selectedDrug}
+          onChange={(e) => handleDrugSelect(e.target.value)}
+        >
+          <option value="">Select drug</option>
+          <option value="pyrene">Pyrene</option>
+          <option value="nile_red">Nile Red</option>
+          <option value="curcumin">Curcumin</option>
+          <option value="ibuprofen">Ibuprofen</option>
+        </select>
+
+        <p style={{ marginTop: "10px" }}>
+          logP: <strong>{drugProps.logp || "—"}</strong>
+        </p>
+      </Card>
+
+      <Card>
+        <h3>Formulation</h3>
+
+        <div className="formulation-grid">
+          {["F1", "F2", "F3", "F4"].map((f) => (
+            <div key={f} className="formulation-tile">
+              {f}
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <button
+        className="button"
+        onClick={handlePredict}
+        disabled={
+          !drugProps.logp ||
+          !drugProps.delta_d ||
+          !drugProps.delta_p ||
+          !drugProps.delta_h ||
+          loading
+        }
+      >
+        {loading ? "Calculating..." : "🔮 Predict"}
+      </button>
+    </>
+  );
+
+  const renderOutputs = () => {
+    const score = results?.recommendation?.confidence_score || 0.5;
+
+    return (
+      <>
+        <Card highlight>
+          <h3>Predicted Localisation</h3>
+
+          <div className="gauge">
+            <div
+              className="gauge-dot"
+              style={{ left: `${score * 100}%` }}
+            />
+          </div>
+
+          <p style={{ marginTop: "10px" }}>
+            {score > 0.6
+              ? "Core-favoured"
+              : score < 0.4
+              ? "Interface-favoured"
+              : "Mixed localisation"}
+          </p>
+        </Card>
+
+        <Card>
+          <p>
+            This reflects how the drug partitions between lipid core and
+            interfacial regions based on its properties.
+          </p>
+        </Card>
+      </>
+    );
+  };
 
   if (mode === "welcome") {
     return (
@@ -112,9 +180,8 @@ function App() {
 
         <Card>
           <p>
-            Learn to design optimal nanostructured lipid carrier (NLC)
-            formulations using computational predictions validated by
-            experimental data.
+            Explore how drugs distribute within lipid nanoparticles using
+            computational prediction.
           </p>
           <button className="button" onClick={() => setMode("sandbox")}>
             Enter Sandbox Mode
@@ -125,121 +192,30 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <button className="button" onClick={() => setMode("welcome")}>
-        ← Back
-      </button>
+    <div className="app-container">
 
-      <h1>LipidLogic Sandbox</h1>
-      <p className="subtitle">
-        Explore computational predictions for NLC formulation design.
-      </p>
-
-      <Card>
-        <h2>1. Drug Properties</h2>
-
-        <label>Select a drug</label>
-        <select
-          value={selectedDrug}
-          onChange={(e) => handleDrugSelect(e.target.value)}
-        >
-          <option value="">-- Select drug --</option>
-          <option value="pyrene">Pyrene</option>
-          <option value="nile_red">Nile Red</option>
-          <option value="curcumin">Curcumin</option>
-          <option value="ibuprofen">Ibuprofen</option>
-        </select>
-
-        <label>log P</label>
-        <input
-          type="number"
-          value={drugProps.logp}
-          onChange={(e) =>
-            setDrugProps({ ...drugProps, logp: e.target.value })
-          }
-        />
-
-        <label>δD</label>
-        <input
-          type="number"
-          value={drugProps.delta_d}
-          onChange={(e) =>
-            setDrugProps({ ...drugProps, delta_d: e.target.value })
-          }
-        />
-
-        <label>δP</label>
-        <input
-          type="number"
-          value={drugProps.delta_p}
-          onChange={(e) =>
-            setDrugProps({ ...drugProps, delta_p: e.target.value })
-          }
-        />
-
-        <label>δH</label>
-        <input
-          type="number"
-          value={drugProps.delta_h}
-          onChange={(e) =>
-            setDrugProps({ ...drugProps, delta_h: e.target.value })
-          }
-        />
-
-        <button
-          className="button"
-          onClick={handlePredict}
-          disabled={
-            !drugProps.logp ||
-            !drugProps.delta_d ||
-            !drugProps.delta_p ||
-            !drugProps.delta_h ||
-            loading
-          }
-          style={{ marginTop: "15px", width: "100%" }}
-        >
-          {loading ? "Calculating..." : "🔮 Predict Formulation"}
+      <div className="header">
+        <button className="button" onClick={() => setMode("welcome")}>
+          ← Back
         </button>
-      </Card>
 
-      {results && (
-        <>
-          <Card highlight>
-            <h2>🎯 Recommended Formulation</h2>
-            <h3>{results.recommendation.formulation_name}</h3>
-            <StarRating stars={results.recommendation.stars} />
-            <p>
-              Confidence:{" "}
-              {results.recommendation.confidence_score.toFixed(2)}
-            </p>
-            <p>
-              <strong>{results.recommendation.guidance}</strong>
-              <br />
-              {results.recommendation.strategy}
-            </p>
-          </Card>
+        <h1>Lipid Logic – Drug Distribution Explorer</h1>
+        <p className="subtitle">
+          Where does your drug want to live?
+        </p>
+      </div>
 
-          <Card>
-            <h2>📊 Ranking</h2>
-            {results.recommendation.ranking.map((item, index) => (
-              <div
-                key={item.formulation_id}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: "8px 0",
-                  borderBottom: "1px solid #eee",
-                }}
-              >
-                <span>
-                  #{index + 1} {item.formulation_name}
-                </span>
-                <span>{item.weighted_score.toFixed(2)}</span>
-              </div>
-            ))}
-          </Card>
-        </>
-      )}
+      <div className="main-grid">
+
+        <div className="left-panel">
+          {renderInputs()}
+        </div>
+
+        <div className="right-panel">
+          {results && renderOutputs()}
+        </div>
+
+      </div>
     </div>
   );
 }
