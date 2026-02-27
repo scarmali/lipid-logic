@@ -36,3 +36,5 @@ const FormulationCard = ({ formulation, drugLogP }) => {
     </div>
   );
 };
+
+export default FormulationCard;
