@@ -278,7 +278,7 @@ function App() {
                     <div className="hypothesis-card">
                       <h6>H1: Lipophilic Gradient</h6>
                       <p className="score-display">
-                        Δlog P: <strong>{formData.h1.gradient:+.2f}</strong>
+                        Δlog P: <strong>{formData.h1.gradient > 0 ? '+' : ''}{formData.h1.gradient.toFixed(2)}</strong>
                       </p>
                       <StarRating stars={formData.h1.score} />
                       <p className="interpretation">{formData.h1.interpretation}</p>
