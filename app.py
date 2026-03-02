@@ -62,53 +62,54 @@ def get_hansen_dist(h1, h2):
 def predict():
     data = request.json
     logp = float(data.get('drug_logp', 0))
-    hsp = data.get('drug_hsp', {'delta_d': 0, 'delta_p': 0, 'delta_h': 0})
-    
-    # 1. Weights based on spatial heterogeneity & Lipophilicity
+    hsp_raw = data.get('drug_hsp')
+
+    # Detect Log P-only mode: HSP not provided, or all values are absent/zero
+    logp_only = (
+        hsp_raw is None or
+        not isinstance(hsp_raw, dict) or
+        all(hsp_raw.get(k) in (None, 0, '') for k in ('delta_d', 'delta_p', 'delta_h'))
+    )
+    hsp = hsp_raw if not logp_only else None
+
+    # 1. Lipophilicity category, weights, and confidence
     if logp > 5.0:
-        # High lipophilicity: prioritize core polarity and Type I structures
         weights = {'h1': 0.1, 'h2': 0.3, 'h3': 0.6}
         category, strategy = "Highly Lipophilic", "Core-loading priority"
-        confidence = 5 # In your validated range
-        
     elif 3.0 <= logp <= 5.0:
-        # Moderate lipophilicity: prioritize interfacial accommodation
         weights = {'h1': 0.2, 'h2': 0.1, 'h3': 0.7}
         category, strategy = "Moderately Lipophilic", "Interfacial-loading priority"
-        confidence = 5 # In your validated range
-        
     elif 2.0 <= logp < 3.0:
-        # Low lipophilicity: relies on bulk thermodynamic gradient
         weights = {'h1': 0.6, 'h2': 0.2, 'h3': 0.2}
         category, strategy = "Low Lipophilicity", "Thermodynamic gradient focus"
-        confidence = 3 # Outside main validation but still "lipid-loving"
-        
-    else: # This handles logp < 2.0
-        # Hydrophilic drugs: The gradient is irrelevant/negative
-        # We focus entirely on the surfactant shell as a "trap" (Hypothesis 3)
+    else:
         weights = {'h1': 0.05, 'h2': 0.05, 'h3': 0.9}
         category = "Hydrophilic / Low Lipophilicity"
         strategy = "Surface Retention Focus (High risk of leaching)"
-        confidence = 1  # 1-star
 
-    # 2. Confidence Rating (Source 177)
+    # Confidence rating (Source 177)
     confidence = 5 if 4.0 <= logp <= 5.5 else 3 if 3.0 <= logp <= 6.0 else 1
 
     rankings = []
     for fid, f in FORMULATIONS.items():
-        # Theory scores (1-5 scale)
         grad = f['core_logp'] - f['surf_logp']
         s1 = 5 if grad > 1.0 else 3 if grad > 0 else 1
-        
-        d_core = get_hansen_dist(hsp, f['core_hsp'])
-        s2 = 5 if d_core < 8.0 else 3 if d_core < 10.0 else 1
-        
-        d_surf = get_hansen_dist(hsp, f['surf_hsp'])
-        location = "Core" if d_core <= d_surf else "Interface"
-        s3 = 5 if min(d_core, d_surf) < 8.0 else 3
-        
-        final_score = (s1 * weights['h1']) + (s2 * weights['h2']) + (s3 * weights['h3'])
-        
+
+        if logp_only:
+            # HSP not available: rank by lipophilic gradient only
+            s2, s3 = 3, 3          # neutral placeholders
+            location = "Undetermined"
+            final_score = s1       # gradient is the sole differentiator
+        else:
+            d_core = get_hansen_dist(hsp, f['core_hsp'])
+            s2 = 5 if d_core < 8.0 else 3 if d_core < 10.0 else 1
+
+            d_surf = get_hansen_dist(hsp, f['surf_hsp'])
+            location = "Core" if d_core <= d_surf else "Interface"
+            s3 = 5 if min(d_core, d_surf) < 8.0 else 3
+
+            final_score = (s1 * weights['h1']) + (s2 * weights['h2']) + (s3 * weights['h3'])
+
         rankings.append({
             'id': fid, 'name': f['name'], 'score': round(final_score, 2),
             'location': location, 'structure': f['structure'],
@@ -118,7 +119,12 @@ def predict():
     rankings.sort(key=lambda x: x['score'], reverse=True)
 
     return jsonify({
-        'metadata': {'category': category, 'strategy': strategy, 'stars': confidence},
+        'metadata': {
+            'category': category,
+            'strategy': strategy,
+            'stars': confidence,
+            'logp_only': logp_only
+        },
         'results': rankings
     })
 

@@ -38,25 +38,25 @@ function App() {
 
   const handlePredict = async () => {
     const { logp, delta_d, delta_p, delta_h } = drugProps;
-    if (!logp || !delta_d || !delta_p || !delta_h) {
-      setError("Please fill in all four drug properties (Log P, δd, δp, δh) before running the analysis.");
+    if (!logp) {
+      setError("Please enter a Log P value before running the analysis.");
       return;
     }
     setLoading(true);
     setError(null);
+
+    // If all HSP fields are blank, send null to trigger Log P-only mode
+    const hspProvided = delta_d || delta_p || delta_h;
+    const drug_hsp = hspProvided
+      ? { delta_d: parseFloat(delta_d), delta_p: parseFloat(delta_p), delta_h: parseFloat(delta_h) }
+      : null;
+
     const API_URL = process.env.REACT_APP_API_URL || "";
     try {
       const res = await fetch(`${API_URL}/api/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          drug_logp: parseFloat(logp),
-          drug_hsp: {
-            delta_d: parseFloat(delta_d),
-            delta_p: parseFloat(delta_p),
-            delta_h: parseFloat(delta_h),
-          },
-        }),
+        body: JSON.stringify({ drug_logp: parseFloat(logp), drug_hsp }),
       });
       if (!res.ok) throw new Error(`Server responded with status ${res.status}`);
       const data = await res.json();
@@ -158,7 +158,9 @@ function App() {
                       className="tooltip-icon"
                       data-tooltip="HSP decompose solubility into dispersive (δd), polar (δp), and hydrogen-bonding (δh) contributions. Units: MPa½."
                     >?</span>
+                    <span className="optional-label">optional</span>
                   </h4>
+                  <p className="hsp-hint">Leave blank to rank by lipophilicity gradient only.</p>
                 </div>
                 <div className="hsp-grid">
                   <div className="input-group">
@@ -224,6 +226,15 @@ function App() {
               <div className="results-list">
                 <h3 className="section-title">Ranked Formulations</h3>
                 <p className="results-subtitle">Formulations ordered by predicted drug–carrier compatibility score</p>
+                {results.metadata.logp_only && (
+                  <div className="logp-only-banner">
+                    <span className="logp-only-icon">⚠️</span>
+                    <div>
+                      <strong>Log P-only analysis</strong> — ranked by lipophilic gradient.
+                      Add Hansen Solubility Parameters (δd, δp, δh) for a full three-hypothesis prediction.
+                    </div>
+                  </div>
+                )}
                 {results.results.map((formulation, index) => (
                   <FormulationCard
                     key={formulation.id}
