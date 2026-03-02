@@ -340,22 +340,51 @@ function App() {
               </div>
             ) : results ? (
               <div className="results-list">
-                <h3 className="section-title">Ranked Formulations</h3>
-                <p className="results-subtitle">Formulations ordered by predicted drug–carrier compatibility score</p>
+
+                {/* ── Distribution summary ── */}
+                {(() => {
+                  const formulations = results.results;
+                  const coreCount = formulations.filter(f => f.location === "Core").length;
+                  const total = formulations.length;
+                  const majorityCore = coreCount >= total / 2;
+                  const allSame = coreCount === 0 || coreCount === total;
+                  return (
+                    <div className={`distribution-summary ${majorityCore ? "ds--core" : "ds--interface"}`}>
+                      <div className="ds-icon">{majorityCore ? "🔵" : "🟢"}</div>
+                      <div className="ds-body">
+                        <h3 className="ds-title">
+                          Predicted to distribute to the{" "}
+                          <span className={majorityCore ? "ds-site-core" : "ds-site-interface"}>
+                            {majorityCore ? "lipid core" : "surfactant interface"}
+                          </span>
+                        </h3>
+                        <p className="ds-detail">
+                          {allSame
+                            ? `All ${total} formulations predict ${majorityCore ? "core" : "interface"} localisation for this drug.`
+                            : `${coreCount} of ${total} formulations predict core loading; ${total - coreCount} predict interface localisation. The outcome varies with formulation composition.`}
+                          {results.metadata.logp_only &&
+                            " This prediction is based on lipophilic gradient only — add HSP values for a more precise result."}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 {results.metadata.logp_only && (
                   <div className="logp-only-banner">
                     <span className="logp-only-icon">⚠️</span>
                     <div>
-                      <strong>Log P-only analysis</strong> — ranked by lipophilic gradient.
-                      Add Hansen Solubility Parameters (δd, δp, δh) for a full three-hypothesis prediction.
+                      <strong>Lipophilicity gradient only</strong> — add Hansen Solubility Parameters (δd, δp, δh) for a full three-hypothesis prediction with precise core/interface affinity percentages.
                     </div>
                   </div>
                 )}
-                {results.results.map((formulation, index) => (
+
+                <h4 className="results-sub-heading">Predicted behaviour in each formulation</h4>
+
+                {results.results.map((formulation) => (
                   <FormulationCard
                     key={formulation.id}
                     formulation={formulation}
-                    rank={index + 1}
                     drugLogP={drugProps.logp}
                   />
                 ))}

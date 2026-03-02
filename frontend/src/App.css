@@ -444,17 +444,58 @@ body {
   animation: fadeInUp 0.4s ease;
 }
 
-.section-title {
-  font-size: 20px;
+/* Distribution summary card */
+.distribution-summary {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 16px;
+  border: 1.5px solid;
+  animation: fadeInUp 0.3s ease;
+}
+.ds--core {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.ds--interface {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+.ds-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+  line-height: 1;
+  padding-top: 2px;
+}
+.ds-body {
+  min-width: 0;
+}
+.ds-title {
+  font-size: 15px;
   font-weight: 700;
   color: #0f2537;
-  margin: 0 0 4px;
+  margin: 0 0 5px;
+  line-height: 1.3;
+}
+.ds-site-core      { color: #1d4ed8; }
+.ds-site-interface { color: #15803d; }
+.ds-detail {
+  font-size: 13px;
+  color: #475569;
+  margin: 0;
+  line-height: 1.55;
 }
 
-.results-subtitle {
-  font-size: 13px;
-  color: #64748b;
-  margin: 0 0 16px;
+/* Sub-heading above cards */
+.results-sub-heading {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #94a3b8;
+  margin: 0 0 12px;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -639,10 +680,11 @@ body {
    FORMULATION CARD
 ═══════════════════════════════════════════════════════ */
 .formulation-card {
-  border: 2px solid;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 14px;
   padding: 18px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   animation: fadeInUp 0.4s ease backwards;
 }
@@ -671,80 +713,108 @@ body {
   gap: 10px;
 }
 
-.rank-badge {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
+/* Formulation ID badge (replaces rank) */
+.fc-id-badge {
+  background: linear-gradient(135deg, #1e3a5f, #2d5aa0);
+  color: #fff;
+  font-size: 11px;
   font-weight: 700;
-  color: white;
+  padding: 3px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
   flex-shrink: 0;
 }
 
 .fc-name {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: #0f2537;
   margin: 0;
 }
 
-.score-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 2px solid;
-  border-radius: 10px;
-  padding: 5px 14px;
-}
-
-.score-value {
-  font-size: 20px;
+/* Location badge in card header */
+.fc-location-badge {
+  font-size: 11px;
   font-weight: 700;
-  color: #0f2537;
-  line-height: 1;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+.badge-core {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+.badge-interface {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
 }
 
-.score-label {
-  font-size: 9px;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
+/* Card colour accent */
+.fc--core      { border-left: 4px solid #3b82f6; }
+.fc--interface { border-left: 4px solid #10b981; }
 
-/* Score bar */
-.score-bar-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* Preference bar */
+.fc-pref-section {
   margin-bottom: 14px;
 }
+.fc-pref-section--gradient {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
 
-.score-bar-track {
-  flex: 1;
-  height: 6px;
-  background: #e4edf5;
-  border-radius: 4px;
+.fc-pref-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #94a3b8;
+}
+
+.pref-label-active {
+  color: #0f2537;
+  font-weight: 700;
+}
+.pref-label { color: #94a3b8; }
+
+.fc-pref-bar-track {
+  display: flex;
+  height: 10px;
+  border-radius: 10px;
   overflow: hidden;
+  background: #e2e8f0;
+  margin-bottom: 8px;
 }
 
-.score-bar-fill {
+.fc-pref-bar-core {
+  background: #3b82f6;
   height: 100%;
-  border-radius: 4px;
-  animation: growBar 0.8s ease backwards;
+  transition: width 0.6s ease;
+  border-radius: 10px 0 0 10px;
 }
 
-@keyframes growBar {
-  from { width: 0 !important; }
+.fc-pref-bar-interface {
+  background: #10b981;
+  height: 100%;
+  transition: width 0.6s ease;
+  border-radius: 0 10px 10px 0;
 }
 
-.score-percent {
+.fc-pref-note {
   font-size: 12px;
   color: #64748b;
-  width: 36px;
-  text-align: right;
+  margin: 0;
+  line-height: 1.5;
+}
+.fc-pref-note--gradient {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
 }
 
 /* Spatial visualisation */
