@@ -10,10 +10,8 @@ function App() {
   const [error, setError] = useState(null);
 
   const validationDrugs = {
-    pyrene:    { name: "Pyrene",    logp: 5.19, hsp: { delta_d: 20.4, delta_p: 5.0, delta_h: 3.5 } },
-    nile_red:  { name: "Nile Red",  logp: 4.0,  hsp: { delta_d: 19.8, delta_p: 6.5, delta_h: 5.2 } },
-    curcumin:  { name: "Curcumin",  logp: 3.29, hsp: { delta_d: 21.2, delta_p: 7.4, delta_h: 9.1 } },
-    ibuprofen: { name: "Ibuprofen", logp: 3.97, hsp: { delta_d: 18.0, delta_p: 5.5, delta_h: 8.5 } },
+    pyrene:   { name: "Pyrene",   logp: 5.19, hsp: { delta_d: 20.4, delta_p: 5.0, delta_h: 3.5 } },
+    nile_red: { name: "Nile Red", logp: 4.0,  hsp: { delta_d: 19.8, delta_p: 6.5, delta_h: 5.2 } },
   };
 
   const handleDrugSelect = (key) => {
