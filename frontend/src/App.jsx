@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import FormulationCard from "./components/FormulationCard";
 import AdminPanel from "./components/AdminPanel";
 import AboutPage from "./components/AboutPage";
+import ValidationPage from "./components/ValidationPage";
 import "./App.css";
 
 function App() {
@@ -122,6 +123,10 @@ function App() {
             onClick={() => setPage("about")}
           >About</button>
           <button
+            className={`nav-link ${page === "validation" ? "nav-link--active" : ""}`}
+            onClick={() => setPage("validation")}
+          >Validation</button>
+          <button
             className="nav-admin-btn"
             onClick={openAdmin}
             title="Admin: manage formulation database"
@@ -160,6 +165,9 @@ function App() {
 
       {/* ABOUT PAGE */}
       {page === "about" && <AboutPage />}
+
+      {/* VALIDATION PAGE */}
+      {page === "validation" && <ValidationPage />}
 
       {/* TOOL PAGE */}
       {page === "tool" && (

@@ -3,61 +3,33 @@ import React, { useState } from "react";
 const hypotheses = [
   {
     id: "H1",
-    label: "H1 — Lipophilic Gradient Theory",
     icon: "⟶",
     colour: "#3b82f6",
+    title: "Lipophilic Gradient",
+    tagline: "Like dissolves like — at scale",
     summary:
-      "The difference in Log P between the lipid core and the surfactant shell creates a thermodynamic driving force that directs lipophilic drugs toward the phase with the higher affinity.",
-    detail:
-      "When the core Log P exceeds the surfactant Log P by more than 1 unit, the resulting gradient strongly favours core sequestration. This hypothesis dominates the prediction for highly lipophilic compounds (Log P > 5), where bulk thermodynamic partitioning is the primary driver of encapsulation.",
-    dominatesAt: "Log P > 5  ·  weight = 0.50",
+      "The difference in oil-affinity between the lipid core and the surfactant layer creates a natural driving force. Highly oil-loving drugs are pulled toward the core, much like how oil and water separate spontaneously.",
+    whenDominant: "Most influential for strongly lipophilic drugs",
   },
   {
     id: "H2",
-    label: "H2 — HSP Core Compatibility",
     icon: "⬡",
     colour: "#8b5cf6",
+    title: "Chemical Compatibility",
+    tagline: "A precise measure of chemical fit",
     summary:
-      "Hansen Solubility Parameters (HSP) quantify the chemical compatibility between a drug and each NLC compartment. Drugs preferentially localise in the phase whose HSP vector is closest to their own.",
-    detail:
-      "The Hansen distance (Δδ) is calculated as √[(δd₁−δd₂)² + (δp₁−δp₂)² + (δh₁−δh₂)²]. A smaller distance to the core indicates stronger thermodynamic compatibility and predicts core loading. This hypothesis is co-dominant with H1 for strongly lipophilic drugs.",
-    dominatesAt: "Log P > 5  ·  weight = 0.40",
+      "Hansen Solubility Parameters break down a molecule's chemistry into three components — how it disperses, polarises, and hydrogen-bonds. Drugs migrate to whichever compartment is the closest chemical match.",
+    whenDominant: "Co-dominant with H1 for highly lipophilic drugs",
   },
   {
     id: "H3",
-    label: "H3 — Competitive Partitioning Theory",
     icon: "⇌",
     colour: "#10b981",
+    title: "Competitive Partitioning",
+    tagline: "The surfactant shell as a rival",
     summary:
-      "At intermediate lipophilicities, the surfactant shell becomes a genuine competitor for drug sequestration. The drug distributes between core and shell according to the relative HSP compatibility of both phases.",
-    detail:
-      "For moderately lipophilic drugs (Log P 3–5), the surfactant forms a thick, disordered corona that is chemically distinct from the lipid core. Because both phases have similar Log P, the HSP distance to each phase becomes the deciding factor. Competitive partitioning is the dominant mechanism for this lipophilicity window.",
-    dominatesAt: "Log P 3–5  ·  weight = 0.70",
-  },
-];
-
-const validationData = [
-  {
-    probe: "Pyrene",
-    logp: 5.19,
-    best: "F4 (C10-PEG100)",
-    site: "Core",
-    siteClass: "site-core",
-    metric: "I₁/I₃ = 0.785",
-    evidence:
-      "Pyrene's vibronic band ratio (I₁/I₃) reports on local polarity. A ratio of 0.785 indicates a highly apolar environment consistent with deep core encapsulation inside the crystalline C10 lipid matrix.",
-    icon: "🔷",
-  },
-  {
-    probe: "Nile Red",
-    logp: 4.0,
-    best: "F2 (C10-PS80)",
-    site: "Interface",
-    siteClass: "site-interface",
-    metric: "λmax = 628.7 nm",
-    evidence:
-      "Nile Red is solvatochromic — its emission maximum red-shifts in polar environments. A λmax of 628.7 nm corresponds to the moderately polar amphiphilic interface between the lipid core and the Polysorbate 80 corona, confirming interfacial localisation.",
-    icon: "🔴",
+      "At moderate lipophilicities the surfactant corona becomes a genuine competitor for the drug. Both the core and the shell are chemically attractive, so the drug distributes between them based on relative compatibility.",
+    whenDominant: "Dominant for moderately lipophilic drugs",
   },
 ];
 
@@ -75,9 +47,9 @@ export default function AboutPage() {
             Computer-Assisted Drug<br />Formulation Design
           </h1>
           <p className="about-hero-sub">
-            A mechanistic prediction engine for drug localisation in
-            Nanostructured Lipid Carriers — built on three competing
-            physicochemical hypotheses and validated with fluorescent probes.
+            A rational prediction engine for drug localisation in Nanostructured
+            Lipid Carriers — cutting down on trial-and-error before any
+            experiment begins.
           </p>
         </div>
       </section>
@@ -88,27 +60,25 @@ export default function AboutPage() {
           <div className="about-text-block">
             <h2 className="about-section-title">What are Nanostructured Lipid Carriers?</h2>
             <p>
-              Nanostructured Lipid Carriers (NLCs) are second-generation solid
-              lipid nanoparticles composed of a blend of solid and liquid lipids,
-              stabilised by a surfactant corona. The structural disorder introduced
-              by the liquid lipid fraction creates nanoscale imperfections within the
-              crystalline matrix, which generate additional space to accommodate drug
-              molecules and dramatically reduce drug expulsion on storage — a key
-              limitation of first-generation solid lipid nanoparticles (SLNs).
+              Nanostructured Lipid Carriers (NLCs) are tiny lipid-based particles —
+              typically 100–500 nm across — designed to encapsulate and deliver
+              drug molecules that would otherwise be too oily or unstable to
+              administer directly. They are made from a blend of solid and liquid
+              fats, coated in a thin layer of surfactant.
             </p>
             <p>
-              NLCs offer several advantages over conventional formulation approaches:
-              high encapsulation efficiency for lipophilic molecules, protection of
-              labile actives from enzymatic degradation, tunable release kinetics, and
-              biocompatibility with physiologically relevant lipid excipients. They are
-              particularly promising for dermal, oral, and parenteral delivery of
-              poorly water-soluble drugs.
+              The deliberate disorder in the fat matrix creates nanoscale pockets
+              that trap drug molecules and hold them there — preventing the drug
+              from being expelled during storage, which was the main weakness of
+              earlier solid lipid nanoparticles.
             </p>
             <p>
-              Despite these advantages, rational selection of an NLC formulation for a
-              specific drug has historically relied on trial-and-error screening.
-              CADFD addresses this gap by providing a quantitative, hypothesis-driven
-              prediction of drug–carrier compatibility before any experimental work begins.
+              NLCs are particularly promising for drugs that are poorly soluble in
+              water, because the lipid environment dramatically improves their
+              stability, bioavailability, and release behaviour. However, choosing
+              the right formulation for a given drug has traditionally required
+              extensive, expensive screening.
+              <strong> CADFD changes that.</strong>
             </p>
           </div>
 
@@ -120,25 +90,65 @@ export default function AboutPage() {
               <div className="nlc-shell-label">Surfactant Shell</div>
             </div>
             <div className="nlc-legend">
-              <div className="nlc-legend-row"><span className="nlc-dot nlc-dot-core"></span>Solid + liquid lipid blend</div>
-              <div className="nlc-legend-row"><span className="nlc-dot nlc-dot-shell"></span>Amphiphilic surfactant corona</div>
-              <div className="nlc-legend-row"><span className="nlc-dot nlc-dot-drug"></span>Drug (localisation predicted)</div>
+              <div className="nlc-legend-row">
+                <span className="nlc-dot nlc-dot-core"></span>Solid + liquid lipid blend
+              </div>
+              <div className="nlc-legend-row">
+                <span className="nlc-dot nlc-dot-shell"></span>Amphiphilic surfactant corona
+              </div>
+              <div className="nlc-legend-row">
+                <span className="nlc-dot nlc-dot-drug"></span>Drug (localisation predicted)
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why it matters ────────────────────────────────────────────────── */}
+      <section className="about-section about-section--alt">
+        <div className="about-section-inner about-section-inner--full">
+          <h2 className="about-section-title about-section-title--center">
+            Why Does Localisation Matter?
+          </h2>
+          <p className="about-section-intro">
+            Where a drug sits inside an NLC determines almost everything about
+            how it behaves.
+          </p>
+          <div className="why-grid">
+            <div className="why-card">
+              <span className="why-icon">🎯</span>
+              <h4>Encapsulation efficiency</h4>
+              <p>A drug in the right compartment stays encapsulated. In the wrong one it leaches out quickly, reducing the dose that reaches the target.</p>
+            </div>
+            <div className="why-card">
+              <span className="why-icon">⏱</span>
+              <h4>Release kinetics</h4>
+              <p>Core-loaded drugs release slowly through the crystalline matrix. Interface-loaded drugs release faster as the corona disperses. Knowing the site lets you engineer the profile.</p>
+            </div>
+            <div className="why-card">
+              <span className="why-icon">🧪</span>
+              <h4>Formulation screening</h4>
+              <p>Rather than testing every lipid–surfactant combination experimentally, CADFD scores all formulations in seconds — so you start experiments with the best candidates.</p>
+            </div>
+            <div className="why-card">
+              <span className="why-icon">🔬</span>
+              <h4>Mechanistic understanding</h4>
+              <p>Predictions are backed by three physicochemical hypotheses, not a black box. You can see why a formulation was ranked and build on that understanding.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* ── The three hypotheses ──────────────────────────────────────────── */}
-      <section className="about-section about-section--alt">
+      <section className="about-section">
         <div className="about-section-inner about-section-inner--full">
           <h2 className="about-section-title about-section-title--center">
-            The Three Hypotheses
+            The Science Behind the Predictions
           </h2>
           <p className="about-section-intro">
-            CADFD integrates three independent physicochemical hypotheses.
-            Their relative contributions are dynamically weighted based on
-            the drug's lipophilicity, reflecting which mechanism dominates
-            at each point on the Log&nbsp;P spectrum.
+            The tool combines three independent physicochemical principles. Their
+            relative importance shifts depending on how oil-loving the drug is —
+            click any card to learn more.
           </p>
 
           <div className="hyp-grid">
@@ -153,112 +163,30 @@ export default function AboutPage() {
                   <span className="hyp-icon" style={{ color: h.colour }}>{h.icon}</span>
                   <div className="hyp-title-group">
                     <span className="hyp-id" style={{ background: h.colour }}>{h.id}</span>
-                    <h3 className="hyp-title">{h.label.replace(h.id + " — ", "")}</h3>
+                    <div>
+                      <h3 className="hyp-title">{h.title}</h3>
+                      <p className="hyp-tagline">{h.tagline}</p>
+                    </div>
                   </div>
                   <span className="hyp-chevron">{openHyp === h.id ? "▲" : "▼"}</span>
                 </div>
-                <p className="hyp-summary">{h.summary}</p>
                 {openHyp === h.id && (
                   <div className="hyp-detail">
-                    <p>{h.detail}</p>
-                    <span className="hyp-dominates">{h.dominatesAt}</span>
+                    <p>{h.summary}</p>
+                    <span className="hyp-dominates">{h.whenDominant}</span>
                   </div>
                 )}
               </div>
             ))}
           </div>
 
-          {/* Weighting diagram */}
-          <div className="weight-diagram">
-            <h3 className="weight-diagram-title">Dynamic Weighting Across Log P</h3>
-            <div className="weight-scale">
-              <div className="weight-zone weight-zone--1">
-                <div className="weight-zone-label">Log P &lt; 2</div>
-                <div className="weight-bars">
-                  <div className="weight-bar" style={{ height: "0%",  background: "#3b82f6" }}></div>
-                  <div className="weight-bar" style={{ height: "0%",  background: "#8b5cf6" }}></div>
-                  <div className="weight-bar" style={{ height: "100%", background: "#10b981" }}></div>
-                </div>
-                <div className="weight-zone-note">Too hydrophilic for NLC</div>
-              </div>
-              <div className="weight-zone weight-zone--2">
-                <div className="weight-zone-label">Log P 2–3</div>
-                <div className="weight-bars">
-                  <div className="weight-bar" style={{ height: "60%", background: "#3b82f6" }}></div>
-                  <div className="weight-bar" style={{ height: "20%", background: "#8b5cf6" }}></div>
-                  <div className="weight-bar" style={{ height: "20%", background: "#10b981" }}></div>
-                </div>
-                <div className="weight-zone-note">H1 dominates</div>
-              </div>
-              <div className="weight-zone weight-zone--3">
-                <div className="weight-zone-label">Log P 3–5</div>
-                <div className="weight-bars">
-                  <div className="weight-bar" style={{ height: "20%", background: "#3b82f6" }}></div>
-                  <div className="weight-bar" style={{ height: "10%", background: "#8b5cf6" }}></div>
-                  <div className="weight-bar" style={{ height: "70%", background: "#10b981" }}></div>
-                </div>
-                <div className="weight-zone-note">H3 dominates</div>
-              </div>
-              <div className="weight-zone weight-zone--4">
-                <div className="weight-zone-label">Log P &gt; 5</div>
-                <div className="weight-bars">
-                  <div className="weight-bar" style={{ height: "50%", background: "#3b82f6" }}></div>
-                  <div className="weight-bar" style={{ height: "40%", background: "#8b5cf6" }}></div>
-                  <div className="weight-bar" style={{ height: "10%", background: "#10b981" }}></div>
-                </div>
-                <div className="weight-zone-note">H1 + H2 dominate</div>
-              </div>
-            </div>
-            <div className="weight-legend">
-              <span style={{ color: "#3b82f6" }}>■ H1 Gradient</span>
-              <span style={{ color: "#8b5cf6" }}>■ H2 HSP Core</span>
-              <span style={{ color: "#10b981" }}>■ H3 Partitioning</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Experimental validation ───────────────────────────────────────── */}
-      <section className="about-section">
-        <div className="about-section-inner about-section-inner--full">
-          <h2 className="about-section-title about-section-title--center">
-            Experimental Validation
-          </h2>
-          <p className="about-section-intro">
-            Two fluorescent probes with well-characterised environment-sensitive
-            spectroscopic signatures were used to empirically confirm drug
-            localisation across four NLC formulations (F1–F4).
-          </p>
-
-          <div className="val-grid">
-            {validationData.map((v) => (
-              <div key={v.probe} className="val-card">
-                <div className="val-header">
-                  <span className="val-icon">{v.icon}</span>
-                  <div>
-                    <h3 className="val-probe">{v.probe}</h3>
-                    <p className="val-logp">Log P = {v.logp}</p>
-                  </div>
-                  <span className={`val-site-badge ${v.siteClass}`}>{v.site}</span>
-                </div>
-                <div className="val-best-formulation">
-                  <span className="val-best-label">Best formulation</span>
-                  <strong>{v.best}</strong>
-                </div>
-                <div className="val-metric">{v.metric}</div>
-                <p className="val-evidence">{v.evidence}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="val-note">
-            <span className="val-note-icon">🔬</span>
+          <div className="hyp-footer-note">
+            <span>💡</span>
             <p>
-              Fluorescence measurements were conducted using established
-              solvatochromic probe methods. Pyrene's vibronic band ratio (I₁/I₃)
-              and Nile Red's emission maximum (λmax) were measured across all four
-              formulations to map the local microenvironment experienced by each
-              probe molecule, providing direct evidence of its encapsulation site.
+              The three hypotheses are combined into a single score for each
+              formulation. The balance between them is adjusted automatically
+              based on the drug's lipophilicity — so the most relevant
+              mechanism always has the greatest influence on the result.
             </p>
           </div>
         </div>
@@ -272,22 +200,22 @@ export default function AboutPage() {
             <div className="howto-step">
               <div className="howto-num">1</div>
               <h4>Calculate Log P</h4>
-              <p>Compute the octanol–water partition coefficient for your drug using tools such as ALOGPS, ChemDraw, or the Moriguchi method. Log P is the primary input and the minimum required for an analysis.</p>
+              <p>Compute the octanol–water partition coefficient for your drug using tools such as ALOGPS or ChemDraw. This is the only required input — it tells the model how oil-loving your drug is.</p>
             </div>
             <div className="howto-step">
               <div className="howto-num">2</div>
-              <h4>Calculate HSP (optional)</h4>
-              <p>Use a group-contribution method (e.g., Hoy's method) to calculate the three Hansen Solubility Parameters: δd (dispersive), δp (polar), and δh (hydrogen bonding) in units of MPa½. Providing HSP activates the full three-hypothesis model.</p>
+              <h4>Add HSP values (optional)</h4>
+              <p>For a more precise prediction, add the three Hansen Solubility Parameters (δd, δp, δh) in MPa½. These can be estimated using group-contribution methods. Without them, the tool ranks by lipophilicity gradient alone.</p>
             </div>
             <div className="howto-step">
               <div className="howto-num">3</div>
-              <h4>Run Analysis</h4>
-              <p>Select a validation drug or enter your custom values and click "Run CADFD Analysis". The engine applies dynamic weighting across the three hypotheses and scores all formulations in the database.</p>
+              <h4>Run the analysis</h4>
+              <p>Click "Run CADFD Analysis". The engine scores all formulations in the database and ranks them by predicted compatibility with your drug.</p>
             </div>
             <div className="howto-step">
               <div className="howto-num">4</div>
-              <h4>Interpret Results</h4>
-              <p>Ranked formulation cards show the compatibility score, predicted localisation site (Core or Interface), and Hansen distances to each compartment. Higher-ranked formulations are prioritised for experimental evaluation.</p>
+              <h4>Interpret the results</h4>
+              <p>Each formulation card shows a compatibility score, predicted localisation site (Core or Interface), and the chemical distances to each compartment. Use the top-ranked formulations as your experimental starting point.</p>
             </div>
           </div>
         </div>
