@@ -222,7 +222,44 @@ function App() {
 
           {/* RIGHT PANEL — RESULTS */}
           <div className="right-panel">
-            {results ? (
+            {results && results.metadata.too_hydrophilic ? (
+              /* ── Hydrophilic warning — replace formulation cards ── */
+              <div className="hydrophilic-panel">
+                <div className="hydrophilic-icon">💧</div>
+                <h3>NLC Not Recommended</h3>
+                <p className="hydrophilic-intro">
+                  With a Log&nbsp;P of <strong>{parseFloat(drugProps.logp).toFixed(2)}</strong>, this drug is
+                  too hydrophilic for reliable encapsulation in a nanostructured lipid carrier.
+                  At this lipophilicity, the drug is unlikely to partition into either the lipid
+                  core or the surfactant shell — it will remain predominantly in the aqueous
+                  phase, leading to poor loading efficiency and rapid leaching.
+                </p>
+                <div className="hydrophilic-alternatives">
+                  <h4>Recommended alternatives</h4>
+                  <div className="alt-card">
+                    <span className="alt-icon">🫧</span>
+                    <div>
+                      <strong>Liposomes</strong>
+                      <p>Phospholipid bilayer vesicles with an aqueous core — well-suited for hydrophilic drugs. Can achieve high encapsulation efficiency for water-soluble compounds.</p>
+                    </div>
+                  </div>
+                  <div className="alt-card">
+                    <span className="alt-icon">🔵</span>
+                    <div>
+                      <strong>Polymeric Nanoparticles</strong>
+                      <p>PLGA or chitosan-based systems can entrap hydrophilic drugs via physical encapsulation or ionic interactions, offering controlled release profiles.</p>
+                    </div>
+                  </div>
+                  <div className="alt-card">
+                    <span className="alt-icon">⭕</span>
+                    <div>
+                      <strong>Cyclodextrin Complexation</strong>
+                      <p>Forms inclusion complexes that improve solubility and stability of hydrophilic or poorly soluble drugs without requiring a lipid matrix.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : results ? (
               <div className="results-list">
                 <h3 className="section-title">Ranked Formulations</h3>
                 <p className="results-subtitle">Formulations ordered by predicted drug–carrier compatibility score</p>

@@ -71,6 +71,18 @@ const FormulationCard = ({ formulation, rank, drugLogP }) => {
               {formulation.location}
             </span>
           </p>
+          {formulation.d_core != null && formulation.d_surf != null && (
+            <div className="distance-table">
+              <div className={`dist-row ${isCorePreferred ? 'dist-winner' : ''}`}>
+                <span className="dist-label">Δδ to core</span>
+                <span className="dist-value">{formulation.d_core} MPa½</span>
+              </div>
+              <div className={`dist-row ${!isCorePreferred ? 'dist-winner' : ''}`}>
+                <span className="dist-label">Δδ to shell</span>
+                <span className="dist-value">{formulation.d_surf} MPa½</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

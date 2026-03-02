@@ -73,19 +73,26 @@ def predict():
     hsp = hsp_raw if not logp_only else None
 
     # 1. Lipophilicity category, weights, and confidence
+    too_hydrophilic = logp < 2.0
+
     if logp > 5.0:
-        weights = {'h1': 0.1, 'h2': 0.3, 'h3': 0.6}
+        # H1 (gradient) and H2 (core HSP fit) dominate — drug is strongly core-driven;
+        # surfactant shell cannot compete at this lipophilicity.
+        weights = {'h1': 0.5, 'h2': 0.4, 'h3': 0.1}
         category, strategy = "Highly Lipophilic", "Core-loading priority"
     elif 3.0 <= logp <= 5.0:
+        # H3 (competitive partitioning) dominates — surfactant shell is a genuine competitor.
         weights = {'h1': 0.2, 'h2': 0.1, 'h3': 0.7}
-        category, strategy = "Moderately Lipophilic", "Interfacial-loading priority"
+        category, strategy = "Moderately Lipophilic", "Competitive partitioning — surfactant shell is a strong competitor"
     elif 2.0 <= logp < 3.0:
+        # H1 (gradient) dominates — relies on bulk thermodynamic driving force.
         weights = {'h1': 0.6, 'h2': 0.2, 'h3': 0.2}
         category, strategy = "Low Lipophilicity", "Thermodynamic gradient focus"
     else:
-        weights = {'h1': 0.05, 'h2': 0.05, 'h3': 0.9}
-        category = "Hydrophilic / Low Lipophilicity"
-        strategy = "Surface Retention Focus (High risk of leaching)"
+        # logp < 2: too hydrophilic for reliable NLC core encapsulation.
+        weights = {'h1': 0.0, 'h2': 0.0, 'h3': 1.0}
+        category = "Hydrophilic"
+        strategy = "Not recommended for NLC core encapsulation"
 
     # Confidence rating (Source 177)
     confidence = 5 if 4.0 <= logp <= 5.5 else 3 if 3.0 <= logp <= 6.0 else 1
@@ -97,22 +104,35 @@ def predict():
 
         if logp_only:
             # HSP not available: rank by lipophilic gradient only
-            s2, s3 = 3, 3          # neutral placeholders
+            s2, s3 = 3, 3
+            d_core, d_surf = None, None
             location = "Undetermined"
-            final_score = s1       # gradient is the sole differentiator
+            final_score = s1
         else:
             d_core = get_hansen_dist(hsp, f['core_hsp'])
-            s2 = 5 if d_core < 8.0 else 3 if d_core < 10.0 else 1
-
             d_surf = get_hansen_dist(hsp, f['surf_hsp'])
-            location = "Core" if d_core <= d_surf else "Interface"
+
+            s2 = 5 if d_core < 8.0 else 3 if d_core < 10.0 else 1
             s3 = 5 if min(d_core, d_surf) < 8.0 else 3
+
+            # ── Weighted location prediction ──────────────────────────
+            # H1: strong lipophilic gradient (>1.0) drives drug toward core
+            h1_core = 1.0 if grad > 1.0 else 0.0
+            # H2 & H3: both ask whether the core is a better HSP match than the shell
+            hsp_favors_core = 1.0 if d_core <= d_surf else 0.0
+            core_score = (weights['h1'] * h1_core +
+                          weights['h2'] * hsp_favors_core +
+                          weights['h3'] * hsp_favors_core)
+            location = "Core" if core_score >= 0.5 else "Interface"
 
             final_score = (s1 * weights['h1']) + (s2 * weights['h2']) + (s3 * weights['h3'])
 
         rankings.append({
             'id': fid, 'name': f['name'], 'score': round(final_score, 2),
-            'location': location, 'structure': f['structure'],
+            'location': location,
+            'd_core': d_core,
+            'd_surf': d_surf,
+            'structure': f['structure'],
             'note': f['experimental_note']
         })
 
@@ -123,7 +143,8 @@ def predict():
             'category': category,
             'strategy': strategy,
             'stars': confidence,
-            'logp_only': logp_only
+            'logp_only': logp_only,
+            'too_hydrophilic': too_hydrophilic
         },
         'results': rankings
     })
