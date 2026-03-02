@@ -1,0 +1,81 @@
+================================================================================
+LIPIDLOGIC BRANDING UPDATE - INSTRUCTIONS
+================================================================================
+
+🎨 Files have been updated with LipidLogic branding!
+
+================================================================================
+WHAT WAS CHANGED:
+================================================================================
+
+✅ frontend/src/App.jsx
+   - Title: "🧬 LipidLogic"
+   - Subtitle: "Rational NLC Design Through Computational Prediction"
+
+✅ frontend/public/index.html
+   - Page title: "LipidLogic - NLC Formulation Design"
+   - Meta description updated
+
+✅ frontend/package.json
+   - Name: "lipidlogic"
+   - Description updated
+
+✅ app.py
+   - Header comments updated to LipidLogic
+   - Server startup message updated
+
+================================================================================
+HOW TO UPDATE YOUR REPOSITORY:
+================================================================================
+
+OPTION 1: Replace Individual Files (Recommended)
+────────────────────────────────────────────────────────────────────────────
+
+Download the 4 updated files from outputs:
+1. App.jsx
+2. index.html
+3. package.json
+4. app.py
+
+Then replace them in your local repository:
+
+cd /path/to/lipid-logic
+
+# Replace the files
+cp ~/Downloads/App.jsx frontend/src/App.jsx
+cp ~/Downloads/index.html frontend/public/index.html
+cp ~/Downloads/package.json frontend/package.json
+cp ~/Downloads/app.py app.py
+
+# Commit and push
+git add frontend/src/App.jsx frontend/public/index.html frontend/package.json app.py
+git commit -m "Update branding to LipidLogic"
+git push
+
+OPTION 2: Extract Archive
+────────────────────────────────────────────────────────────────────────────
+
+Download lipidlogic-updated-files.tar.gz
+
+cd /path/to/lipid-logic
+
+# Extract (will overwrite files)
+tar -xzf ~/Downloads/lipidlogic-updated-files.tar.gz
+
+# Commit and push
+git add .
+git commit -m "Update branding to LipidLogic"
+git push
+
+================================================================================
+AFTER PUSHING TO GITHUB:
+================================================================================
+
+✅ Cloudflare Pages will automatically rebuild (2-3 minutes)
+✅ Render backend will automatically redeploy (2-3 minutes)
+
+Then check your live site and you should see:
+🧬 LipidLogic
+Rational NLC Design Through Computational Prediction
+
+================================================================================
