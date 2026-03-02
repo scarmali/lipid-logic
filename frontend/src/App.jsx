@@ -1,8 +1,30 @@
 import React, { useState } from "react";
 import FormulationCard from "./components/FormulationCard";
+import AdminPanel from "./components/AdminPanel";
+import AboutPage from "./components/AboutPage";
 import "./App.css";
 
 function App() {
+  // ── Page routing ─────────────────────────────────────────────────────────
+  const [page, setPage] = useState("tool");
+
+  // ── Admin panel ───────────────────────────────────────────────────────────
+  const [showAdmin, setShowAdmin]         = useState(false);
+  const [adminKey, setAdminKey]           = useState("");
+  const [showKeyModal, setShowKeyModal]   = useState(false);
+  const [adminKeyInput, setAdminKeyInput] = useState("");
+
+  const openAdmin = () => {
+    if (adminKey) { setShowAdmin(true); return; }
+    setShowKeyModal(true);
+  };
+  const submitKey = () => {
+    setAdminKey(adminKeyInput.trim());
+    setShowKeyModal(false);
+    setShowAdmin(true);
+  };
+
+  // ── Tool state ─────────────────────────────────────────────────────────────
   const [selectedDrug, setSelectedDrug] = useState("");
   const [drugProps, setDrugProps] = useState({ logp: "", delta_d: "", delta_p: "", delta_h: "" });
   const [results, setResults] = useState(null);
@@ -90,8 +112,57 @@ function App() {
           <h1 className="hero-title">Lipid Logic Explorer</h1>
           <p className="hero-subtitle">Rational NLC Design via Competitive Partitioning</p>
         </div>
+        <nav className="main-nav">
+          <button
+            className={`nav-link ${page === "tool" ? "nav-link--active" : ""}`}
+            onClick={() => setPage("tool")}
+          >Tool</button>
+          <button
+            className={`nav-link ${page === "about" ? "nav-link--active" : ""}`}
+            onClick={() => setPage("about")}
+          >About</button>
+          <button
+            className="nav-admin-btn"
+            onClick={openAdmin}
+            title="Admin: manage formulation database"
+            aria-label="Admin panel"
+          >⚙</button>
+        </nav>
       </header>
 
+      {/* ADMIN KEY MODAL */}
+      {showKeyModal && (
+        <div className="modal-overlay" onClick={() => setShowKeyModal(false)}>
+          <div className="modal-box" onClick={e => e.stopPropagation()}>
+            <h3 className="modal-title">Admin Access</h3>
+            <p className="modal-desc">Enter the admin key to manage the formulation database.</p>
+            <input
+              className="modal-input"
+              type="password"
+              placeholder="Admin key"
+              value={adminKeyInput}
+              onChange={e => setAdminKeyInput(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && submitKey()}
+              autoFocus
+            />
+            <div className="modal-actions">
+              <button className="modal-cancel" onClick={() => setShowKeyModal(false)}>Cancel</button>
+              <button className="modal-confirm" onClick={submitKey}>Open Admin Panel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ADMIN PANEL OVERLAY */}
+      {showAdmin && (
+        <AdminPanel adminKey={adminKey} onClose={() => setShowAdmin(false)} />
+      )}
+
+      {/* ABOUT PAGE */}
+      {page === "about" && <AboutPage />}
+
+      {/* TOOL PAGE */}
+      {page === "tool" && (
       <div className="app-container">
         <div className="main-grid">
 
@@ -309,6 +380,7 @@ function App() {
 
         </div>
       </div>
+      )}
     </>
   );
 }

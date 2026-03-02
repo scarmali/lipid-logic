@@ -2,64 +2,50 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import math
 import os
+import json
 
 app = Flask(__name__)
 CORS(app)
 
 # ============================================================================
-# ENHANCED FORMULATION DATABASE
+# FORMULATION DATABASE  —  loaded from formulations.json
 # ============================================================================
 
-FORMULATIONS = {
-    'F1': {
-        'name': 'F1 (C8-PS80)',
-        'core_logp': 2.70,
-        'surf_logp': 2.45,
-        'core_hsp': {'delta_d': 16.8, 'delta_p': 5.0, 'delta_h': 12.3},
-        'surf_hsp': {'delta_d': 16.5, 'delta_p': 5.0, 'delta_h': 11.0},
-        'structure': 'Type II Amorphous',
-        'experimental_note': 'Moderate encapsulation; baseline performance.'
-    },
-    'F2': {
-        'name': 'F2 (C10-PS80)',
-        'core_logp': 3.75,
-        'surf_logp': 2.45,
-        'core_hsp': {'delta_d': 16.9, 'delta_p': 4.5, 'delta_h': 11.6},
-        'surf_hsp': {'delta_d': 16.5, 'delta_p': 5.0, 'delta_h': 11.0},
-        'structure': 'Type II Amorphous', # Source 153
-        'experimental_note': 'Optimal for interfacial localization (e.g., Nile Red).' # Source 157
-    },
-    'F3': {
-        'name': 'F3 (C8-PEG100)',
-        'core_logp': 2.70,
-        'surf_logp': 2.54,
-        'core_hsp': {'delta_d': 16.8, 'delta_p': 5.0, 'delta_h': 12.3},
-        'surf_hsp': {'delta_d': 17.0, 'delta_p': 3.0, 'delta_h': 9.5},
-        'structure': 'Type I Imperfect Crystal', # Source 153
-        'experimental_note': 'High clustering observed; poor molecular dispersion.' # Source 113
-    },
-    'F4': {
-        'name': 'F4 (C10-PEG100)',
-        'core_logp': 3.75,
-        'surf_logp': 2.54,
-        'core_hsp': {'delta_d': 16.9, 'delta_p': 4.5, 'delta_h': 11.6},
-        'surf_hsp': {'delta_d': 17.0, 'delta_p': 3.0, 'delta_h': 9.5},
-        'structure': 'Type I Imperfect Crystal', # Source 153
-        'experimental_note': 'Optimal for deep core-loading (e.g., Pyrene).' # Source 156
-    }
-}
+DB_PATH = os.path.join(os.path.dirname(__file__), 'formulations.json')
+
+def load_formulations():
+    with open(DB_PATH, 'r') as f:
+        return json.load(f)
+
+def save_formulations(data):
+    with open(DB_PATH, 'w') as f:
+        json.dump(data, f, indent=2)
+
+# ============================================================================
+# ADMIN AUTH  —  set ADMIN_KEY env var on your server; default for local dev
+# ============================================================================
+
+ADMIN_KEY = os.environ.get('ADMIN_KEY', 'lipid-admin-2025')
+
+def check_admin(req):
+    return req.headers.get('X-Admin-Key') == ADMIN_KEY
 
 # ============================================================================
 # ANALYTICAL LOGIC
 # ============================================================================
 
 def get_hansen_dist(h1, h2):
-    return round(math.sqrt((h1['delta_d']-h2['delta_d'])**2 + 
-                           (h1['delta_p']-h2['delta_p'])**2 + 
+    return round(math.sqrt((h1['delta_d']-h2['delta_d'])**2 +
+                           (h1['delta_p']-h2['delta_p'])**2 +
                            (h1['delta_h']-h2['delta_h'])**2), 2)
+
+# ============================================================================
+# PREDICTION ENDPOINT
+# ============================================================================
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
+    FORMULATIONS = load_formulations()
     data = request.json
     logp = float(data.get('drug_logp', 0))
     hsp_raw = data.get('drug_hsp')
@@ -76,25 +62,24 @@ def predict():
     too_hydrophilic = logp < 2.0
 
     if logp > 5.0:
-        # H1 (gradient) and H2 (core HSP fit) dominate — drug is strongly core-driven;
-        # surfactant shell cannot compete at this lipophilicity.
+        # H1 (gradient) and H2 (core HSP fit) dominate — drug is strongly core-driven
         weights = {'h1': 0.5, 'h2': 0.4, 'h3': 0.1}
         category, strategy = "Highly Lipophilic", "Core-loading priority"
     elif 3.0 <= logp <= 5.0:
-        # H3 (competitive partitioning) dominates — surfactant shell is a genuine competitor.
+        # H3 (competitive partitioning) dominates — surfactant shell is a genuine competitor
         weights = {'h1': 0.2, 'h2': 0.1, 'h3': 0.7}
         category, strategy = "Moderately Lipophilic", "Competitive partitioning — surfactant shell is a strong competitor"
     elif 2.0 <= logp < 3.0:
-        # H1 (gradient) dominates — relies on bulk thermodynamic driving force.
+        # H1 (gradient) dominates — relies on bulk thermodynamic driving force
         weights = {'h1': 0.6, 'h2': 0.2, 'h3': 0.2}
         category, strategy = "Low Lipophilicity", "Thermodynamic gradient focus"
     else:
-        # logp < 2: too hydrophilic for reliable NLC core encapsulation.
+        # logp < 2: too hydrophilic for reliable NLC core encapsulation
         weights = {'h1': 0.0, 'h2': 0.0, 'h3': 1.0}
         category = "Hydrophilic"
         strategy = "Not recommended for NLC core encapsulation"
 
-    # Confidence rating (Source 177)
+    # Confidence rating
     confidence = 5 if 4.0 <= logp <= 5.5 else 3 if 3.0 <= logp <= 6.0 else 1
 
     rankings = []
@@ -103,7 +88,6 @@ def predict():
         s1 = 5 if grad > 1.0 else 3 if grad > 0 else 1
 
         if logp_only:
-            # HSP not available: rank by lipophilic gradient only
             s2, s3 = 3, 3
             d_core, d_surf = None, None
             location = "Undetermined"
@@ -115,10 +99,8 @@ def predict():
             s2 = 5 if d_core < 8.0 else 3 if d_core < 10.0 else 1
             s3 = 5 if min(d_core, d_surf) < 8.0 else 3
 
-            # ── Weighted location prediction ──────────────────────────
-            # H1: strong lipophilic gradient (>1.0) drives drug toward core
+            # Weighted location prediction
             h1_core = 1.0 if grad > 1.0 else 0.0
-            # H2 & H3: both ask whether the core is a better HSP match than the shell
             hsp_favors_core = 1.0 if d_core <= d_surf else 0.0
             core_score = (weights['h1'] * h1_core +
                           weights['h2'] * hsp_favors_core +
@@ -148,6 +130,74 @@ def predict():
         },
         'results': rankings
     })
+
+# ============================================================================
+# ADMIN ENDPOINTS
+# ============================================================================
+
+@app.route('/api/formulations', methods=['GET'])
+def get_formulations():
+    """List all formulations in the database."""
+    FORMULATIONS = load_formulations()
+    return jsonify(FORMULATIONS)
+
+@app.route('/api/formulations', methods=['POST'])
+def add_formulation():
+    """Add a new formulation. Requires X-Admin-Key header."""
+    if not check_admin(request):
+        return jsonify({'error': 'Unauthorised'}), 401
+
+    body = request.json
+    required = ['id', 'name', 'core_logp', 'surf_logp',
+                'core_hsp', 'surf_hsp', 'structure', 'experimental_note']
+    missing = [k for k in required if k not in body]
+    if missing:
+        return jsonify({'error': f'Missing fields: {missing}'}), 400
+
+    for hsp_field in ('core_hsp', 'surf_hsp'):
+        for sub in ('delta_d', 'delta_p', 'delta_h'):
+            if sub not in body[hsp_field]:
+                return jsonify({'error': f'{hsp_field}.{sub} is required'}), 400
+
+    FORMULATIONS = load_formulations()
+    fid = body['id'].strip().upper()
+    if fid in FORMULATIONS:
+        return jsonify({'error': f'ID {fid} already exists. Use a different ID.'}), 409
+
+    FORMULATIONS[fid] = {
+        'name':               body['name'],
+        'core_logp':          float(body['core_logp']),
+        'surf_logp':          float(body['surf_logp']),
+        'core_hsp': {
+            'delta_d': float(body['core_hsp']['delta_d']),
+            'delta_p': float(body['core_hsp']['delta_p']),
+            'delta_h': float(body['core_hsp']['delta_h']),
+        },
+        'surf_hsp': {
+            'delta_d': float(body['surf_hsp']['delta_d']),
+            'delta_p': float(body['surf_hsp']['delta_p']),
+            'delta_h': float(body['surf_hsp']['delta_h']),
+        },
+        'structure':          body['structure'],
+        'experimental_note':  body['experimental_note'],
+    }
+    save_formulations(FORMULATIONS)
+    return jsonify({'success': True, 'id': fid}), 201
+
+@app.route('/api/formulations/<fid>', methods=['DELETE'])
+def delete_formulation(fid):
+    """Delete a formulation by ID. Requires X-Admin-Key header."""
+    if not check_admin(request):
+        return jsonify({'error': 'Unauthorised'}), 401
+
+    FORMULATIONS = load_formulations()
+    fid = fid.upper()
+    if fid not in FORMULATIONS:
+        return jsonify({'error': f'{fid} not found'}), 404
+
+    del FORMULATIONS[fid]
+    save_formulations(FORMULATIONS)
+    return jsonify({'success': True})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

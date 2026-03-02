@@ -1,0 +1,38 @@
+{
+  "F1": {
+    "name": "F1 (C8-PS80)",
+    "core_logp": 2.70,
+    "surf_logp": 2.45,
+    "core_hsp": { "delta_d": 16.8, "delta_p": 5.0, "delta_h": 12.3 },
+    "surf_hsp": { "delta_d": 16.5, "delta_p": 5.0, "delta_h": 11.0 },
+    "structure": "Type II Amorphous",
+    "experimental_note": "Moderate encapsulation; baseline performance."
+  },
+  "F2": {
+    "name": "F2 (C10-PS80)",
+    "core_logp": 3.75,
+    "surf_logp": 2.45,
+    "core_hsp": { "delta_d": 16.9, "delta_p": 4.5, "delta_h": 11.6 },
+    "surf_hsp": { "delta_d": 16.5, "delta_p": 5.0, "delta_h": 11.0 },
+    "structure": "Type II Amorphous",
+    "experimental_note": "Optimal for interfacial localization (e.g., Nile Red)."
+  },
+  "F3": {
+    "name": "F3 (C8-PEG100)",
+    "core_logp": 2.70,
+    "surf_logp": 2.54,
+    "core_hsp": { "delta_d": 16.8, "delta_p": 5.0, "delta_h": 12.3 },
+    "surf_hsp": { "delta_d": 17.0, "delta_p": 3.0, "delta_h": 9.5 },
+    "structure": "Type I Imperfect Crystal",
+    "experimental_note": "High clustering observed; poor molecular dispersion."
+  },
+  "F4": {
+    "name": "F4 (C10-PEG100)",
+    "core_logp": 3.75,
+    "surf_logp": 2.54,
+    "core_hsp": { "delta_d": 16.9, "delta_p": 4.5, "delta_h": 11.6 },
+    "surf_hsp": { "delta_d": 17.0, "delta_p": 3.0, "delta_h": 9.5 },
+    "structure": "Type I Imperfect Crystal",
+    "experimental_note": "Optimal for deep core-loading (e.g., Pyrene)."
+  }
+}
