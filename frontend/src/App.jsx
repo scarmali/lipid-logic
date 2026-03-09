@@ -3,6 +3,7 @@ import FormulationCard from "./components/FormulationCard";
 import AdminPanel from "./components/AdminPanel";
 import AboutPage from "./components/AboutPage";
 import ValidationPage from "./components/ValidationPage";
+import WalkthroughModal from "./components/WalkthroughModal";
 import "./App.css";
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
     setShowKeyModal(false);
     setShowAdmin(true);
   };
+
+  // ── Walkthrough ───────────────────────────────────────────────────────────
+  const [showWalkthrough, setShowWalkthrough] = useState(true);
 
   // ── Tool state ─────────────────────────────────────────────────────────────
   const [selectedDrug, setSelectedDrug] = useState("");
@@ -105,27 +109,57 @@ function App() {
     return "Highly Lipophilic";
   };
 
+  const getLogPColour = (v) => {
+    if (isNaN(v)) return "#64748b";
+    if (v < 1)  return "#3b82f6";
+    if (v < 3)  return "#10b981";
+    if (v < 5)  return "#f59e0b";
+    return "#ef4444";
+  };
+
   return (
     <>
+      {/* WALKTHROUGH MODAL */}
+      {showWalkthrough && (
+        <WalkthroughModal onClose={() => setShowWalkthrough(false)} />
+      )}
+
       {/* FULL-WIDTH HEADER */}
       <header className="main-header">
         <div className="hero-content">
+          <div className="hero-badge">CADFD · Rational NLC Design</div>
           <h1 className="hero-title">Lipid Logic Explorer</h1>
-          <p className="hero-subtitle">Rational NLC Design via Competitive Partitioning</p>
+          <p className="hero-subtitle">
+            Predict drug localisation in Nanostructured Lipid Carriers — before any experiment begins
+          </p>
         </div>
         <nav className="main-nav">
           <button
             className={`nav-link ${page === "tool" ? "nav-link--active" : ""}`}
             onClick={() => setPage("tool")}
-          >Tool</button>
+          >
+            <span className="nav-icon">⚗️</span> Tool
+          </button>
           <button
             className={`nav-link ${page === "about" ? "nav-link--active" : ""}`}
             onClick={() => setPage("about")}
-          >About</button>
+          >
+            <span className="nav-icon">📖</span> About
+          </button>
           <button
             className={`nav-link ${page === "validation" ? "nav-link--active" : ""}`}
             onClick={() => setPage("validation")}
-          >Validation</button>
+          >
+            <span className="nav-icon">🔬</span> Validation
+          </button>
+          <button
+            className="nav-guide-btn"
+            onClick={() => setShowWalkthrough(true)}
+            title="Re-open the guided walkthrough"
+            aria-label="Open guide"
+          >
+            ? Guide
+          </button>
           <button
             className="nav-admin-btn"
             onClick={openAdmin}
@@ -172,6 +206,26 @@ function App() {
       {/* TOOL PAGE */}
       {page === "tool" && (
       <div className="app-container">
+
+        {/* PAGE INTRO BANNER */}
+        <div className="page-intro-banner">
+          <div className="pib-left">
+            <h2 className="pib-title">NLC Formulation Predictor</h2>
+            <p className="pib-desc">
+              Enter your drug's physicochemical properties below to predict which NLC
+              formulation offers the best chemical compatibility.
+            </p>
+          </div>
+          <div className="pib-links">
+            <button className="pib-link" onClick={() => setPage("about")}>
+              📖 New to NLCs? Read the background
+            </button>
+            <button className="pib-link" onClick={() => setPage("validation")}>
+              🔬 See how predictions were validated
+            </button>
+          </div>
+        </div>
+
         <div className="main-grid">
 
           {/* LEFT PANEL — INPUTS */}
@@ -182,10 +236,10 @@ function App() {
               {/* Drug selector */}
               <div className="input-group">
                 <label>
-                  Validation Drug
+                  Try a Validation Drug
                   <span
                     className="tooltip-icon"
-                    data-tooltip="Select a well-characterised drug to auto-fill its properties and validate the model."
+                    data-tooltip="Select a well-characterised drug to auto-fill its known properties and see how the model performs against experimental data."
                   >?</span>
                 </label>
                 <select value={selectedDrug} onChange={(e) => handleDrugSelect(e.target.value)}>
@@ -194,7 +248,18 @@ function App() {
                     <option key={key} value={key}>{validationDrugs[key].name}</option>
                   ))}
                 </select>
+                {selectedDrug && (
+                  <p className="input-hint">
+                    ✓ Properties auto-filled from the validation dataset.{" "}
+                    <button className="inline-link" onClick={() => setPage("validation")}>
+                      See experimental evidence →
+                    </button>
+                  </p>
+                )}
               </div>
+
+              {/* Divider */}
+              <div className="or-divider"><span>or enter your own drug</span></div>
 
               {/* Log P */}
               <div className="input-group">
@@ -202,8 +267,9 @@ function App() {
                   Log P
                   <span
                     className="tooltip-icon"
-                    data-tooltip="Octanol–water partition coefficient. Measures lipophilicity: higher values indicate more oil-soluble compounds."
+                    data-tooltip="Octanol–water partition coefficient. Measures lipophilicity: higher values indicate more oil-soluble compounds. This is the only required input."
                   >?</span>
+                  <span className="required-label">required</span>
                 </label>
                 <input
                   type="number"
@@ -212,6 +278,7 @@ function App() {
                   value={drugProps.logp}
                   onChange={(e) => handlePropChange("logp", e.target.value)}
                 />
+                <p className="input-hint">Find this in ChemDraw, DrugBank, or PubChem</p>
               </div>
 
               {/* LogP gauge */}
@@ -222,9 +289,19 @@ function App() {
                   </div>
                   <div className="gauge-labels">
                     <span>Hydrophilic</span>
-                    <span className="gauge-value-label">{getLogPLabel(logpValue)}</span>
+                    <span
+                      className="gauge-value-label"
+                      style={{ color: getLogPColour(logpValue) }}
+                    >
+                      {getLogPLabel(logpValue)}
+                    </span>
                     <span>Lipophilic</span>
                   </div>
+                  {logpValue < 1 && !isNaN(logpValue) && (
+                    <div className="logp-warning">
+                      ⚠️ Log P below 1 — NLC encapsulation may be inefficient. See results for alternatives.
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -235,15 +312,24 @@ function App() {
                     Hansen Solubility Parameters
                     <span
                       className="tooltip-icon"
-                      data-tooltip="HSP decompose solubility into dispersive (δd), polar (δp), and hydrogen-bonding (δh) contributions. Units: MPa½."
+                      data-tooltip="HSP decompose solubility into dispersive (δd), polar (δp), and hydrogen-bonding (δh) contributions. Units: MPa½. These enable a more precise three-hypothesis prediction."
                     >?</span>
                     <span className="optional-label">optional</span>
                   </h4>
-                  <p className="hsp-hint">Leave blank to rank by lipophilicity gradient only.</p>
+                  <p className="hsp-hint">
+                    Leave blank to rank by lipophilicity gradient only.{" "}
+                    <span
+                      className="tooltip-icon tooltip-icon--inline"
+                      data-tooltip="HSP values can be estimated using group-contribution methods or tools like HSPiP. They are listed in the HSP workbook and solubility databases."
+                    >?</span>
+                  </p>
                 </div>
                 <div className="hsp-grid">
                   <div className="input-group">
-                    <label>δd (MPa½)</label>
+                    <label>
+                      δd (MPa½)
+                      <span className="tooltip-icon" data-tooltip="Dispersion component — non-specific London forces">?</span>
+                    </label>
                     <input
                       type="number" step="0.1" placeholder="e.g. 18.0"
                       value={drugProps.delta_d}
@@ -251,7 +337,10 @@ function App() {
                     />
                   </div>
                   <div className="input-group">
-                    <label>δp (MPa½)</label>
+                    <label>
+                      δp (MPa½)
+                      <span className="tooltip-icon" data-tooltip="Polar component — dipole–dipole interactions">?</span>
+                    </label>
                     <input
                       type="number" step="0.1" placeholder="e.g. 5.5"
                       value={drugProps.delta_p}
@@ -259,7 +348,10 @@ function App() {
                     />
                   </div>
                   <div className="input-group">
-                    <label>δh (MPa½)</label>
+                    <label>
+                      δh (MPa½)
+                      <span className="tooltip-icon" data-tooltip="Hydrogen-bonding component — H-bond donor/acceptor capacity">?</span>
+                    </label>
                     <input
                       type="number" step="0.1" placeholder="e.g. 8.5"
                       value={drugProps.delta_h}
@@ -273,8 +365,8 @@ function App() {
 
               <button className="predict-button" onClick={handlePredict} disabled={loading}>
                 {loading ? (
-                  <><span className="spinner" /> Analyzing…</>
-                ) : "Run CADFD Analysis"}
+                  <><span className="spinner" /> Analysing…</>
+                ) : "▶ Run CADFD Analysis"}
               </button>
             </div>
 
@@ -292,9 +384,14 @@ function App() {
                   {results.metadata.stars >= 4
                     ? "High confidence — drug properties fall well within the validated model range."
                     : results.metadata.stars >= 3
-                    ? "Moderate confidence — prediction is reasonable, treat as a starting point for further study."
+                    ? "Moderate confidence — prediction is reasonable; treat as a starting point for further study."
                     : "Lower confidence — drug properties are at the edge of the model's training range; use with caution."}
                 </p>
+                <div className="confidence-learn-more">
+                  <button className="inline-link" onClick={() => setPage("about")}>
+                    How does the model calculate this? →
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -363,8 +460,13 @@ function App() {
                             ? `All ${total} formulations predict ${majorityCore ? "core" : "interface"} localisation for this drug.`
                             : `${coreCount} of ${total} formulations predict core loading; ${total - coreCount} predict interface localisation. The outcome varies with formulation composition.`}
                           {results.metadata.logp_only &&
-                            " This prediction is based on lipophilic gradient only — add HSP values for a more precise result."}
+                            " This prediction uses lipophilic gradient only — add HSP values for a more precise result."}
                         </p>
+                        <div className="ds-implication">
+                          {majorityCore
+                            ? "🐢 Expect slower drug release and better protection from the environment."
+                            : "⚡ Expect faster drug release as the surfactant corona disperses."}
+                        </div>
                       </div>
                     </div>
                   );
@@ -379,13 +481,17 @@ function App() {
                   </div>
                 )}
 
-                <h4 className="results-sub-heading">Predicted behaviour in each formulation</h4>
+                <h4 className="results-sub-heading">
+                  Formulations ranked by predicted compatibility
+                  <span className="results-sub-note">Best match first</span>
+                </h4>
 
-                {results.results.map((formulation) => (
+                {results.results.map((formulation, idx) => (
                   <FormulationCard
                     key={formulation.id}
                     formulation={formulation}
                     drugLogP={drugProps.logp}
+                    rank={idx + 1}
                   />
                 ))}
               </div>
@@ -394,21 +500,55 @@ function App() {
                 <div className="empty-icon">⚗️</div>
                 <h3>Ready to Analyse</h3>
                 <p>
-                  Select a validation drug or enter custom physicochemical properties,
-                  then click <strong>Run CADFD Analysis</strong> to predict the optimal NLC formulation.
+                  Enter your drug's Log&nbsp;P value on the left, then click{" "}
+                  <strong>Run CADFD Analysis</strong> to predict how it will behave
+                  across all NLC formulations in the database.
                 </p>
+
                 <div className="empty-steps">
                   <div className="step">
                     <span className="step-num">1</span>
-                    Choose a drug or enter Log P &amp; HSP values
+                    <div>
+                      <strong>Enter Log P</strong>
+                      <span>Find this in ChemDraw, DrugBank, or PubChem</span>
+                    </div>
                   </div>
                   <div className="step">
                     <span className="step-num">2</span>
-                    Click "Run CADFD Analysis"
+                    <div>
+                      <strong>Add HSP values</strong>
+                      <span>Optional — improves prediction accuracy</span>
+                    </div>
                   </div>
                   <div className="step">
                     <span className="step-num">3</span>
-                    Review ranked formulation predictions
+                    <div>
+                      <strong>Run the analysis</strong>
+                      <span>Get ranked formulation predictions in seconds</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="empty-info-grid">
+                  <div className="empty-info-card">
+                    <span className="eic-icon">📖</span>
+                    <div>
+                      <strong>New to NLCs?</strong>
+                      <p>Learn about nanostructured lipid carriers, why drug localisation matters, and the science behind the predictions.</p>
+                      <button className="inline-link" onClick={() => setPage("about")}>
+                        Read the background →
+                      </button>
+                    </div>
+                  </div>
+                  <div className="empty-info-card">
+                    <span className="eic-icon">🔬</span>
+                    <div>
+                      <strong>See validation data</strong>
+                      <p>Explore how fluorescent probe experiments confirmed the model's predictions across four NLC formulations.</p>
+                      <button className="inline-link" onClick={() => setPage("validation")}>
+                        View validation →
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
