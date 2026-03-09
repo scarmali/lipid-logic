@@ -84,7 +84,11 @@ def predict():
         strategy = "Not recommended for NLC core encapsulation"
 
     # Confidence rating
-    confidence = 5 if 4.0 <= logp <= 5.5 else 3 if 3.0 <= logp <= 6.0 else 1
+    # 5★ = within validated range (Pyrene 5.19, Nile Red 4.0)
+    # 3★ = within modelled range but outside validation
+    # 2★ = high logP (> 6.0) — prediction is directionally valid but extrapolated
+    # 1★ = low logP (< 2.5) where NLC encapsulation is generally unreliable
+    confidence = 5 if 4.0 <= logp <= 5.5 else 3 if 2.5 <= logp <= 7.0 else 2 if logp > 7.0 else 1
 
     rankings = []
     for fid, f in FORMULATIONS.items():
@@ -94,7 +98,15 @@ def predict():
         if logp_only:
             s2, s3 = 3, 3
             d_core, d_surf = None, None
-            location = "Undetermined"
+            # In logP-only mode, apply H1 (lipophilicity gradient) alone.
+            # If the core is more lipophilic than the surface (grad > 0) and the
+            # drug is appreciably lipophilic (logp >= 2.5), predict Core localisation.
+            if grad > 0 and logp >= 2.5:
+                location = "Core"
+            elif grad < 0 and logp >= 2.5:
+                location = "Interface"
+            else:
+                location = "Undetermined"  # borderline: gradient weak or drug near threshold
             final_score = s1
         else:
             d_core = get_hansen_dist(hsp, f['core_hsp'])

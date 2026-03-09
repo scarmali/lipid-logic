@@ -544,7 +544,9 @@ function App() {
                     ? "High confidence — drug properties fall well within the validated model range."
                     : results.metadata.stars >= 3
                     ? "Moderate confidence — prediction is reasonable; treat as a starting point for further study."
-                    : "Lower confidence — drug properties are at the edge of the model's training range; use with caution."}
+                    : results.metadata.stars === 2
+                    ? "Extrapolated prediction — Log P is above the validated range. The directional result (core vs interface) is likely correct, but treat quantitative scores with caution."
+                    : "Lower confidence — drug is too hydrophilic for reliable NLC encapsulation. Consider alternative formulation strategies."}
                 </p>
                 <div className="confidence-learn-more">
                   <button className="inline-link" onClick={() => setPage("about")}>
