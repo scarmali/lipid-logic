@@ -17,7 +17,7 @@ function parseDescriptor(name = "", structure = "") {
   // Surfactant detection
   let surfLabel = "Surfactant shell";
   let surfNote  = "";
-  if (/PEG[\-\s]*100|PEG100/i.test(name)) {
+  if (/PEG[-\s]*100|PEG100/i.test(name)) {
     surfLabel = "PEG-based surfactant";
     surfNote  = "Highly hydrophilic shell — reduces protein adsorption, forms a dense steric barrier";
   } else if (/PS80|Polysorbate\s*80|Tween\s*80/i.test(name)) {
