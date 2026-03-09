@@ -29,6 +29,12 @@ function App() {
   // ── Walkthrough ───────────────────────────────────────────────────────────
   const [showWalkthrough, setShowWalkthrough] = useState(true);
 
+  // ── Reset ─────────────────────────────────────────────────────────────────
+  const handleReset = () => {
+    setResults(null);
+    setError(null);
+  };
+
   // ── Tool state ─────────────────────────────────────────────────────────────
   const [selectedDrug, setSelectedDrug] = useState("");
   const [drugProps, setDrugProps] = useState({ logp: "", delta_d: "", delta_p: "", delta_h: "" });
@@ -437,6 +443,16 @@ function App() {
               </div>
             ) : results ? (
               <div className="results-list">
+
+                {/* ── Results action bar ── */}
+                <div className="results-action-bar">
+                  <span className="rab-label">
+                    {results.results.length} formulation{results.results.length !== 1 ? "s" : ""} analysed
+                  </span>
+                  <button className="rab-reset-btn" onClick={handleReset}>
+                    ↺ New Analysis
+                  </button>
+                </div>
 
                 {/* ── Distribution summary ── */}
                 {(() => {

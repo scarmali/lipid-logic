@@ -3151,3 +3151,219 @@ body {
   }
 }
 
+
+/* ═══════════════════════════════════════════════════════
+   RESULTS ACTION BAR (reset button)
+═══════════════════════════════════════════════════════ */
+.results-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding: 8px 14px;
+  background: #f8fafc;
+  border: 1px solid #e4edf5;
+  border-radius: 10px;
+}
+
+.rab-label {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.rab-reset-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1.5px solid #d1dce8;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+
+.rab-reset-btn:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FORMULATION CARD — generalised header & details
+═══════════════════════════════════════════════════════ */
+.fc-title-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.fc-name-secondary {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.fc-struct-tag {
+  display: inline-block;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+/* Key properties summary inside spatial-info */
+.fc-key-props {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.fc-key-prop {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.fkp-label {
+  font-weight: 700;
+  color: #64748b;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.fkp-value {
+  color: #334155;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Component summary inside explainer */
+.fc-comp-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.fc-comp-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid #e4edf5;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.fc-comp-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.fc-comp-row strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0f2537;
+  margin-bottom: 1px;
+}
+
+.fc-comp-row p {
+  margin: 0;
+  color: #64748b;
+  font-size: 11px;
+}
+
+.fc-explainer-divider {
+  height: 1px;
+  background: #e4edf5;
+  margin: 12px 0;
+}
+
+/* Details toggle */
+.fc-details-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid #e4edf5;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 5px 12px;
+  border-radius: 8px;
+  margin: 8px 0 0;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  width: 100%;
+  justify-content: center;
+}
+
+.fc-details-toggle:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+/* Details panel */
+.fc-details {
+  background: #f8fafc;
+  border: 1px solid #e4edf5;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 8px 0 0;
+  animation: fadeInDown 0.2s ease;
+}
+
+.fc-details-row {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  padding: 4px 0;
+  border-bottom: 1px solid #f1f5f9;
+  line-height: 1.4;
+}
+
+.fc-details-row:last-child {
+  border-bottom: none;
+}
+
+.fd-label {
+  font-weight: 700;
+  color: #64748b;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 52px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.fd-value {
+  color: #334155;
+}
+
+.fd-note {
+  font-style: italic;
+  color: #64748b;
+}
+
