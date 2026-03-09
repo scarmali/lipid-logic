@@ -35,35 +35,80 @@ function App() {
     setError(null);
   };
 
-  // ── SMILES / Log P calculator ─────────────────────────────────────────────
-  const [smilesInput,   setSmilesInput]   = useState("");
-  const [logpCalcState, setLogpCalcState] = useState("idle"); // idle | loading | success | error
-  const [logpCalcMsg,   setLogpCalcMsg]   = useState("");
+  // ── Drug name / SMILES → Log P lookup ────────────────────────────────────
+  const [drugNameInput,  setDrugNameInput]  = useState("");
+  const [smilesInput,    setSmilesInput]    = useState("");
+  const [logpCalcState,  setLogpCalcState]  = useState("idle"); // idle | loading | success | error
+  const [logpCalcMsg,    setLogpCalcMsg]    = useState("");
 
-  const handleCalcLogP = async () => {
-    if (!smilesInput.trim()) return;
+  // Shared helper: fill Log P from a successful lookup
+  const applyLogP = (logp, source) => {
+    setDrugProps(prev => ({ ...prev, logp }));
+    setSelectedDrug("");
+    setResults(null);
+    setError(null);
+    setLogpCalcState("success");
+    setLogpCalcMsg(`Log P = ${logp} — ${source}`);
+    setTimeout(() => setLogpCalcState("idle"), 7000);
+  };
+
+  // PubChem lookup by drug name
+  const handleNameLookup = async () => {
+    const name = drugNameInput.trim();
+    if (!name) return;
     setLogpCalcState("loading");
     setLogpCalcMsg("");
-    const API_URL = process.env.REACT_APP_API_URL || "";
     try {
-      const res  = await fetch(`${API_URL}/api/logp`, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ smiles: smilesInput.trim() }),
-      });
+      const enc = encodeURIComponent(name);
+      const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${enc}/property/XLogP,IsomericSMILES,IUPACName/JSON`;
+      const res = await fetch(url);
+      if (res.status === 404) throw new Error(`"${name}" not found in PubChem. Check spelling or try using the SMILES string directly.`);
+      if (!res.ok) throw new Error("PubChem returned an error — try again or use SMILES.");
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Calculation failed");
-      // Auto-fill Log P and clear any previously selected validation drug
-      setDrugProps(prev => ({ ...prev, logp: data.logp }));
-      setSelectedDrug("");
-      setResults(null);
-      setError(null);
-      setLogpCalcState("success");
-      setLogpCalcMsg(`Log P = ${data.logp} (${data.source})`);
-      setTimeout(() => setLogpCalcState("idle"), 6000);
+      const props = data?.PropertyTable?.Properties?.[0];
+      if (!props) throw new Error("No data returned for that compound.");
+      if (props.XLogP == null) throw new Error("PubChem has no XLogP value for this compound. Try entering Log P manually.");
+      // Auto-fill SMILES field too so student can see the structure string
+      if (props.IsomericSMILES) setSmilesInput(props.IsomericSMILES);
+      applyLogP(parseFloat(props.XLogP.toFixed(2)), `PubChem XLogP3 · ${props.IUPACName || name}`);
     } catch (err) {
       setLogpCalcState("error");
       setLogpCalcMsg(err.message);
+    }
+  };
+
+  // PubChem lookup by SMILES structure
+  const handleCalcLogP = async () => {
+    const smiles = smilesInput.trim();
+    if (!smiles) return;
+    setLogpCalcState("loading");
+    setLogpCalcMsg("");
+    try {
+      // Try PubChem first (client-side, no backend needed)
+      const enc = encodeURIComponent(smiles);
+      const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${enc}/property/XLogP,IUPACName/JSON`;
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        const props = data?.PropertyTable?.Properties?.[0];
+        if (props?.XLogP != null) {
+          applyLogP(parseFloat(props.XLogP.toFixed(2)), `PubChem XLogP3${props.IUPACName ? ` · ${props.IUPACName}` : ""}`);
+          return;
+        }
+      }
+      // Fallback: backend ALOGPS 2.1 API
+      const API_URL = process.env.REACT_APP_API_URL || "";
+      const apiRes  = await fetch(`${API_URL}/api/logp`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ smiles }),
+      });
+      const apiData = await apiRes.json();
+      if (!apiRes.ok) throw new Error(apiData.error || "Calculation failed");
+      applyLogP(apiData.logp, apiData.source);
+    } catch (err) {
+      setLogpCalcState("error");
+      setLogpCalcMsg(err.message.includes("fetch") ? "Could not reach lookup service — check your internet connection." : err.message);
     }
   };
 
@@ -299,21 +344,48 @@ function App() {
               {/* Divider */}
               <div className="or-divider"><span>or enter your own drug</span></div>
 
-              {/* SMILES → Log P calculator */}
+              {/* Drug name / SMILES → Log P lookup */}
               <div className="smiles-section">
                 <div className="smiles-header">
                   <h4>
-                    Calculate Log P from SMILES
+                    Look Up Log P
                     <span
                       className="tooltip-icon"
-                      data-tooltip="SMILES (Simplified Molecular Input Line Entry System) is a text representation of a molecule's structure. Paste one here and Log P will be calculated automatically using ALOGPS 2.1."
+                      data-tooltip="Search by drug name to auto-fill Log P from PubChem, or paste a SMILES string to calculate it. Both methods query the PubChem XLogP3 database."
                     >?</span>
                     <span className="optional-label">optional</span>
                   </h4>
                   <p className="smiles-hint">
-                    Find SMILES on PubChem, ChemDraw, or DrugBank — or draw your molecule and export as SMILES.
+                    Search by name or paste a SMILES string — Log P will be filled automatically.
                   </p>
                 </div>
+
+                {/* Drug name row */}
+                <label className="lookup-field-label">By drug name</label>
+                <div className="smiles-input-row">
+                  <input
+                    className="smiles-input"
+                    type="text"
+                    placeholder="e.g. ibuprofen, caffeine, curcumin"
+                    value={drugNameInput}
+                    onChange={e => { setDrugNameInput(e.target.value); setLogpCalcState("idle"); }}
+                    onKeyDown={e => e.key === "Enter" && handleNameLookup()}
+                    spellCheck={false}
+                    autoCorrect="off"
+                  />
+                  <button
+                    className={`smiles-calc-btn ${logpCalcState === "loading" ? "smiles-calc-btn--loading" : ""}`}
+                    onClick={handleNameLookup}
+                    disabled={!drugNameInput.trim() || logpCalcState === "loading"}
+                  >
+                    {logpCalcState === "loading"
+                      ? <><span className="spinner" /> Looking up…</>
+                      : "Look Up"}
+                  </button>
+                </div>
+
+                {/* SMILES row */}
+                <label className="lookup-field-label lookup-field-label--mt">By SMILES string</label>
                 <div className="smiles-input-row">
                   <input
                     className="smiles-input"
@@ -333,15 +405,19 @@ function App() {
                   >
                     {logpCalcState === "loading"
                       ? <><span className="spinner" /> Calculating…</>
-                      : "Calculate Log P"}
+                      : "Calculate"}
                   </button>
                 </div>
+
                 {logpCalcState === "success" && (
                   <p className="smiles-feedback smiles-feedback--success">✓ {logpCalcMsg}</p>
                 )}
                 {logpCalcState === "error" && (
                   <p className="smiles-feedback smiles-feedback--error">⚠ {logpCalcMsg}</p>
                 )}
+                <p className="smiles-source-note">
+                  Log P values sourced from PubChem XLogP3 — a validated computational predictor used in drug discovery.
+                </p>
               </div>
 
               {/* Log P */}
