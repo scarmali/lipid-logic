@@ -41,9 +41,11 @@ function App() {
   const [logpCalcState,  setLogpCalcState]  = useState("idle"); // idle | loading | success | error
   const [logpCalcMsg,    setLogpCalcMsg]    = useState("");
 
-  // Shared helper: fill Log P from a successful lookup
+  // Shared helper: fill Log P from a successful lookup.
+  // Clears HSP fields so stale values from a previous drug don't contaminate
+  // the new prediction — the student can re-enter HSP manually if they have them.
   const applyLogP = (logp, source) => {
-    setDrugProps(prev => ({ ...prev, logp }));
+    setDrugProps({ logp, delta_d: "", delta_p: "", delta_h: "" });
     setSelectedDrug("");
     setResults(null);
     setError(null);

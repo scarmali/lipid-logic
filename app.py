@@ -116,7 +116,18 @@ def predict():
             s3 = 5 if min(d_core, d_surf) < 8.0 else 3
 
             # Weighted location prediction
-            h1_core = 1.0 if grad > 1.0 else 0.0
+            # h1_core: strength of thermodynamic pull toward the core.
+            # A strong gradient (grad > 1.0) always signals core preference.
+            # For weak gradients, the signal scales with the drug's own logP —
+            # a highly lipophilic drug (logP >> 3) will seek the core even when
+            # the formulation gradient is small, because the core is still the
+            # most lipophilic phase available.
+            if grad > 1.0:
+                h1_core = 1.0
+            elif grad > 0:
+                h1_core = min(1.0, max(0.0, (logp - 2.0) / 3.0))
+            else:
+                h1_core = 0.0
             hsp_favors_core = 1.0 if d_core <= d_surf else 0.0
             core_score = (weights['h1'] * h1_core +
                           weights['h2'] * hsp_favors_core +
