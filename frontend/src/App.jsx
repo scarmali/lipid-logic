@@ -35,6 +35,38 @@ function App() {
     setError(null);
   };
 
+  // ── SMILES / Log P calculator ─────────────────────────────────────────────
+  const [smilesInput,   setSmilesInput]   = useState("");
+  const [logpCalcState, setLogpCalcState] = useState("idle"); // idle | loading | success | error
+  const [logpCalcMsg,   setLogpCalcMsg]   = useState("");
+
+  const handleCalcLogP = async () => {
+    if (!smilesInput.trim()) return;
+    setLogpCalcState("loading");
+    setLogpCalcMsg("");
+    const API_URL = process.env.REACT_APP_API_URL || "";
+    try {
+      const res  = await fetch(`${API_URL}/api/logp`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ smiles: smilesInput.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Calculation failed");
+      // Auto-fill Log P and clear any previously selected validation drug
+      setDrugProps(prev => ({ ...prev, logp: data.logp }));
+      setSelectedDrug("");
+      setResults(null);
+      setError(null);
+      setLogpCalcState("success");
+      setLogpCalcMsg(`Log P = ${data.logp} (${data.source})`);
+      setTimeout(() => setLogpCalcState("idle"), 6000);
+    } catch (err) {
+      setLogpCalcState("error");
+      setLogpCalcMsg(err.message);
+    }
+  };
+
   // ── Tool state ─────────────────────────────────────────────────────────────
   const [selectedDrug, setSelectedDrug] = useState("");
   const [drugProps, setDrugProps] = useState({ logp: "", delta_d: "", delta_p: "", delta_h: "" });
@@ -266,6 +298,51 @@ function App() {
 
               {/* Divider */}
               <div className="or-divider"><span>or enter your own drug</span></div>
+
+              {/* SMILES → Log P calculator */}
+              <div className="smiles-section">
+                <div className="smiles-header">
+                  <h4>
+                    Calculate Log P from SMILES
+                    <span
+                      className="tooltip-icon"
+                      data-tooltip="SMILES (Simplified Molecular Input Line Entry System) is a text representation of a molecule's structure. Paste one here and Log P will be calculated automatically using ALOGPS 2.1."
+                    >?</span>
+                    <span className="optional-label">optional</span>
+                  </h4>
+                  <p className="smiles-hint">
+                    Find SMILES on PubChem, ChemDraw, or DrugBank — or draw your molecule and export as SMILES.
+                  </p>
+                </div>
+                <div className="smiles-input-row">
+                  <input
+                    className="smiles-input"
+                    type="text"
+                    placeholder="e.g. c1ccccc1 (benzene)"
+                    value={smilesInput}
+                    onChange={e => { setSmilesInput(e.target.value); setLogpCalcState("idle"); }}
+                    onKeyDown={e => e.key === "Enter" && handleCalcLogP()}
+                    spellCheck={false}
+                    autoCorrect="off"
+                    autoCapitalize="none"
+                  />
+                  <button
+                    className={`smiles-calc-btn ${logpCalcState === "loading" ? "smiles-calc-btn--loading" : ""}`}
+                    onClick={handleCalcLogP}
+                    disabled={!smilesInput.trim() || logpCalcState === "loading"}
+                  >
+                    {logpCalcState === "loading"
+                      ? <><span className="spinner" /> Calculating…</>
+                      : "Calculate Log P"}
+                  </button>
+                </div>
+                {logpCalcState === "success" && (
+                  <p className="smiles-feedback smiles-feedback--success">✓ {logpCalcMsg}</p>
+                )}
+                {logpCalcState === "error" && (
+                  <p className="smiles-feedback smiles-feedback--error">⚠ {logpCalcMsg}</p>
+                )}
+              </div>
 
               {/* Log P */}
               <div className="input-group">

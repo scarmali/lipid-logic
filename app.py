@@ -3,6 +3,10 @@ from flask_cors import CORS
 import math
 import os
 import json
+import socket
+from urllib.request import urlopen
+from urllib.parse import quote as url_quote
+from urllib.error import URLError, HTTPError
 
 app = Flask(__name__)
 CORS(app)
@@ -130,6 +134,54 @@ def predict():
         },
         'results': rankings
     })
+
+# ============================================================================
+# LOG P CALCULATION ENDPOINT  —  proxies ALOGPS 2.1 (VCCLAB)
+# ============================================================================
+
+@app.route('/api/logp', methods=['POST'])
+def calculate_logp():
+    """Calculate Log P from a SMILES string using ALOGPS 2.1 at VCCLAB."""
+    data = request.json or {}
+    smiles = (data.get('smiles') or '').strip()
+
+    if not smiles:
+        return jsonify({'error': 'No SMILES string provided'}), 400
+
+    try:
+        encoded = url_quote(smiles, safe='')
+        url = f'http://www.vcclab.org/web/alogps/calc?SMILES={encoded}'
+
+        with urlopen(url, timeout=12) as resp:
+            text = resp.read().decode('utf-8', errors='replace').strip()
+
+        if not text:
+            return jsonify({'error': 'ALOGPS returned an empty response — the SMILES may be invalid.'}), 422
+
+        # ALOGPS response format: "mol_1 <logP> <logS> <SMILES>"
+        # One line per molecule; we only send one SMILES so we read the first line.
+        first_line = text.splitlines()[0]
+        parts = first_line.split()
+
+        if len(parts) < 2:
+            return jsonify({'error': 'Unexpected response from ALOGPS — check your SMILES string.'}), 422
+
+        logp = float(parts[1])
+        return jsonify({
+            'logp':   round(logp, 2),
+            'smiles': smiles,
+            'source': 'ALOGPS 2.1 (VCCLAB)'
+        })
+
+    except socket.timeout:
+        return jsonify({'error': 'ALOGPS timed out. Try again, or enter Log P manually.'}), 504
+    except (URLError, HTTPError) as e:
+        return jsonify({'error': f'Could not reach ALOGPS: {e}. Enter Log P manually.'}), 503
+    except (ValueError, IndexError):
+        return jsonify({'error': 'Could not parse the ALOGPS result — the SMILES string may be invalid.'}), 422
+    except Exception as e:
+        return jsonify({'error': f'Log P calculation failed: {str(e)}'}), 500
+
 
 # ============================================================================
 # ADMIN ENDPOINTS
