@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <!-- Outer ring gradient -->
+    <radialGradient id="outerGrad" cx="38%" cy="32%" r="65%">
+      <stop offset="0%" stop-color="#4ab3f4"/>
+      <stop offset="55%" stop-color="#1a6fc4"/>
+      <stop offset="100%" stop-color="#0a2d6e"/>
+    </radialGradient>
+    <!-- Core gradient (orange/red) -->
+    <radialGradient id="coreGrad" cx="36%" cy="34%" r="65%">
+      <stop offset="0%" stop-color="#ffe066"/>
+      <stop offset="35%" stop-color="#ff8800"/>
+      <stop offset="100%" stop-color="#cc2200"/>
+    </radialGradient>
+    <!-- Middle ring gradient -->
+    <radialGradient id="midGrad" cx="38%" cy="32%" r="65%">
+      <stop offset="0%" stop-color="#6ec6f8"/>
+      <stop offset="60%" stop-color="#1e5fb0"/>
+      <stop offset="100%" stop-color="#0c2a60"/>
+    </radialGradient>
+    <!-- Pearl bead gradient -->
+    <radialGradient id="pearlGrad" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#e8f4ff"/>
+      <stop offset="50%" stop-color="#a8d8f0"/>
+      <stop offset="100%" stop-color="#4a90c8"/>
+    </radialGradient>
+    <!-- Bubble gradient -->
+    <radialGradient id="bubbleGrad" cx="30%" cy="28%" r="70%">
+      <stop offset="0%" stop-color="#b8e4ff"/>
+      <stop offset="100%" stop-color="#2e88d4"/>
+    </radialGradient>
+    <!-- Drop shadow filter -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#0a1a40" flood-opacity="0.5"/>
+    </filter>
+    <filter id="softglow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Outer disc (dark blue) -->
+  <circle cx="50" cy="51" r="44" fill="url(#outerGrad)" filter="url(#shadow)"/>
+
+  <!-- Highlight ring edge -->
+  <circle cx="50" cy="51" r="43.5" fill="none" stroke="#5bbfff" stroke-width="0.8" opacity="0.6"/>
+
+  <!-- Middle ring (medium blue) -->
+  <circle cx="50" cy="51" r="34" fill="url(#midGrad)"/>
+
+  <!-- Inner ring separator -->
+  <circle cx="50" cy="51" r="26" fill="#0d2550" opacity="0.9"/>
+
+  <!-- Pearl beads arranged in a ring (radius ~30 from centre) -->
+  <!-- 20 beads evenly spaced -->
+  <circle cx="50.0" cy="22.0" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="59.3" cy="23.0" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="67.6" cy="26.7" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="74.2" cy="32.8" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="78.4" cy="40.8" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="79.5" cy="50.0" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="77.4" cy="59.1" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="72.2" cy="67.0" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="64.6" cy="72.8" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="55.5" cy="75.8" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="45.6" cy="75.8" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="36.4" cy="72.8" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="28.8" cy="67.0" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="23.6" cy="59.1" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="21.5" cy="50.0" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="22.6" cy="40.8" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="26.8" cy="32.8" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="33.4" cy="26.7" r="3.2" fill="url(#pearlGrad)"/>
+  <circle cx="41.7" cy="23.0" r="3.2" fill="url(#pearlGrad)"/>
+  <!-- one more bead to close the ring naturally -->
+  <circle cx="50.0" cy="22.0" r="3.2" fill="url(#pearlGrad)" opacity="0"/>
+
+  <!-- Inner smaller pearl ring (radius ~19) -->
+  <circle cx="50.0" cy="32.2" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="56.7" cy="33.2" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="62.4" cy="36.7" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="66.1" cy="42.4" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="67.2" cy="49.1" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="65.0" cy="55.6" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="60.3" cy="60.7" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="54.0" cy="63.5" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="47.0" cy="63.5" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="40.7" cy="60.7" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="36.0" cy="55.6" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="33.8" cy="49.1" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="34.9" cy="42.4" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="38.6" cy="36.7" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+  <circle cx="44.3" cy="33.2" r="2.2" fill="url(#pearlGrad)" opacity="0.75"/>
+
+  <!-- Orange/red core -->
+  <circle cx="50" cy="51" r="18" fill="url(#coreGrad)" filter="url(#softglow)"/>
+  <!-- Core highlight -->
+  <circle cx="44" cy="45" r="5.5" fill="white" opacity="0.22"/>
+  <circle cx="43" cy="44" r="2.5" fill="white" opacity="0.18"/>
+
+  <!-- Outer glow ring on core edge -->
+  <circle cx="50" cy="51" r="18.5" fill="none" stroke="#ff6600" stroke-width="1" opacity="0.5"/>
+
+  <!-- Bubbles top-right -->
+  <circle cx="78" cy="16" r="5.2" fill="url(#bubbleGrad)" filter="url(#shadow)"/>
+  <circle cx="86" cy="22" r="3.2" fill="url(#bubbleGrad)" opacity="0.85"/>
+  <circle cx="90" cy="14" r="1.8" fill="url(#bubbleGrad)" opacity="0.7"/>
+
+  <!-- Outer disc edge shine -->
+  <circle cx="50" cy="51" r="44" fill="none" stroke="white" stroke-width="0.6" opacity="0.12"/>
+</svg>
