@@ -43,9 +43,6 @@ export default function AboutPage() {
       <section className="about-hero">
         <div className="about-hero-inner">
           <span className="about-badge">CADFD</span>
-          <h1 className="about-hero-title">
-            Computer-Assisted Drug<br />Formulation Design
-          </h1>
           <p className="about-hero-sub">
             A computational model for predicting drug localisation in
             nanostructured lipid carriers.
