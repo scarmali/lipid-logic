@@ -645,11 +645,6 @@ function App() {
                               <span className="pd-label">Lipophilicity difference</span>
                               <span className="pd-value">ΔlogP = <strong>{gradAbs}</strong></span>
                               <span className={`pd-tag ${nlcProps.grad > 0 ? "pd-tag--core" : "pd-tag--surf"}`}>{gradDir}</span>
-                              <span className="pd-note">
-                                {gradStrength === "strong" ? "Strong driving force towards lipid core"
-                                  : gradStrength === "moderate" ? "Moderate core-interface partitioning gradient"
-                                  : "Weak gradient — other factors dominate"}
-                              </span>
                             </div>
                           </div>
                         )}
@@ -659,8 +654,7 @@ function App() {
                             <div className="pd-body">
                               <span className="pd-label">Hansen compatibility</span>
                               <span className="pd-value">Δδ = <strong>{result.d_core} MPa½</strong></span>
-                              <span className={`pd-tag ${coreCompat.cls}`}>{coreCompat.label.split(" ")[0]}</span>
-                              <span className="pd-note">{coreCompat.label}</span>
+                              <span className={`pd-tag ${coreCompat.cls}`}>{coreCompat.label.replace(" with core lipid", "")}</span>
                             </div>
                           </div>
                         )}
@@ -740,26 +734,16 @@ function App() {
                     )}
 
                     {/* Confidence */}
-                    <div className="card confidence-card confidence-card--inline">
-                      <h3 className="card-title">Model Confidence</h3>
-                      <div className="stars">
-                        {Array.from({ length: 5 }, (_, i) => (
-                          <span key={i} className={i < results.metadata.stars ? "star filled" : "star empty"}>★</span>
-                        ))}
+                    <div className="card confidence-card confidence-card--inline confidence-card--compact">
+                      <div className="confidence-row">
+                        <span className="confidence-label">Model Confidence</span>
+                        <div className="stars">
+                          {Array.from({ length: 5 }, (_, i) => (
+                            <span key={i} className={i < results.metadata.stars ? "star filled" : "star empty"}>★</span>
+                          ))}
+                        </div>
+                        <p className="strategy-tag">{results.metadata.strategy}</p>
                       </div>
-                      <p className="strategy-tag">{results.metadata.strategy}</p>
-                      <p className="confidence-note">
-                        {results.metadata.stars >= 4
-                          ? "High confidence — drug properties fall within the validated model range."
-                          : results.metadata.stars >= 3
-                          ? "Moderate confidence — treat as a starting hypothesis for further study."
-                          : results.metadata.stars === 2
-                          ? "Extrapolated — Log P is above the validated range. Directional result likely correct."
-                          : "Lower confidence — drug may be too hydrophilic for reliable NLC encapsulation."}
-                      </p>
-                      <button className="inline-link" onClick={() => setPage("about")}>
-                        How does the model work? →
-                      </button>
                     </div>
                   </div>
                 );

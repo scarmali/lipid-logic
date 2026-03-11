@@ -784,7 +784,7 @@ body {
 .single-result {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   animation: fadeInUp 0.35s ease;
 }
 
@@ -809,8 +809,8 @@ body {
 .location-hero {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px;
+  gap: 14px;
+  padding: 14px 18px;
   border-radius: 14px;
   border: 1px solid transparent;
 }
@@ -825,7 +825,7 @@ body {
   border-color: #a7f3d0;
 }
 
-.lh-icon { font-size: 36px; flex-shrink: 0; }
+.lh-icon { font-size: 28px; flex-shrink: 0; }
 
 .lh-body { flex: 1; }
 
@@ -839,10 +839,10 @@ body {
 }
 
 .lh-site {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
   color: #0f2537;
-  margin: 0 0 4px;
+  margin: 0 0 3px;
   letter-spacing: -0.3px;
 }
 
@@ -857,7 +857,7 @@ body {
   background: white;
   border: 1px solid #e4edf5;
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 10px 14px;
 }
 
 .affinity-title {
@@ -871,10 +871,10 @@ body {
 
 .affinity-bar-track {
   display: flex;
-  height: 16px;
+  height: 13px;
   border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   background: #f1f5f9;
 }
 
@@ -916,6 +916,27 @@ body {
 /* Confidence card inline */
 .confidence-card--inline {
   margin-top: 0;
+}
+
+/* Compact confidence card — single row */
+.confidence-card--compact {
+  padding: 10px 14px;
+}
+
+.confidence-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.confidence-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #64748b;
+  flex-shrink: 0;
 }
 
 .results-list {
@@ -1062,8 +1083,8 @@ body {
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 12px;
+  padding: 10px 14px;
+  margin-bottom: 0;
 }
 
 .pd-title {
@@ -1072,14 +1093,14 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.8px;
   color: #64748b;
-  margin: 0 0 10px;
+  margin: 0 0 6px;
 }
 
 .pd-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
-  padding: 9px 0;
+  padding: 6px 0;
   border-top: 1px solid #f1f5f9;
 }
 .pd-row:first-of-type { border-top: none; padding-top: 0; }
@@ -1092,9 +1113,11 @@ body {
 
 .pd-body {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   flex: 1;
+  flex-wrap: wrap;
 }
 
 .pd-label {
@@ -1378,11 +1401,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: #f8fafb;
   border-radius: 12px;
-  padding: 18px 14px 14px;
-  margin-bottom: 12px;
+  padding: 12px 14px 10px;
+  margin-bottom: 0;
   border: 1px solid #e4edf5;
 }
 
@@ -1397,8 +1420,8 @@ body {
 
 /* SVG NLC diagram */
 .nlc-svg {
-  width: 180px;
-  height: 189px; /* preserves viewBox 200×210 ratio */
+  width: 148px;
+  height: 155px; /* preserves viewBox 200×210 ratio */
   display: block;
   filter: drop-shadow(0 4px 12px rgba(30, 58, 95, 0.18));
 }
