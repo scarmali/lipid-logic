@@ -246,10 +246,10 @@ function App() {
         </div>
         {/* Hero — centered badge + subtitle */}
         <div className="hero-content">
-          <div className="hero-badge">CADFD · Rational NLC Design</div>
+          <div className="hero-badge">Computational Tool for Rational NLC Design</div>
           <h1 className="hero-title">NLC Formulation Predictor</h1>
           <p className="hero-subtitle">
-            Predict drug localisation in Nanostructured Lipid Carriers — before any experiment begins
+            Predict drug partitioning within nanostructured lipid carriers using lipophilicity and Hansen solubility parameters.
           </p>
         </div>
       </header>
