@@ -2578,9 +2578,60 @@ body {
    VALIDATION PAGE
 ═══════════════════════════════════════════════════════ */
 
-.val-hero {
-  /* slightly different gradient for visual distinction */
-  background: linear-gradient(160deg, #0f2537 0%, #1a3355 45%, #7c3aed 100%);
+/* Two-panel intro layout */
+.val-intro-panels {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+.val-intro-panel {
+  flex: 1;
+  min-width: 0;
+}
+.val-intro-note {
+  font-size: 14px !important;
+  color: #64748b;
+  margin-top: 0 !important;
+}
+
+/* Probe list in intro panel */
+.val-probe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 16px 0;
+}
+.val-probe-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.val-probe-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.val-probe-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f2537;
+  margin: 0 0 4px;
+}
+.val-probe-logp {
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  margin-left: 8px;
+}
+.val-probe-desc {
+  font-size: 14px;
+  color: #475569;
+  margin: 0;
+  line-height: 1.55;
 }
 
 /* Formulation grid */
@@ -2588,6 +2639,10 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
+}
+.val-formulation-grid--2col {
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 16px;
 }
 
 .val-formulation-card {

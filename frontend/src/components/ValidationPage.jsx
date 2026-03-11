@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
 const formulations = [
-  { id: "F1", name: "C10 + Miglyol / PEG-100", core: "Capric acid (C10)", surf: "PEG-100 Stearate", colour: "#3b82f6" },
-  { id: "F2", name: "C10 + Miglyol / PS80",    core: "Capric acid (C10)", surf: "Polysorbate 80",   colour: "#8b5cf6" },
-  { id: "F3", name: "C16 + Miglyol / PEG-100", core: "Palmitic acid (C16)", surf: "PEG-100 Stearate", colour: "#f59e0b" },
-  { id: "F4", name: "C16 + Miglyol / PS80",    core: "Palmitic acid (C16)", surf: "Polysorbate 80",   colour: "#10b981" },
+  { id: "F1", name: "C8 / PEG-100",  core: "Glyceryl caprylate (C8)",  liquid: "Soy lecithin", surf: "PEG-100 Stearate", colour: "#3b82f6" },
+  { id: "F2", name: "C8 / PS80",     core: "Glyceryl caprylate (C8)",  liquid: "Soy lecithin", surf: "Polysorbate 80",   colour: "#8b5cf6" },
+  { id: "F3", name: "C10 / PEG-100", core: "Glyceryl caprate (C10)",   liquid: "Soy lecithin", surf: "PEG-100 Stearate", colour: "#f59e0b" },
+  { id: "F4", name: "C10 / PS80",    core: "Glyceryl caprate (C10)",   liquid: "Soy lecithin", surf: "Polysorbate 80",   colour: "#10b981" },
 ];
 
 const probes = [
@@ -19,7 +19,7 @@ const probes = [
     methodDetail:
       "Pyrene has five vibronic emission bands. The ratio of the first (I₁) to the third (I₃) is highly sensitive to local polarity — low ratios indicate an apolar environment, high ratios indicate a polar one.",
     bestFormulation: "F4",
-    bestLabel: "F4 (C16 + Miglyol / PS80)",
+    bestLabel: "F4 (Glyceryl caprate / PS80)",
     keyMetric: "I₁/I₃ = 0.785",
     interpretation:
       "A ratio of 0.785 is characteristic of a highly apolar, hydrophobic environment — consistent with deep encapsulation inside the crystalline palmitic acid lipid core. For comparison, pyrene in pure hexane gives I₁/I₃ ≈ 0.6 and in water ≈ 1.87.",
@@ -43,7 +43,7 @@ const probes = [
     methodDetail:
       "Nile Red is solvatochromic — its fluorescence emission wavelength shifts depending on the polarity of its immediate environment. In non-polar solvents it emits at shorter wavelengths (blue-shifted); in polar environments it red-shifts.",
     bestFormulation: "F2",
-    bestLabel: "F2 (C10 + Miglyol / PS80)",
+    bestLabel: "F2 (Glyceryl caprylate / PS80)",
     keyMetric: "λmax = 628.7 nm",
     interpretation:
       "An emission maximum of 628.7 nm corresponds to a moderately polar amphiphilic environment — the interface between the lipid core and the Polysorbate 80 surfactant corona. This confirms interfacial localisation rather than core encapsulation.",
@@ -90,30 +90,77 @@ export default function ValidationPage() {
         </div>
       </div>
 
-      {/* ── Formulations tested ───────────────────────────────────────── */}
+      {/* ── Two-panel intro ───────────────────────────────────────────── */}
       <section className="about-section">
         <div className="about-section-inner about-section-inner--full">
-          <h2 className="about-section-title about-section-title--center">Formulations Tested</h2>
-          <p className="about-section-intro">
-            Four NLC formulations were prepared, each combining a different solid
-            lipid core with a different surfactant shell.
-          </p>
-          <div className="val-formulation-grid">
-            {formulations.map(f => (
-              <div key={f.id} className="val-formulation-card" style={{ borderTopColor: f.colour }}>
-                <span className="val-form-id" style={{ background: f.colour }}>{f.id}</span>
-                <div className="val-form-body">
-                  <div className="val-form-row">
-                    <span className="val-form-label">Core</span>
-                    <span>{f.core}</span>
+          <div className="val-intro-panels">
+
+            {/* Left: Formulations Tested */}
+            <div className="val-intro-panel">
+              <h2 className="about-section-title">Formulations Tested</h2>
+              <p className="about-section-intro about-section-intro--left">
+                Four NLC formulations were prepared by combining two core lipids
+                (glyceryl caprylate, C8, and glyceryl caprate, C10) with two
+                surfactant shells (PEG-100 stearate or polysorbate 80). Soy
+                lecithin was included as the liquid lipid phase in all systems.
+              </p>
+              <p className="about-section-intro about-section-intro--left val-intro-note">
+                This design systematically varies both core lipophilicity and
+                interfacial chemistry, enabling the model's competing partitioning
+                hypotheses to be tested.
+              </p>
+              <div className="val-formulation-grid val-formulation-grid--2col">
+                {formulations.map(f => (
+                  <div key={f.id} className="val-formulation-card" style={{ borderTopColor: f.colour }}>
+                    <span className="val-form-id" style={{ background: f.colour }}>{f.id}</span>
+                    <div className="val-form-body">
+                      <div className="val-form-row">
+                        <span className="val-form-label">Core</span>
+                        <span>{f.core}</span>
+                      </div>
+                      <div className="val-form-row">
+                        <span className="val-form-label">Liquid</span>
+                        <span>{f.liquid}</span>
+                      </div>
+                      <div className="val-form-row">
+                        <span className="val-form-label">Shell</span>
+                        <span>{f.surf}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="val-form-row">
-                    <span className="val-form-label">Shell</span>
-                    <span>{f.surf}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Fluorescent Probes */}
+            <div className="val-intro-panel">
+              <h2 className="about-section-title">Fluorescent Probes</h2>
+              <p className="about-section-intro about-section-intro--left">
+                Two probes spanning the lipophilicity spectrum were used:
+              </p>
+              <div className="val-probe-list">
+                <div className="val-probe-item">
+                  <span className="val-probe-icon" style={{ color: "#3b82f6" }}>🔷</span>
+                  <div>
+                    <p className="val-probe-name">Pyrene <span className="val-probe-logp">Log P ≈ 5.2</span></p>
+                    <p className="val-probe-desc">Strongly lipophilic, expected to favour the lipid core.</p>
+                  </div>
+                </div>
+                <div className="val-probe-item">
+                  <span className="val-probe-icon" style={{ color: "#e11d48" }}>🔴</span>
+                  <div>
+                    <p className="val-probe-name">Nile Red <span className="val-probe-logp">Log P ≈ 4.0</span></p>
+                    <p className="val-probe-desc">Moderately lipophilic, sensitive to interfacial polarity.</p>
                   </div>
                 </div>
               </div>
-            ))}
+              <p className="about-section-intro about-section-intro--left val-intro-note">
+                Their contrasting behaviours provide a test of the transition
+                between core-dominated and interface-dominated partitioning
+                predicted by the model.
+              </p>
+            </div>
+
           </div>
         </div>
       </section>
