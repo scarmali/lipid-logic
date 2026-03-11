@@ -374,7 +374,7 @@ function App() {
                     <span className="optional-label">optional</span>
                   </label>
                   <select value={selectedDrug} onChange={e => handleDrugSelect(e.target.value)}>
-                    <option value="">— Enter custom drug —</option>
+                    <option value="">— Select —</option>
                     {Object.keys(validationDrugs).map(k => (
                       <option key={k} value={k}>{validationDrugs[k].name}</option>
                     ))}
@@ -450,7 +450,14 @@ function App() {
                       <span className="tooltip-icon" data-tooltip="Decompose solubility into dispersive (δd), polar (δp), and H-bonding (δh). Units: MPa½. Enable precise three-hypothesis prediction.">?</span>
                       <span className="optional-label">optional</span>
                     </h4>
-                    <p className="hsp-hint">Leave blank for log P-only prediction.</p>
+                    {(drugProps.delta_d || drugProps.delta_p || drugProps.delta_h) ? (
+                      <p className="hsp-hint hsp-hint--active">✓ Full prediction mode — lipophilicity + Hansen compatibility</p>
+                    ) : (
+                      <p className="hsp-hint">
+                        <strong>Log P only prediction</strong><br/>
+                        Add Hansen parameters (δD, δP, δH) to enable full compatibility modelling.
+                      </p>
+                    )}
                   </div>
                   <div className="hsp-grid">
                     {[["delta_d","δd (MPa½)","Dispersion","e.g. 18.0"],["delta_p","δp (MPa½)","Polar","e.g. 5.5"],["delta_h","δh (MPa½)","H-bonding","e.g. 8.5"]].map(([field, lbl, tip, ph]) => (
@@ -536,30 +543,6 @@ function App() {
                     : <PropBadge comp={surfProps} />}
                 </div>
 
-                {/* Lipophilicity gradient preview */}
-                {nlcProps && (
-                  <div className="gradient-preview-box">
-                    <div className="gpb-title">Lipophilicity Gradient</div>
-                    <div className="gpb-phases">
-                      <div className="gpb-phase">
-                        <span className="gpb-tag gpb-tag--core">Core</span>
-                        <span className="gpb-logp">Log P {nlcProps.core_logp}</span>
-                      </div>
-                      <div className={`gpb-arrow ${nlcProps.grad > 0 ? "gpb-arrow--pos" : "gpb-arrow--neg"}`}>
-                        {nlcProps.grad > 0 ? "→" : "←"}
-                      </div>
-                      <div className="gpb-phase">
-                        <span className="gpb-tag gpb-tag--surf">Interface</span>
-                        <span className="gpb-logp">Log P {nlcProps.surf_logp}</span>
-                      </div>
-                    </div>
-                    <p className="gpb-note">
-                      Δ = <strong>{Math.abs(nlcProps.grad)}</strong> log units —
-                      {" "}{nlcProps.grad > 1 ? "strong core-favoured gradient" : nlcProps.grad > 0 ? "moderate core-favoured gradient" : "weak or neutral gradient"}
-                    </p>
-                  </div>
-                )}
-
               </div>
             </div>
 
@@ -605,12 +588,29 @@ function App() {
                 </div>
 
               ) : results ? (() => {
-                const result = results.results[0];
-                const isCore = result.location === "Core";
-                const af     = result.affinities || {};
+                const result  = results.results[0];
+                const isCore  = result.location === "Core";
+                const af      = result.affinities || {};
                 const corePct = af.core      ?? null;
                 const intPct  = af.interface  ?? null;
                 const aqPct   = af.aqueous    ?? null;
+
+                // Hansen compatibility rating helper
+                const hansCompat = (ra) => {
+                  if (ra == null) return null;
+                  if (ra < 5.0)  return { label: "Excellent compatibility with core lipid", cls: "hc--excellent" };
+                  if (ra < 8.0)  return { label: "Good compatibility with core lipid",      cls: "hc--good"      };
+                  if (ra < 10.0) return { label: "Moderate compatibility with core lipid",  cls: "hc--moderate"  };
+                  return              { label: "Poor compatibility with core lipid",         cls: "hc--poor"      };
+                };
+                const coreCompat = hansCompat(result.d_core);
+
+                // ΔlogP gradient (core vs interface, same as the old preview)
+                const gradAbs  = nlcProps ? Math.abs(nlcProps.grad) : null;
+                const gradDir  = nlcProps ? (nlcProps.grad > 0 ? "Core-favoured" : nlcProps.grad < 0 ? "Interface-favoured" : "No gradient") : null;
+                const gradStrength = nlcProps
+                  ? (nlcProps.grad > 2 ? "strong" : nlcProps.grad > 0.5 ? "moderate" : "weak")
+                  : null;
 
                 return (
                   <div className="single-result">
@@ -634,6 +634,39 @@ function App() {
                       </div>
                     </div>
 
+                    {/* Partitioning drivers */}
+                    {(gradAbs !== null || coreCompat) && (
+                      <div className="partitioning-drivers">
+                        <h4 className="pd-title">Partitioning Drivers</h4>
+                        {gradAbs !== null && (
+                          <div className="pd-row">
+                            <div className="pd-icon">📊</div>
+                            <div className="pd-body">
+                              <span className="pd-label">Lipophilicity difference</span>
+                              <span className="pd-value">ΔlogP = <strong>{gradAbs}</strong></span>
+                              <span className={`pd-tag ${nlcProps.grad > 0 ? "pd-tag--core" : "pd-tag--surf"}`}>{gradDir}</span>
+                              <span className="pd-note">
+                                {gradStrength === "strong" ? "Strong driving force towards lipid core"
+                                  : gradStrength === "moderate" ? "Moderate core-interface partitioning gradient"
+                                  : "Weak gradient — other factors dominate"}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                        {coreCompat && (
+                          <div className="pd-row">
+                            <div className="pd-icon">🧪</div>
+                            <div className="pd-body">
+                              <span className="pd-label">Hansen compatibility</span>
+                              <span className="pd-value">Δδ = <strong>{result.d_core} MPa½</strong></span>
+                              <span className={`pd-tag ${coreCompat.cls}`}>{coreCompat.label.split(" ")[0]}</span>
+                              <span className="pd-note">{coreCompat.label}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {/* NLC spatial diagram — SVG cross-section */}
                     <div className="spatial-viz">
                       <p className="spatial-title">NLC Cross-Section</p>
@@ -649,27 +682,28 @@ function App() {
                           </radialGradient>
                         </defs>
                         {/* Aqueous phase label */}
-                        <text x="100" y="13" textAnchor="middle" fill="#94a3b8" fontSize="8.5" fontStyle="italic">Aqueous phase</text>
+                        <text x="100" y="10" textAnchor="middle" fill="#94a3b8" fontSize="7.5" fontStyle="italic">Aqueous phase</text>
                         {/* Shell (full particle) */}
                         <circle cx="100" cy="110" r="85" fill="url(#nlcShellGrad)" stroke="#3b82f6" strokeWidth="1.5"/>
                         {/* Core */}
                         <circle cx="100" cy="110" r="50" fill="url(#nlcCoreGrad)"/>
-                        {/* Core label */}
-                        <text x="100" y="107" textAnchor="middle" fill="white" fontSize="10" fontWeight="700" letterSpacing="0.3">LIPID</text>
-                        <text x="100" y="120" textAnchor="middle" fill="white" fontSize="10" fontWeight="700" letterSpacing="0.3">CORE</text>
-                        {/* Shell region label (in the ring, bottom-right area) */}
-                        <text x="148" y="158" textAnchor="middle" fill="white" fontSize="8.5" fontWeight="600" opacity="0.92">Surfactant</text>
-                        <text x="148" y="168" textAnchor="middle" fill="white" fontSize="8.5" fontWeight="600" opacity="0.92">Shell</text>
-                        {/* Drug dot — core: centred, interface: in shell ring at top */}
+                        {/* Core label — lower half so it clears the drug dot */}
+                        <text x="100" y="124" textAnchor="middle" fill="white" fontSize="9.5" fontWeight="700" letterSpacing="0.5">LIPID CORE</text>
+                        {/* Shell region label — right side of ring, away from drug dot */}
+                        <text x="157" y="140" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="600" opacity="0.95">Surfactant</text>
+                        <text x="157" y="151" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="600" opacity="0.95">Shell</text>
+                        {/* Drug dot:
+                            Core     → upper-centre of core (cy=90), label above (y=77)
+                            Interface → top of shell ring (cy=30), label below (y=47) */}
                         {isCore ? (
                           <>
-                            <circle cx="100" cy="110" r="10" fill="#ef4444" stroke="white" strokeWidth="2.5"/>
-                            <text x="100" y="128" textAnchor="middle" fill="#ef4444" fontSize="9" fontWeight="700">DRUG</text>
+                            <circle cx="100" cy="91" r="10" fill="#ef4444" stroke="white" strokeWidth="2.5"/>
+                            <text x="100" y="78" textAnchor="middle" fill="#ef4444" fontSize="8.5" fontWeight="700">DRUG</text>
                           </>
                         ) : (
                           <>
                             <circle cx="100" cy="30" r="10" fill="#ef4444" stroke="white" strokeWidth="2.5"/>
-                            <text x="100" y="46" textAnchor="middle" fill="#ef4444" fontSize="9" fontWeight="700">DRUG</text>
+                            <text x="100" y="47" textAnchor="middle" fill="#ef4444" fontSize="8.5" fontWeight="700">DRUG</text>
                           </>
                         )}
                       </svg>
@@ -679,19 +713,6 @@ function App() {
                         <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--shell"/>Surfactant Shell</span>
                         <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--drug"/>Drug</span>
                       </div>
-                      {result.d_core != null && (
-                        <div className="distance-table">
-                          <div className={`dist-row ${isCore ? "dist-winner" : ""}`}>
-                            <span className="dist-label">Δδ to core (Ra)</span>
-                            <span className="dist-value">{result.d_core} MPa½</span>
-                          </div>
-                          <div className={`dist-row ${!isCore ? "dist-winner" : ""}`}>
-                            <span className="dist-label">Δδ to interface (Ra)</span>
-                            <span className="dist-value">{result.d_surf} MPa½</span>
-                          </div>
-                          <p className="dist-explainer">Lower Ra = stronger chemical affinity</p>
-                        </div>
-                      )}
                     </div>
 
                     {/* Partition affinity bar — shown after spatial diagram */}
