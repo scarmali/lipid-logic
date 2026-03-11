@@ -788,21 +788,33 @@ body {
   animation: fadeInUp 0.35s ease;
 }
 
-.sr-topbar {
+.new-analysis-card {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: center;
+  padding-top: 4px;
+  margin-top: 6px;
+  border-top: 1px solid #e4edf5;
 }
 
-.sr-formulation-label {
-  font-size: 12px;
-  color: #64748b;
-  font-weight: 500;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.new-analysis-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: white;
+  border: 1.5px solid #d1dce8;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+
+.new-analysis-btn:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
 }
 
 /* Location hero */
@@ -3750,26 +3762,7 @@ body {
   font-weight: 500;
 }
 
-.rab-reset-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: white;
-  border: 1.5px solid #d1dce8;
-  color: #334155;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.18s, border-color 0.18s, color 0.18s;
-}
-
-.rab-reset-btn:hover {
-  background: #fef2f2;
-  border-color: #fca5a5;
-  color: #b91c1c;
-}
+/* (rab-reset-btn removed — replaced by .new-analysis-btn) */
 
 /* ═══════════════════════════════════════════════════════
    FORMULATION CARD — generalised header & details

@@ -611,13 +611,8 @@ function App() {
 
                 return (
                   <div className="single-result">
-                    {/* Header bar */}
-                    <div className="sr-topbar">
-                      <span className="sr-formulation-label">{nlcProps?.name}</span>
-                      <button className="rab-reset-btn" onClick={handleReset}>↺ New Analysis</button>
-                    </div>
 
-                    {/* Location hero */}
+                    {/* 1 — Predicted Localisation */}
                     <div className={`location-hero ${isCore ? "lh--core" : "lh--interface"}`}>
                       <div className="lh-icon">{isCore ? "🔵" : "🟢"}</div>
                       <div className="lh-body">
@@ -631,7 +626,46 @@ function App() {
                       </div>
                     </div>
 
-                    {/* Partitioning drivers */}
+                    {/* 2 — NLC Cross-Section */}
+                    <div className="spatial-viz">
+                      <p className="spatial-title">NLC Cross-Section</p>
+                      <svg className="nlc-svg" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" aria-label="NLC cross-section diagram">
+                        <defs>
+                          <radialGradient id="nlcShellGrad" cx="35%" cy="35%">
+                            <stop offset="0%" stopColor="#bfdbfe"/>
+                            <stop offset="100%" stopColor="#4a90b8"/>
+                          </radialGradient>
+                          <radialGradient id="nlcCoreGrad" cx="35%" cy="35%">
+                            <stop offset="0%" stopColor="#93c5fd"/>
+                            <stop offset="100%" stopColor="#1e3a5f"/>
+                          </radialGradient>
+                        </defs>
+                        <text x="100" y="10" textAnchor="middle" fill="#94a3b8" fontSize="7.5" fontStyle="italic">Aqueous phase</text>
+                        <circle cx="100" cy="110" r="85" fill="url(#nlcShellGrad)" stroke="#3b82f6" strokeWidth="1.5"/>
+                        <circle cx="100" cy="110" r="50" fill="url(#nlcCoreGrad)"/>
+                        <text x="100" y="124" textAnchor="middle" fill="white" fontSize="9.5" fontWeight="700" letterSpacing="0.5">LIPID CORE</text>
+                        <text x="157" y="140" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="600" opacity="0.95">Surfactant</text>
+                        <text x="157" y="151" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="600" opacity="0.95">Shell</text>
+                        {isCore ? (
+                          <>
+                            <circle cx="100" cy="91" r="10" fill="#ef4444" stroke="white" strokeWidth="2.5"/>
+                            <text x="100" y="78" textAnchor="middle" fill="#ef4444" fontSize="8.5" fontWeight="700">DRUG</text>
+                          </>
+                        ) : (
+                          <>
+                            <circle cx="100" cy="30" r="10" fill="#ef4444" stroke="white" strokeWidth="2.5"/>
+                            <text x="100" y="47" textAnchor="middle" fill="#ef4444" fontSize="8.5" fontWeight="700">DRUG</text>
+                          </>
+                        )}
+                      </svg>
+                      <div className="nlc-legend">
+                        <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--core"/>Lipid Core</span>
+                        <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--shell"/>Surfactant Shell</span>
+                        <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--drug"/>Drug</span>
+                      </div>
+                    </div>
+
+                    {/* 3 — Partitioning Drivers */}
                     {(gradAbs !== null || coreCompat) && (
                       <div className="partitioning-drivers">
                         <h4 className="pd-title">Partitioning Drivers</h4>
@@ -658,79 +692,7 @@ function App() {
                       </div>
                     )}
 
-                    {/* NLC spatial diagram — SVG cross-section */}
-                    <div className="spatial-viz">
-                      <p className="spatial-title">NLC Cross-Section</p>
-                      <svg className="nlc-svg" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" aria-label="NLC cross-section diagram">
-                        <defs>
-                          <radialGradient id="nlcShellGrad" cx="35%" cy="35%">
-                            <stop offset="0%" stopColor="#bfdbfe"/>
-                            <stop offset="100%" stopColor="#4a90b8"/>
-                          </radialGradient>
-                          <radialGradient id="nlcCoreGrad" cx="35%" cy="35%">
-                            <stop offset="0%" stopColor="#93c5fd"/>
-                            <stop offset="100%" stopColor="#1e3a5f"/>
-                          </radialGradient>
-                        </defs>
-                        {/* Aqueous phase label */}
-                        <text x="100" y="10" textAnchor="middle" fill="#94a3b8" fontSize="7.5" fontStyle="italic">Aqueous phase</text>
-                        {/* Shell (full particle) */}
-                        <circle cx="100" cy="110" r="85" fill="url(#nlcShellGrad)" stroke="#3b82f6" strokeWidth="1.5"/>
-                        {/* Core */}
-                        <circle cx="100" cy="110" r="50" fill="url(#nlcCoreGrad)"/>
-                        {/* Core label — lower half so it clears the drug dot */}
-                        <text x="100" y="124" textAnchor="middle" fill="white" fontSize="9.5" fontWeight="700" letterSpacing="0.5">LIPID CORE</text>
-                        {/* Shell region label — right side of ring, away from drug dot */}
-                        <text x="157" y="140" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="600" opacity="0.95">Surfactant</text>
-                        <text x="157" y="151" textAnchor="middle" fill="white" fontSize="7.5" fontWeight="600" opacity="0.95">Shell</text>
-                        {/* Drug dot:
-                            Core     → upper-centre of core (cy=90), label above (y=77)
-                            Interface → top of shell ring (cy=30), label below (y=47) */}
-                        {isCore ? (
-                          <>
-                            <circle cx="100" cy="91" r="10" fill="#ef4444" stroke="white" strokeWidth="2.5"/>
-                            <text x="100" y="78" textAnchor="middle" fill="#ef4444" fontSize="8.5" fontWeight="700">DRUG</text>
-                          </>
-                        ) : (
-                          <>
-                            <circle cx="100" cy="30" r="10" fill="#ef4444" stroke="white" strokeWidth="2.5"/>
-                            <text x="100" y="47" textAnchor="middle" fill="#ef4444" fontSize="8.5" fontWeight="700">DRUG</text>
-                          </>
-                        )}
-                      </svg>
-                      {/* Legend */}
-                      <div className="nlc-legend">
-                        <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--core"/>Lipid Core</span>
-                        <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--shell"/>Surfactant Shell</span>
-                        <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--drug"/>Drug</span>
-                      </div>
-                    </div>
-
-                    {/* Partition affinity bar — shown after spatial diagram */}
-                    {corePct !== null && (
-                      <div className="affinity-section">
-                        <h4 className="affinity-title">Partition Affinity</h4>
-                        <div className="affinity-bar-track">
-                          <div className="affinity-seg affinity-core" style={{ width: `${corePct}%` }} />
-                          <div className="affinity-seg affinity-int"  style={{ width: `${intPct}%` }}  />
-                          <div className="affinity-seg affinity-aq"   style={{ width: `${aqPct}%` }}   />
-                        </div>
-                        <div className="affinity-legend">
-                          <span className="aff-item"><span className="aff-swatch aff-swatch--core" />Core {corePct}%</span>
-                          <span className="aff-item"><span className="aff-swatch aff-swatch--int"  />Interface {intPct}%</span>
-                          <span className="aff-item"><span className="aff-swatch aff-swatch--aq"   />Aqueous {aqPct}%</span>
-                        </div>
-                      </div>
-                    )}
-
-                    {results.metadata.logp_only && (
-                      <div className="logp-only-banner">
-                        <span className="logp-only-icon">⚠️</span>
-                        <div><strong>Log P only</strong> — add Hansen Solubility Parameters (δd, δp, δh) for a full three-hypothesis prediction and more precise affinity scores.</div>
-                      </div>
-                    )}
-
-                    {/* Confidence */}
+                    {/* 4 — Model Confidence */}
                     <div className="card confidence-card confidence-card--inline confidence-card--compact">
                       <div className="confidence-row">
                         <span className="confidence-label">Model Confidence</span>
@@ -742,6 +704,22 @@ function App() {
                         <p className="strategy-tag">{results.metadata.strategy}</p>
                       </div>
                     </div>
+
+                    {/* 5 — Log P only banner (conditional) */}
+                    {results.metadata.logp_only && (
+                      <div className="logp-only-banner">
+                        <span className="logp-only-icon">⚠️</span>
+                        <div><strong>Log P only</strong> — add Hansen Solubility Parameters (δd, δp, δh) for a full three-hypothesis prediction and more precise affinity scores.</div>
+                      </div>
+                    )}
+
+                    {/* 6 — New Analysis (centred, separated) */}
+                    <div className="new-analysis-card">
+                      <button className="new-analysis-btn" onClick={handleReset}>
+                        ↺ New Analysis
+                      </button>
+                    </div>
+
                   </div>
                 );
               })() : (
