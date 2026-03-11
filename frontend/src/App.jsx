@@ -251,8 +251,42 @@ function App() {
           <p className="hero-subtitle">
             Predict drug partitioning within nanostructured lipid carriers using lipophilicity and Hansen solubility parameters.
           </p>
+          <p className="hero-model-line">
+            <span className="hero-model-label">Model inputs:</span> log P &bull; Hansen dispersion (&delta;D) &bull; polar (&delta;P) &bull; hydrogen bonding (&delta;H)
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <span className="hero-model-label">Output:</span> Predicted drug distribution between lipid phases.
+          </p>
         </div>
       </header>
+
+      {/* WORKFLOW STRIP */}
+      <div className="workflow-strip">
+        <div className="workflow-inner">
+          <div className="workflow-step">
+            <div className="workflow-num">1</div>
+            <div className="workflow-text">
+              <span className="workflow-title">Enter drug physicochemical properties</span>
+              <span className="workflow-desc">Log P and Hansen solubility parameters</span>
+            </div>
+          </div>
+          <div className="workflow-arrow">→</div>
+          <div className="workflow-step">
+            <div className="workflow-num">2</div>
+            <div className="workflow-text">
+              <span className="workflow-title">Define lipid carrier composition</span>
+              <span className="workflow-desc">Solid lipid, liquid lipid, surfactant</span>
+            </div>
+          </div>
+          <div className="workflow-arrow">→</div>
+          <div className="workflow-step">
+            <div className="workflow-num">3</div>
+            <div className="workflow-text">
+              <span className="workflow-title">Predict drug localisation</span>
+              <span className="workflow-desc">Within the NLC structure</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* ADMIN KEY MODAL */}
       {showKeyModal && (
