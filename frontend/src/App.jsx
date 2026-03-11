@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import FormulationCard from "./components/FormulationCard";
 import AdminPanel from "./components/AdminPanel";
 import AboutPage from "./components/AboutPage";
 import ValidationPage from "./components/ValidationPage";
