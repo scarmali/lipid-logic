@@ -608,9 +608,6 @@ function App() {
                 // ΔlogP gradient (core vs interface, same as the old preview)
                 const gradAbs  = nlcProps ? Math.abs(nlcProps.grad) : null;
                 const gradDir  = nlcProps ? (nlcProps.grad > 0 ? "Core-favoured" : nlcProps.grad < 0 ? "Interface-favoured" : "No gradient") : null;
-                const gradStrength = nlcProps
-                  ? (nlcProps.grad > 2 ? "strong" : nlcProps.grad > 0.5 ? "moderate" : "weak")
-                  : null;
 
                 return (
                   <div className="single-result">
@@ -799,7 +796,7 @@ function App() {
             <div className="footer-bug-card footer-research-card">
               <div className="footer-bug-icon">🔬</div>
               <div className="footer-bug-body">
-                <p className="footer-bug-title">Curious about research?</p>
+                <p className="footer-bug-title">Curious about our research?</p>
                 <p className="footer-bug-desc">Explore the science and projects behind this tool.</p>
                 <a
                   className="footer-gh-link"
@@ -809,7 +806,7 @@ function App() {
                   <svg className="footer-gh-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style={{strokeWidth:"2",stroke:"currentColor"}}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
                   </svg>
-                  Visit sheiliza.com
+                  Visit our Group Webpage
                 </a>
               </div>
             </div>
