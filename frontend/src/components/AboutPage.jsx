@@ -19,7 +19,7 @@ const hypotheses = [
     tagline: "A precise measure of chemical fit",
     summary:
       "Hansen Solubility Parameters break down a molecule's chemistry into three components — how it disperses, polarises, and hydrogen-bonds. Drugs migrate to whichever compartment is the closest chemical match.",
-    whenDominant: "Co-dominant with H1 for highly lipophilic drugs",
+    whenDominant: "Co-dominant with lipophilicity gradient for highly lipophilic drugs",
   },
   {
     id: "H3",
@@ -122,7 +122,6 @@ export default function AboutPage() {
                 <div className="hyp-card-header">
                   <span className="hyp-icon" style={{ color: h.colour }}>{h.icon}</span>
                   <div className="hyp-title-group">
-                    <span className="hyp-id" style={{ background: h.colour }}>{h.id}</span>
                     <div>
                       <h3 className="hyp-title">{h.title}</h3>
                       <p className="hyp-tagline">{h.tagline}</p>
@@ -140,10 +139,9 @@ export default function AboutPage() {
           <div className="hyp-footer-note">
             <span>💡</span>
             <p>
-              The three hypotheses are combined into a single score. Their
-              relative weight shifts automatically based on the drug's
-              lipophilicity — so the most relevant mechanism always has the
-              greatest influence on the result.
+              Their relative weight shifts automatically based on the drug's
+              lipophilicity and lipid compatibility — so the most relevant
+              mechanism always has the greatest influence on the result.
             </p>
           </div>
         </div>
