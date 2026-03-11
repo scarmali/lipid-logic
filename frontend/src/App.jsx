@@ -290,7 +290,7 @@ function App() {
             <button className="nav-admin-btn" onClick={openAdmin} title="Admin panel">⚙</button>
           </nav>
         </div>
-        <div className="hero-content">
+        <div className={`hero-content${page !== "tool" ? " hero-content--hidden" : ""}`}>
           <div className="hero-badge">Computational Tool for Rational NLC Design</div>
           <h1 className="hero-title">NLC Formulation Predictor</h1>
           <p className="hero-subtitle">
