@@ -187,14 +187,14 @@ export default function AboutPage() {
             Explore the validation data, methodology, and research behind this tool.
           </p>
           <div className="learn-grid">
-            <a className="learn-card" href="#" onClick={e => { e.preventDefault(); }}>
+            <button className="learn-card learn-card--btn">
               <span className="learn-icon">📊</span>
               <div className="learn-body">
                 <h4>Validation Data</h4>
                 <p>See how predictions compare against experimental localisation data from published NLC studies.</p>
               </div>
               <span className="learn-arrow">→</span>
-            </a>
+            </button>
             <a className="learn-card" href="https://sheiliza.com" target="_blank" rel="noopener noreferrer">
               <span className="learn-icon">🔬</span>
               <div className="learn-body">

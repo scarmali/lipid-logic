@@ -590,10 +590,6 @@ function App() {
               ) : results ? (() => {
                 const result  = results.results[0];
                 const isCore  = result.location === "Core";
-                const af      = result.affinities || {};
-                const corePct = af.core      ?? null;
-                const intPct  = af.interface  ?? null;
-                const aqPct   = af.aqueous    ?? null;
 
                 // Hansen compatibility rating helper
                 const hansCompat = (ra) => {
