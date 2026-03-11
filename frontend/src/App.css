@@ -4109,7 +4109,7 @@ body {
 
 .footer-bug-card {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 16px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -4128,6 +4128,7 @@ body {
 .footer-bug-icon {
   font-size: 26px;
   flex-shrink: 0;
+  align-self: flex-start;
   margin-top: 2px;
 }
 
@@ -4163,7 +4164,8 @@ body {
   font-weight: 600;
   text-decoration: none;
   transition: color 0.15s;
-  margin-top: 10px;
+  margin-top: auto;
+  padding-top: 10px;
 }
 
 .footer-gh-link:hover {
