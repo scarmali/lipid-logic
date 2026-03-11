@@ -15,7 +15,8 @@ CORS(app)
 # FORMULATION DATABASE  —  loaded from formulations.json
 # ============================================================================
 
-DB_PATH = os.path.join(os.path.dirname(__file__), 'formulations.json')
+DB_PATH      = os.path.join(os.path.dirname(__file__), 'formulations.json')
+LIPID_DB_PATH = os.path.join(os.path.dirname(__file__), 'lipid_db.json')
 
 def load_formulations():
     with open(DB_PATH, 'r') as f:
@@ -217,6 +218,18 @@ def calculate_logp():
 # ============================================================================
 # ADMIN ENDPOINTS
 # ============================================================================
+
+# ============================================================================
+# LIPID DATABASE ENDPOINT
+# ============================================================================
+
+@app.route('/api/lipid-db', methods=['GET'])
+def get_lipid_db():
+    try:
+        with open(LIPID_DB_PATH, 'r') as f:
+            return jsonify(json.load(f))
+    except FileNotFoundError:
+        return jsonify({'error': 'Lipid database not found'}), 404
 
 @app.route('/api/formulations', methods=['GET'])
 def get_formulations():

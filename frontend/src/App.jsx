@@ -1,35 +1,34 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import AdminPanel from "./components/AdminPanel";
 import AboutPage from "./components/AboutPage";
 import ValidationPage from "./components/ValidationPage";
 import WalkthroughModal from "./components/WalkthroughModal";
 import "./App.css";
 
-// ── Component Libraries ──────────────────────────────────────────────────────
-// logP: PubChem XLogP3 (or literature consensus); HSP: group-contribution estimates (MPa½)
-const SOLID_LIPIDS = [
-  { id: "compritol",    name: "Glyceryl behenate (Compritol)", logp: 9.7,  delta_d: 17.0, delta_p: 3.0, delta_h: 3.0 },
-  { id: "tripalmitin",  name: "Tripalmitin",                   logp: 10.9, delta_d: 16.5, delta_p: 2.5, delta_h: 2.0 },
-  { id: "stearic_acid", name: "Stearic acid",                  logp: 8.2,  delta_d: 17.0, delta_p: 3.0, delta_h: 5.5 },
-  { id: "cetyl_palm",   name: "Cetyl palmitate",               logp: 11.6, delta_d: 16.5, delta_p: 2.0, delta_h: 2.5 },
-  { id: "custom_solid", name: "Custom",                        logp: null, delta_d: null,  delta_p: null, delta_h: null, custom: true },
-];
-
-const LIQUID_LIPIDS = [
-  { id: "mct",         name: "Medium chain triglyceride (MCT)",       logp: 8.4, delta_d: 16.0, delta_p: 4.0, delta_h: 5.0 },
-  { id: "oleic_acid",  name: "Oleic acid",                            logp: 7.6, delta_d: 16.0, delta_p: 4.5, delta_h: 5.5 },
-  { id: "cc_trig",     name: "Caprylic/capric triglyceride (C8/C10)", logp: 7.8, delta_d: 16.0, delta_p: 4.5, delta_h: 5.5 },
-  { id: "squalene",    name: "Squalene",                              logp: 10.6, delta_d: 16.0, delta_p: 1.5, delta_h: 1.5 },
-  { id: "custom_liq",  name: "Custom",                                logp: null, delta_d: null,  delta_p: null, delta_h: null, custom: true },
-];
-
-const SURFACTANTS = [
-  { id: "ps80",       name: "Polysorbate 80", logp: 2.45, delta_d: 15.5, delta_p: 7.5, delta_h: 11.0 },
-  { id: "polox188",   name: "Poloxamer 188",  logp: 1.5,  delta_d: 15.0, delta_p: 6.5, delta_h: 8.0  },
-  { id: "peg_dspe",   name: "PEG-DSPE",       logp: 2.1,  delta_d: 15.0, delta_p: 7.0, delta_h: 10.0 },
-  { id: "lecithin",   name: "Lecithin",       logp: 4.5,  delta_d: 17.0, delta_p: 6.0, delta_h: 8.0  },
-  { id: "custom_surf",name: "Custom",         logp: null, delta_d: null,  delta_p: null, delta_h: null, custom: true },
-];
+// ── Default lipid component library (used until /api/lipid-db fetch resolves) ─
+// logP: PubChem XLogP3 / literature; HSP: group-contribution estimates (MPa½)
+const DEFAULT_LIPID_DB = {
+  solid_lipids: [
+    { id: "glyc_caprylate", name: "Glyceryl caprylate (C8)",      logp: 3.5,  delta_d: 16.8, delta_p: 5.0, delta_h: 12.3 },
+    { id: "glyc_caprate",   name: "Glyceryl caprate (C10)",        logp: 4.3,  delta_d: 16.9, delta_p: 4.5, delta_h: 11.6 },
+    { id: "compritol",      name: "Glyceryl behenate (Compritol)", logp: 9.7,  delta_d: 17.0, delta_p: 2.0, delta_h: 4.0  },
+    { id: "cetyl_palm",     name: "Cetyl palmitate",               logp: 11.6, delta_d: 16.5, delta_p: 1.5, delta_h: 3.5  },
+    { id: "stearic_acid",   name: "Stearic acid",                  logp: 8.2,  delta_d: 17.3, delta_p: 3.0, delta_h: 5.2  },
+    { id: "tripalmitin",    name: "Tripalmitin",                   logp: 10.9, delta_d: 17.2, delta_p: 2.0, delta_h: 3.8  },
+  ],
+  liquid_lipids: [
+    { id: "soy_lecithin", name: "Soy lecithin",                          logp: 4.5,  delta_d: 16.5, delta_p: 6.5, delta_h: 10.0 },
+    { id: "oleic_acid",   name: "Oleic acid",                            logp: 7.6,  delta_d: 16.0, delta_p: 2.5, delta_h: 4.5  },
+    { id: "cc_trig",      name: "Caprylic/capric triglyceride (C8/C10)", logp: 7.8,  delta_d: 16.8, delta_p: 1.2, delta_h: 3.0  },
+    { id: "squalene",     name: "Squalene",                              logp: 10.6, delta_d: 16.0, delta_p: 0.3, delta_h: 1.5  },
+  ],
+  surfactants: [
+    { id: "ps80",            name: "Polysorbate 80",   logp: 2.45, delta_d: 16.5, delta_p: 5.0, delta_h: 11.0 },
+    { id: "peg100_stearate", name: "PEG-100 stearate", logp: 2.1,  delta_d: 17.0, delta_p: 3.0, delta_h: 9.5  },
+    { id: "polox188",        name: "Poloxamer 188",    logp: 1.5,  delta_d: 17.2, delta_p: 8.0, delta_h: 10.5 },
+  ],
+};
+const CUSTOM_ENTRY = (id) => ({ id, name: "Custom", logp: null, delta_d: null, delta_p: null, delta_h: null, custom: true });
 
 function App() {
   // ── Page routing ─────────────────────────────────────────────────────────
@@ -143,6 +142,21 @@ function App() {
     setSelectedDrug("");
     setDrugProps(prev => ({ ...prev, [field]: value }));
   };
+
+  // ── Lipid database (fetched from backend; falls back to built-in defaults) ─
+  const [lipidDb, setLipidDb] = useState(DEFAULT_LIPID_DB);
+  useEffect(() => {
+    const API_URL = process.env.REACT_APP_API_URL || "";
+    fetch(`${API_URL}/api/lipid-db`)
+      .then(r => r.ok ? r.json() : null)
+      .then(db => { if (db && db.solid_lipids) setLipidDb(db); })
+      .catch(() => {}); // silently keep defaults on network error
+  }, []);
+
+  // Derived component lists (from fetched DB + Custom entry appended)
+  const SOLID_LIPIDS  = useMemo(() => [...(lipidDb.solid_lipids  || []), CUSTOM_ENTRY("custom_solid")], [lipidDb]);
+  const LIQUID_LIPIDS = useMemo(() => [...(lipidDb.liquid_lipids || []), CUSTOM_ENTRY("custom_liq")],   [lipidDb]);
+  const SURFACTANTS   = useMemo(() => [...(lipidDb.surfactants   || []), CUSTOM_ENTRY("custom_surf")],  [lipidDb]);
 
   // ── Formulation builder state ─────────────────────────────────────────────
   const [solidLipidId,  setSolidLipidId]  = useState("");
@@ -620,18 +634,50 @@ function App() {
                       </div>
                     </div>
 
-                    {/* NLC spatial diagram */}
+                    {/* NLC spatial diagram — SVG cross-section */}
                     <div className="spatial-viz">
-                      <div className="particle-container">
-                        <div className="particle-shell">
-                          <div className="particle-core" />
-                          <div className={`drug-dot ${isCore ? "drug-core" : "drug-interface"}`} title="Predicted drug localisation" />
-                        </div>
-                        <div className="particle-legend">
-                          <div className="legend-row"><span className="legend-dot core-dot" /> Lipid Core</div>
-                          <div className="legend-row"><span className="legend-dot shell-dot" /> Shell</div>
-                          <div className="legend-row"><span className="legend-dot drug-dot-legend" /> Drug</div>
-                        </div>
+                      <p className="spatial-title">NLC Cross-Section</p>
+                      <svg className="nlc-svg" viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" aria-label="NLC cross-section diagram">
+                        <defs>
+                          <radialGradient id="nlcShellGrad" cx="35%" cy="35%">
+                            <stop offset="0%" stopColor="#bfdbfe"/>
+                            <stop offset="100%" stopColor="#4a90b8"/>
+                          </radialGradient>
+                          <radialGradient id="nlcCoreGrad" cx="35%" cy="35%">
+                            <stop offset="0%" stopColor="#93c5fd"/>
+                            <stop offset="100%" stopColor="#1e3a5f"/>
+                          </radialGradient>
+                        </defs>
+                        {/* Aqueous phase label */}
+                        <text x="100" y="13" textAnchor="middle" fill="#94a3b8" fontSize="8.5" fontStyle="italic">Aqueous phase</text>
+                        {/* Shell (full particle) */}
+                        <circle cx="100" cy="110" r="85" fill="url(#nlcShellGrad)" stroke="#3b82f6" strokeWidth="1.5"/>
+                        {/* Core */}
+                        <circle cx="100" cy="110" r="50" fill="url(#nlcCoreGrad)"/>
+                        {/* Core label */}
+                        <text x="100" y="107" textAnchor="middle" fill="white" fontSize="10" fontWeight="700" letterSpacing="0.3">LIPID</text>
+                        <text x="100" y="120" textAnchor="middle" fill="white" fontSize="10" fontWeight="700" letterSpacing="0.3">CORE</text>
+                        {/* Shell region label (in the ring, bottom-right area) */}
+                        <text x="148" y="158" textAnchor="middle" fill="white" fontSize="8.5" fontWeight="600" opacity="0.92">Surfactant</text>
+                        <text x="148" y="168" textAnchor="middle" fill="white" fontSize="8.5" fontWeight="600" opacity="0.92">Shell</text>
+                        {/* Drug dot — core: centred, interface: in shell ring at top */}
+                        {isCore ? (
+                          <>
+                            <circle cx="100" cy="110" r="10" fill="#ef4444" stroke="white" strokeWidth="2.5"/>
+                            <text x="100" y="128" textAnchor="middle" fill="#ef4444" fontSize="9" fontWeight="700">DRUG</text>
+                          </>
+                        ) : (
+                          <>
+                            <circle cx="100" cy="30" r="10" fill="#ef4444" stroke="white" strokeWidth="2.5"/>
+                            <text x="100" y="46" textAnchor="middle" fill="#ef4444" fontSize="9" fontWeight="700">DRUG</text>
+                          </>
+                        )}
+                      </svg>
+                      {/* Legend */}
+                      <div className="nlc-legend">
+                        <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--core"/>Lipid Core</span>
+                        <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--shell"/>Surfactant Shell</span>
+                        <span className="nlc-legend-item"><span className="nlc-swatch nlc-swatch--drug"/>Drug</span>
                       </div>
                       {result.d_core != null && (
                         <div className="distance-table">

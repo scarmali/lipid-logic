@@ -1,0 +1,21 @@
+{
+  "solid_lipids": [
+    {"id": "glyc_caprylate", "name": "Glyceryl caprylate (C8)",      "logp": 3.5,  "delta_d": 16.8, "delta_p": 5.0, "delta_h": 12.3},
+    {"id": "glyc_caprate",   "name": "Glyceryl caprate (C10)",        "logp": 4.3,  "delta_d": 16.9, "delta_p": 4.5, "delta_h": 11.6},
+    {"id": "compritol",      "name": "Glyceryl behenate (Compritol)", "logp": 9.7,  "delta_d": 17.0, "delta_p": 2.0, "delta_h": 4.0},
+    {"id": "cetyl_palm",     "name": "Cetyl palmitate",               "logp": 11.6, "delta_d": 16.5, "delta_p": 1.5, "delta_h": 3.5},
+    {"id": "stearic_acid",   "name": "Stearic acid",                  "logp": 8.2,  "delta_d": 17.3, "delta_p": 3.0, "delta_h": 5.2},
+    {"id": "tripalmitin",    "name": "Tripalmitin",                   "logp": 10.9, "delta_d": 17.2, "delta_p": 2.0, "delta_h": 3.8}
+  ],
+  "liquid_lipids": [
+    {"id": "soy_lecithin",   "name": "Soy lecithin",                          "logp": 4.5,  "delta_d": 16.5, "delta_p": 6.5, "delta_h": 10.0},
+    {"id": "oleic_acid",     "name": "Oleic acid",                            "logp": 7.6,  "delta_d": 16.0, "delta_p": 2.5, "delta_h": 4.5},
+    {"id": "cc_trig",        "name": "Caprylic/capric triglyceride (C8/C10)", "logp": 7.8,  "delta_d": 16.8, "delta_p": 1.2, "delta_h": 3.0},
+    {"id": "squalene",       "name": "Squalene",                              "logp": 10.6, "delta_d": 16.0, "delta_p": 0.3, "delta_h": 1.5}
+  ],
+  "surfactants": [
+    {"id": "ps80",            "name": "Polysorbate 80",   "logp": 2.45, "delta_d": 16.5, "delta_p": 5.0, "delta_h": 11.0},
+    {"id": "peg100_stearate", "name": "PEG-100 stearate", "logp": 2.1,  "delta_d": 17.0, "delta_p": 3.0, "delta_h": 9.5},
+    {"id": "polox188",        "name": "Poloxamer 188",    "logp": 1.5,  "delta_d": 17.2, "delta_p": 8.0, "delta_h": 10.5}
+  ]
+}
