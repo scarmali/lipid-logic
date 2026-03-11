@@ -76,17 +76,19 @@ export default function ValidationPage() {
     <div className="about-page">
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <section className="about-hero val-hero">
-        <div className="about-hero-inner">
-          <span className="about-badge">Experimental Validation</span>
-          <h1 className="about-hero-title">Model Validation with Fluorescent Probes</h1>
-          <p className="about-hero-sub">
-            Two environment-sensitive fluorescent dyes were used to confirm
-            where drug molecules actually localise inside each NLC formulation —
-            providing direct experimental evidence to validate CADFD's predictions.
+      <div className="main-header">
+        <div className="hero-content">
+          <div className="hero-badge">Experimental Validation</div>
+          <h1 className="hero-title">Model Validation with Environment-Sensitive Fluorescent Probes</h1>
+          <p className="hero-subtitle">
+            Two polarity-sensitive fluorescent probes were used to experimentally
+            determine where small molecules localise within NLC formulations. Their
+            measured behaviour was compared with the NLC Formulation Predictor to
+            assess whether the model correctly identifies core- and
+            interface-dominated partitioning.
           </p>
         </div>
-      </section>
+      </div>
 
       {/* ── Formulations tested ───────────────────────────────────────── */}
       <section className="about-section">
