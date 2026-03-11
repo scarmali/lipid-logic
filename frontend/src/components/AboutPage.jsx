@@ -39,17 +39,6 @@ export default function AboutPage() {
   return (
     <div className="about-page">
 
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="about-hero">
-        <div className="about-hero-inner">
-          <span className="about-badge">CADFD</span>
-          <p className="about-hero-sub">
-            A computational model for predicting drug localisation in
-            nanostructured lipid carriers.
-          </p>
-        </div>
-      </section>
-
       {/* ── What are NLCs? ────────────────────────────────────────────────── */}
       <section className="about-section">
         <div className="about-section-inner">
@@ -170,44 +159,6 @@ export default function AboutPage() {
               lipophilicity — so the most relevant mechanism always has the
               greatest influence on the result.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Links to deeper science ───────────────────────────────────────── */}
-      <section className="about-section about-section--alt">
-        <div className="about-section-inner about-section-inner--full">
-          <h2 className="about-section-title about-section-title--center">
-            Learn More
-          </h2>
-          <p className="about-section-intro">
-            Explore the validation data, methodology, and research behind this tool.
-          </p>
-          <div className="learn-grid">
-            <button className="learn-card learn-card--btn">
-              <span className="learn-icon">📊</span>
-              <div className="learn-body">
-                <h4>Validation Data</h4>
-                <p>See how predictions compare against experimental localisation data from published NLC studies.</p>
-              </div>
-              <span className="learn-arrow">→</span>
-            </button>
-            <a className="learn-card" href="https://sheiliza.com" target="_blank" rel="noopener noreferrer">
-              <span className="learn-icon">🔬</span>
-              <div className="learn-body">
-                <h4>Research Group</h4>
-                <p>Read about the research and projects behind CADFD at our group webpage.</p>
-              </div>
-              <span className="learn-arrow">→</span>
-            </a>
-            <a className="learn-card" href="https://github.com/scarmali/lipid-logic" target="_blank" rel="noopener noreferrer">
-              <span className="learn-icon">💻</span>
-              <div className="learn-body">
-                <h4>Source Code</h4>
-                <p>Inspect the model implementation, contribute, or report issues on GitHub.</p>
-              </div>
-              <span className="learn-arrow">→</span>
-            </a>
           </div>
         </div>
       </section>
