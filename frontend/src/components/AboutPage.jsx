@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const hypotheses = [
   {
@@ -34,8 +34,6 @@ const hypotheses = [
 ];
 
 export default function AboutPage() {
-  const [openHyp, setOpenHyp] = useState(null);
-
   return (
     <div className="about-page">
 
@@ -56,23 +54,11 @@ export default function AboutPage() {
           </div>
 
           <div className="about-nlc-diagram">
-            <div className="nlc-particle">
-              <div className="nlc-core">
-                <span className="nlc-core-label">Lipid Core</span>
-              </div>
-              <div className="nlc-shell-label">Surfactant Shell</div>
-            </div>
-            <div className="nlc-legend">
-              <div className="nlc-legend-row">
-                <span className="nlc-dot nlc-dot-core"></span>Solid + liquid lipid blend
-              </div>
-              <div className="nlc-legend-row">
-                <span className="nlc-dot nlc-dot-shell"></span>Amphiphilic surfactant corona
-              </div>
-              <div className="nlc-legend-row">
-                <span className="nlc-dot nlc-dot-drug"></span>Drug (localisation predicted)
-              </div>
-            </div>
+            <img
+              src="/nlc-illustration.svg"
+              alt="NLC structure — blue surfactant shell surrounding orange lipid core with green inner sphere"
+              className="nlc-illustration-img"
+            />
           </div>
         </div>
       </section>
@@ -126,9 +112,8 @@ export default function AboutPage() {
             {hypotheses.map((h) => (
               <div
                 key={h.id}
-                className={`hyp-card ${openHyp === h.id ? "hyp-card--open" : ""}`}
+                className="hyp-card"
                 style={{ "--hyp-colour": h.colour }}
-                onClick={() => setOpenHyp(openHyp === h.id ? null : h.id)}
               >
                 <div className="hyp-card-header">
                   <span className="hyp-icon" style={{ color: h.colour }}>{h.icon}</span>
@@ -139,14 +124,11 @@ export default function AboutPage() {
                       <p className="hyp-tagline">{h.tagline}</p>
                     </div>
                   </div>
-                  <span className="hyp-chevron">{openHyp === h.id ? "▲" : "▼"}</span>
                 </div>
-                {openHyp === h.id && (
-                  <div className="hyp-detail">
-                    <p>{h.summary}</p>
-                    <span className="hyp-dominates">{h.whenDominant}</span>
-                  </div>
-                )}
+                <div className="hyp-detail">
+                  <p>{h.summary}</p>
+                  <span className="hyp-dominates">{h.whenDominant}</span>
+                </div>
               </div>
             ))}
           </div>

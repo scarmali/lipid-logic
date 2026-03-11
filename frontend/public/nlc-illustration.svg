@@ -1,0 +1,101 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-label="NLC structure illustration">
+  <defs>
+    <radialGradient id="bgCircle" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#000008"/>
+    </radialGradient>
+    <radialGradient id="coronaGrad" cx="38%" cy="32%">
+      <stop offset="0%" stop-color="#5b9bd5"/>
+      <stop offset="55%" stop-color="#2a6ab5"/>
+      <stop offset="100%" stop-color="#0d3a7a"/>
+    </radialGradient>
+    <radialGradient id="orangeGrad" cx="36%" cy="30%">
+      <stop offset="0%" stop-color="#ffe066"/>
+      <stop offset="30%" stop-color="#f5921e"/>
+      <stop offset="75%" stop-color="#d4600a"/>
+      <stop offset="100%" stop-color="#8b3500"/>
+    </radialGradient>
+    <radialGradient id="greenGrad" cx="36%" cy="30%">
+      <stop offset="0%" stop-color="#b4f06a"/>
+      <stop offset="40%" stop-color="#5cb82a"/>
+      <stop offset="100%" stop-color="#1e6600"/>
+    </radialGradient>
+    <radialGradient id="headGrad" cx="36%" cy="30%">
+      <stop offset="0%" stop-color="#a8deff"/>
+      <stop offset="50%" stop-color="#4da6e8"/>
+      <stop offset="100%" stop-color="#1a5faa"/>
+    </radialGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Dark background circle -->
+  <circle cx="200" cy="200" r="198" fill="url(#bgCircle)"/>
+
+  <!-- Blue surfactant corona ring -->
+  <circle cx="200" cy="200" r="148" fill="url(#coronaGrad)"/>
+
+  <!-- Orange lipid matrix -->
+  <circle cx="200" cy="200" r="108" fill="url(#orangeGrad)"/>
+
+  <!-- Green inner solid lipid / drug sphere -->
+  <circle cx="200" cy="200" r="52" fill="url(#greenGrad)" filter="url(#glow)"/>
+
+  <!-- Surfactant molecules (26): tail first, then head on top -->
+  <line x1="200.0" y1="58.0" x2="200.0" y2="40.0" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="234.0" y1="62.1" x2="238.3" y2="44.6" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="266.0" y1="74.3" x2="274.4" y2="58.3" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="294.2" y1="93.7" x2="306.1" y2="80.2" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="316.9" y1="119.3" x2="331.7" y2="109.1" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="332.8" y1="149.6" x2="349.6" y2="143.3" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="341.0" y1="182.9" x2="358.8" y2="180.7" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="341.0" y1="217.1" x2="358.8" y2="219.3" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="332.8" y1="250.4" x2="349.6" y2="256.7" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="316.9" y1="280.7" x2="331.7" y2="290.9" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="294.2" y1="306.3" x2="306.1" y2="319.8" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="266.0" y1="325.7" x2="274.4" y2="341.7" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="234.0" y1="337.9" x2="238.3" y2="355.4" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="200.0" y1="342.0" x2="200.0" y2="360.0" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="166.0" y1="337.9" x2="161.7" y2="355.4" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="134.0" y1="325.7" x2="125.6" y2="341.7" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="105.8" y1="306.3" x2="93.9" y2="319.8" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="83.1" y1="280.7" x2="68.3" y2="290.9" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="67.2" y1="250.4" x2="50.4" y2="256.7" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="59.0" y1="217.1" x2="41.2" y2="219.3" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="59.0" y1="182.9" x2="41.2" y2="180.7" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="67.2" y1="149.6" x2="50.4" y2="143.3" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="83.1" y1="119.3" x2="68.3" y2="109.1" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="105.8" y1="93.7" x2="93.9" y2="80.2" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="134.0" y1="74.3" x2="125.6" y2="58.3" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+  <line x1="166.0" y1="62.1" x2="161.7" y2="44.6" stroke="#e8b84b" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Heads on top of tails -->
+  <circle cx="200.0" cy="28.0" r="14" fill="url(#headGrad)"/>
+  <circle cx="241.2" cy="33.0" r="14" fill="url(#headGrad)"/>
+  <circle cx="279.9" cy="47.7" r="14" fill="url(#headGrad)"/>
+  <circle cx="314.1" cy="71.3" r="14" fill="url(#headGrad)"/>
+  <circle cx="341.6" cy="102.3" r="14" fill="url(#headGrad)"/>
+  <circle cx="360.8" cy="139.0" r="14" fill="url(#headGrad)"/>
+  <circle cx="370.7" cy="179.3" r="14" fill="url(#headGrad)"/>
+  <circle cx="370.7" cy="220.7" r="14" fill="url(#headGrad)"/>
+  <circle cx="360.8" cy="261.0" r="14" fill="url(#headGrad)"/>
+  <circle cx="341.6" cy="297.7" r="14" fill="url(#headGrad)"/>
+  <circle cx="314.1" cy="328.7" r="14" fill="url(#headGrad)"/>
+  <circle cx="279.9" cy="352.3" r="14" fill="url(#headGrad)"/>
+  <circle cx="241.2" cy="367.0" r="14" fill="url(#headGrad)"/>
+  <circle cx="200.0" cy="372.0" r="14" fill="url(#headGrad)"/>
+  <circle cx="158.8" cy="367.0" r="14" fill="url(#headGrad)"/>
+  <circle cx="120.1" cy="352.3" r="14" fill="url(#headGrad)"/>
+  <circle cx="85.9" cy="328.7" r="14" fill="url(#headGrad)"/>
+  <circle cx="58.4" cy="297.7" r="14" fill="url(#headGrad)"/>
+  <circle cx="39.2" cy="261.0" r="14" fill="url(#headGrad)"/>
+  <circle cx="29.3" cy="220.7" r="14" fill="url(#headGrad)"/>
+  <circle cx="29.3" cy="179.3" r="14" fill="url(#headGrad)"/>
+  <circle cx="39.2" cy="139.0" r="14" fill="url(#headGrad)"/>
+  <circle cx="58.4" cy="102.3" r="14" fill="url(#headGrad)"/>
+  <circle cx="85.9" cy="71.3" r="14" fill="url(#headGrad)"/>
+  <circle cx="120.1" cy="47.7" r="14" fill="url(#headGrad)"/>
+  <circle cx="158.8" cy="33.0" r="14" fill="url(#headGrad)"/>
+</svg>
