@@ -474,7 +474,7 @@ function App() {
                 {/* Liquid lipid */}
                 <div className="input-group">
                   <label>
-                    Liquid Lipid (Oil Phase)
+                    Liquid Lipid
                     <span className="tooltip-icon" data-tooltip="Dispersed liquid oil disrupts crystallinity to create nanoscale drug-trapping pockets.">?</span>
                   </label>
                   <select value={liquidLipidId} onChange={e => { setLiquidLipidId(e.target.value); setResults(null); }}>
@@ -546,22 +546,26 @@ function App() {
                   </div>
                 )}
 
-                {error && <div className="error-message">{error}</div>}
-
-                <button className="predict-button"
-                  onClick={handlePredict}
-                  disabled={loading || !drugProps.logp || !nlcProps}>
-                  {loading ? <><span className="spinner" /> Analysing…</> : "▶ Predict Localisation"}
-                </button>
-
-                <p className="predict-hint">
-                  {!drugProps.logp ? "↑ Enter drug Log P first" : !nlcProps ? "↑ Select all three components" : "✓ Ready — click Predict Localisation"}
-                </p>
               </div>
             </div>
 
             {/* ═══════ RIGHT PANEL — Results ═══════ */}
             <div className="right-panel">
+              {/* Step 3 — Predict */}
+              {!results && (
+                <div className="predict-step-box">
+                  {error && <div className="error-message">{error}</div>}
+                  <button className="predict-button"
+                    onClick={handlePredict}
+                    disabled={loading || !drugProps.logp || !nlcProps}>
+                    {loading ? <><span className="spinner" /> Analysing…</> : "▶ Predict Localisation"}
+                  </button>
+                  <p className="predict-hint">
+                    {!drugProps.logp ? "↑ Enter drug Log P first" : !nlcProps ? "↑ Select all three components" : "✓ Ready — click Predict Localisation"}
+                  </p>
+                </div>
+              )}
+
               {results && results.metadata.too_hydrophilic ? (
                 <div className="hydrophilic-panel">
                   <div className="hydrophilic-icon">💧</div>
@@ -616,23 +620,6 @@ function App() {
                       </div>
                     </div>
 
-                    {/* Partition affinity bar */}
-                    {corePct !== null && (
-                      <div className="affinity-section">
-                        <h4 className="affinity-title">Partition Affinity</h4>
-                        <div className="affinity-bar-track">
-                          <div className="affinity-seg affinity-core" style={{ width: `${corePct}%` }} />
-                          <div className="affinity-seg affinity-int"  style={{ width: `${intPct}%` }}  />
-                          <div className="affinity-seg affinity-aq"   style={{ width: `${aqPct}%` }}   />
-                        </div>
-                        <div className="affinity-legend">
-                          <span className="aff-item"><span className="aff-swatch aff-swatch--core" />Core {corePct}%</span>
-                          <span className="aff-item"><span className="aff-swatch aff-swatch--int"  />Interface {intPct}%</span>
-                          <span className="aff-item"><span className="aff-swatch aff-swatch--aq"   />Aqueous {aqPct}%</span>
-                        </div>
-                      </div>
-                    )}
-
                     {/* NLC spatial diagram */}
                     <div className="spatial-viz">
                       <div className="particle-container">
@@ -660,6 +647,23 @@ function App() {
                         </div>
                       )}
                     </div>
+
+                    {/* Partition affinity bar — shown after spatial diagram */}
+                    {corePct !== null && (
+                      <div className="affinity-section">
+                        <h4 className="affinity-title">Partition Affinity</h4>
+                        <div className="affinity-bar-track">
+                          <div className="affinity-seg affinity-core" style={{ width: `${corePct}%` }} />
+                          <div className="affinity-seg affinity-int"  style={{ width: `${intPct}%` }}  />
+                          <div className="affinity-seg affinity-aq"   style={{ width: `${aqPct}%` }}   />
+                        </div>
+                        <div className="affinity-legend">
+                          <span className="aff-item"><span className="aff-swatch aff-swatch--core" />Core {corePct}%</span>
+                          <span className="aff-item"><span className="aff-swatch aff-swatch--int"  />Interface {intPct}%</span>
+                          <span className="aff-item"><span className="aff-swatch aff-swatch--aq"   />Aqueous {aqPct}%</span>
+                        </div>
+                      </div>
+                    )}
 
                     {results.metadata.logp_only && (
                       <div className="logp-only-banner">
@@ -710,24 +714,6 @@ function App() {
                         <div><strong>{t}</strong><span>{d}</span></div>
                       </div>
                     ))}
-                  </div>
-                  <div className="empty-info-grid">
-                    <div className="empty-info-card">
-                      <span className="eic-icon">📖</span>
-                      <div>
-                        <strong>New to NLCs?</strong>
-                        <p>Learn about nanostructured lipid carriers and why drug localisation matters.</p>
-                        <button className="inline-link" onClick={() => setPage("about")}>Read the background →</button>
-                      </div>
-                    </div>
-                    <div className="empty-info-card">
-                      <span className="eic-icon">🔬</span>
-                      <div>
-                        <strong>See validation data</strong>
-                        <p>Fluorescent probe experiments confirmed the model's predictions.</p>
-                        <button className="inline-link" onClick={() => setPage("validation")}>View validation →</button>
-                      </div>
-                    </div>
                   </div>
                 </div>
               )}

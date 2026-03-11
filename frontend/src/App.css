@@ -754,6 +754,15 @@ body {
   margin: 0;
 }
 
+/* Predict step box — right panel wrapper */
+.predict-step-box {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
 /* Predict hint */
 .predict-hint {
   text-align: center;
