@@ -304,8 +304,8 @@ function App() {
         </div>
       </header>
 
-      {/* ── WORKFLOW STRIP ───────────────────────────────────────────────── */}
-      <div className="workflow-strip">
+      {/* ── WORKFLOW STRIP (hidden on about/validation pages) ────────────── */}
+      <div className={`workflow-strip${page !== "tool" ? " workflow-strip--hidden" : ""}`}>
         <div className="workflow-inner">
           <div className="workflow-step">
             <div className="workflow-num">1</div>

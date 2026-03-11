@@ -132,6 +132,9 @@ body {
   background: white;
   border-bottom: 1px solid #e4edf5;
 }
+.workflow-strip--hidden {
+  display: none;
+}
 
 .workflow-inner {
   max-width: 1200px;
