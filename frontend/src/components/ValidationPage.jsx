@@ -98,12 +98,6 @@ export default function ValidationPage() {
             {/* Left: Formulations Tested */}
             <div className="val-intro-panel">
               <h2 className="about-section-title">Formulations Tested</h2>
-              <p className="about-section-intro about-section-intro--left">
-                Four NLC formulations were prepared by combining two core lipids
-                (glyceryl caprylate, C8, and glyceryl caprate, C10) with two
-                surfactant shells (PEG-100 stearate or polysorbate 80). Soy
-                lecithin was included as the liquid lipid phase in all systems.
-              </p>
               <p className="about-section-intro about-section-intro--left val-intro-note">
                 This design systematically varies both core lipophilicity and
                 interfacial chemistry, enabling the model's competing partitioning
@@ -135,9 +129,6 @@ export default function ValidationPage() {
             {/* Right: Fluorescent Probes */}
             <div className="val-intro-panel">
               <h2 className="about-section-title">Fluorescent Probes</h2>
-              <p className="about-section-intro about-section-intro--left">
-                Two probes spanning the lipophilicity spectrum were used:
-              </p>
               <div className="val-probe-list">
                 <div className="val-probe-item">
                   <span className="val-probe-icon" style={{ color: "#3b82f6" }}>🔷</span>

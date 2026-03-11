@@ -2582,11 +2582,13 @@ body {
 .val-intro-panels {
   display: flex;
   gap: 28px;
-  align-items: flex-start;
+  align-items: stretch;
 }
 .val-intro-panel {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 .val-intro-note {
   font-size: 14px !important;
@@ -2600,6 +2602,7 @@ body {
   flex-direction: column;
   gap: 14px;
   margin: 16px 0;
+  flex: 1;
 }
 .val-probe-item {
   display: flex;
@@ -2643,6 +2646,8 @@ body {
 .val-formulation-grid--2col {
   grid-template-columns: repeat(2, 1fr);
   margin-top: 16px;
+  align-content: start;
+  flex: 1;
 }
 
 .val-formulation-card {
