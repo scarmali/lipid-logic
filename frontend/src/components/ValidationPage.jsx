@@ -76,7 +76,7 @@ export default function ValidationPage() {
     <div className="about-page">
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <div className="main-header">
+      <div className="val-page-hero">
         <div className="hero-content">
           <div className="hero-badge">Experimental Validation</div>
           <h1 className="hero-title">Model Validation with Environment-Sensitive Fluorescent Probes</h1>

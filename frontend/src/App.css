@@ -2581,6 +2581,37 @@ body {
    VALIDATION PAGE
 ═══════════════════════════════════════════════════════ */
 
+/* Validation page hero — sits below the nav bar as a normal section */
+.val-page-hero {
+  background: linear-gradient(135deg, #0f2537 0%, #1e3a5f 40%, #2d5aa0 75%, #4a90b8 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.val-page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+.val-page-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: #f0f4f8;
+  clip-path: ellipse(58% 100% at 50% 100%);
+}
+.val-page-hero .hero-content {
+  padding-bottom: 72px; /* extra room for the wavy cutout */
+}
+
 /* Two-panel intro layout */
 .val-intro-panels {
   display: flex;
