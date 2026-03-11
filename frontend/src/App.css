@@ -2113,19 +2113,22 @@ body {
 /* Hypothesis cards */
 .hyp-grid {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  gap: 12px;
   margin-bottom: 16px;
+  align-items: stretch;
 }
 
 .hyp-card {
+  flex: 1;
   border: 1.5px solid #e2e8f0;
   border-radius: 14px;
-  padding: 18px 20px;
+  padding: 16px 18px;
   cursor: pointer;
   transition: border-color 0.18s, box-shadow 0.18s;
   background: #fff;
-  border-left: 4px solid var(--hyp-colour);
+  border-top: 4px solid var(--hyp-colour);
+  border-left: 1.5px solid #e2e8f0;
 }
 .hyp-card:hover, .hyp-card--open {
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
@@ -2975,6 +2978,9 @@ body {
   }
   .about-nlc-diagram {
     align-items: flex-start;
+  }
+  .hyp-grid {
+    flex-direction: column;
   }
 }
 
