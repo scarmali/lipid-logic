@@ -70,28 +70,32 @@ export default function AboutPage() {
             Why Does Localisation Matter?
           </h2>
           <p className="about-section-intro">
-            Drug localisation inside an NLC strongly influences its performance.
+            Drug molecules can occupy different regions within an NLC — the lipid
+            core, interfacial regions, or amorphous pockets within the matrix.
+            Because NLCs are composed of blended solid and liquid lipids, this
+            internal structure creates multiple microenvironments where drugs may
+            reside. Where a drug localises strongly influences how the formulation behaves.
           </p>
           <div className="why-grid">
             <div className="why-card">
               <span className="why-icon">🎯</span>
-              <h4>Encapsulation efficiency</h4>
-              <p>A drug in the right compartment stays encapsulated. In the wrong one it leaches out quickly, reducing the dose that reaches the target.</p>
+              <h4>Drug loading capacity</h4>
+              <p>Drugs accommodated in amorphous regions can be incorporated at higher levels, while molecules excluded from the lipid structure may be expelled during crystallisation.</p>
             </div>
             <div className="why-card">
               <span className="why-icon">⏱</span>
               <h4>Release kinetics</h4>
-              <p>Core-loaded drugs release slowly through the crystalline matrix. Interface-loaded drugs release faster as the corona disperses. Knowing the site lets you engineer the profile.</p>
+              <p>Drugs embedded within the lipid core typically exhibit slower, diffusion-controlled release, whereas molecules positioned near the interface often produce a faster initial release.</p>
             </div>
             <div className="why-card">
               <span className="why-icon">🧪</span>
-              <h4>Formulation screening</h4>
-              <p>Rather than testing every lipid–surfactant combination experimentally, CADFD scores formulations in seconds — so you start experiments with the best candidates.</p>
+              <h4>Formulation stability</h4>
+              <p>Formulation stability is closely linked to drug position within the matrix. Improper localisation can lead to drug expulsion as the lipid structure reorganises during storage.</p>
             </div>
             <div className="why-card">
               <span className="why-icon">🔬</span>
-              <h4>Mechanistic understanding</h4>
-              <p>Predictions are backed by three physicochemical hypotheses, not a black box. You can see why a formulation was ranked and build on that understanding.</p>
+              <h4>Biological performance</h4>
+              <p>Biological performance may be affected by how the nanoparticle interacts with cells and membranes, which can depend on whether drug molecules remain in the core or are associated with the interfacial region.</p>
             </div>
           </div>
         </div>
