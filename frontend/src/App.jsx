@@ -211,47 +211,47 @@ function App() {
 
       {/* FULL-WIDTH HEADER */}
       <header className="main-header">
+        {/* Brand bar — logo left, nav right (PRELYM-style) */}
+        <div className="header-bar">
+          <div className="header-brand">
+            <div className="brand-icon">⚗️</div>
+            <span className="brand-name">Lipid Logic Explorer</span>
+          </div>
+          <nav className="main-nav">
+            <button
+              className={`nav-link ${page === "tool" ? "nav-link--active" : ""}`}
+              onClick={() => setPage("tool")}
+            >Tool</button>
+            <button
+              className={`nav-link ${page === "about" ? "nav-link--active" : ""}`}
+              onClick={() => setPage("about")}
+            >About</button>
+            <button
+              className={`nav-link ${page === "validation" ? "nav-link--active" : ""}`}
+              onClick={() => setPage("validation")}
+            >Validation</button>
+            <button
+              className="nav-guide-btn"
+              onClick={() => setShowWalkthrough(true)}
+              title="Re-open the guided walkthrough"
+              aria-label="Open guide"
+            >? Guide</button>
+            <button
+              className="nav-admin-btn"
+              onClick={openAdmin}
+              title="Admin: manage formulation database"
+              aria-label="Admin panel"
+            >⚙</button>
+          </nav>
+        </div>
+        {/* Hero — centered badge + subtitle */}
         <div className="hero-content">
           <div className="hero-badge">CADFD · Rational NLC Design</div>
-          <h1 className="hero-title">Lipid Logic Explorer</h1>
+          <h1 className="hero-title">NLC Formulation Predictor</h1>
           <p className="hero-subtitle">
             Predict drug localisation in Nanostructured Lipid Carriers — before any experiment begins
           </p>
         </div>
-        <nav className="main-nav">
-          <button
-            className={`nav-link ${page === "tool" ? "nav-link--active" : ""}`}
-            onClick={() => setPage("tool")}
-          >
-            <span className="nav-icon">⚗️</span> Tool
-          </button>
-          <button
-            className={`nav-link ${page === "about" ? "nav-link--active" : ""}`}
-            onClick={() => setPage("about")}
-          >
-            <span className="nav-icon">📖</span> About
-          </button>
-          <button
-            className={`nav-link ${page === "validation" ? "nav-link--active" : ""}`}
-            onClick={() => setPage("validation")}
-          >
-            <span className="nav-icon">🔬</span> Validation
-          </button>
-          <button
-            className="nav-guide-btn"
-            onClick={() => setShowWalkthrough(true)}
-            title="Re-open the guided walkthrough"
-            aria-label="Open guide"
-          >
-            ? Guide
-          </button>
-          <button
-            className="nav-admin-btn"
-            onClick={openAdmin}
-            title="Admin: manage formulation database"
-            aria-label="Admin panel"
-          >⚙</button>
-        </nav>
       </header>
 
       {/* ADMIN KEY MODAL */}
