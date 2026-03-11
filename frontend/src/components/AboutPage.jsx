@@ -66,11 +66,11 @@ export default function AboutPage() {
       {/* ── Why localisation matters ──────────────────────────────────────── */}
       <section className="about-section about-section--alt">
         <div className="about-section-inner about-section-inner--full">
-          <h2 className="about-section-title about-section-title--center">
+          <h2 className="about-section-title">
             Why Does Localisation Matter?
           </h2>
-          <p className="about-section-intro">
-            Drug molecules can occupy different regions within an NLC — the lipid
+          <p className="about-section-intro about-section-intro--left">
+            Drug molecules can occupy different regions within an NLC: the lipid
             core, interfacial regions, or amorphous pockets within the matrix.
             Because NLCs are composed of blended solid and liquid lipids, this
             internal structure creates multiple microenvironments where drugs may
@@ -104,10 +104,10 @@ export default function AboutPage() {
       {/* ── The science behind the model ──────────────────────────────────── */}
       <section className="about-section">
         <div className="about-section-inner about-section-inner--full">
-          <h2 className="about-section-title about-section-title--center">
+          <h2 className="about-section-title">
             The Science Behind the Model
           </h2>
-          <p className="about-section-intro">
+          <p className="about-section-intro about-section-intro--left">
             The model combines three physicochemical principles that govern
             drug distribution in lipid nanoparticles.
           </p>
