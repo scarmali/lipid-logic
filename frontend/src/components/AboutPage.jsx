@@ -37,19 +37,25 @@ export default function AboutPage() {
   return (
     <div className="about-page">
 
-      {/* ── What are NLCs? ────────────────────────────────────────────────── */}
+      {/* ── Section 1: What are NLCs? ─────────────────────────────────────── */}
       <section className="about-section">
         <div className="about-section-inner">
           <div className="about-text-block">
+            <div className="about-section-number">01</div>
             <h2 className="about-section-title">What are Nanostructured Lipid Carriers?</h2>
             <p>
-              Nanostructured Lipid Carriers (NLCs) are lipid nanoparticles
-              designed to encapsulate hydrophobic drugs. They consist of a
-              solid–liquid lipid matrix surrounded by a surfactant shell.
+              Nanostructured Lipid Carriers (NLCs) are lipid-based nanoparticles used to
+              encapsulate and deliver drugs and other bioactive molecules. They consist of a
+              mixed solid–liquid lipid matrix surrounded by a stabilising surfactant shell.
             </p>
             <p>
-              Drug localisation within this structure strongly influences
-              stability, encapsulation efficiency, and release kinetics.
+              Within this structure, molecules are not uniformly distributed. Instead, they
+              may localise in different regions of the particle, including the lipid core,
+              interfacial layers, or amorphous regions within the matrix.
+            </p>
+            <p>
+              Where a molecule resides strongly influences encapsulation efficiency,
+              formulation stability, and release behaviour.
             </p>
           </div>
 
@@ -63,18 +69,17 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Why localisation matters ──────────────────────────────────────── */}
+      {/* ── Section 2: Why localisation matters ──────────────────────────────── */}
       <section className="about-section about-section--alt">
         <div className="about-section-inner about-section-inner--full">
-          <h2 className="about-section-title">
-            Why Does Localisation Matter?
-          </h2>
+          <div className="about-section-number about-section-number--alt">02</div>
+          <h2 className="about-section-title">Why Does Localisation Matter?</h2>
           <p className="about-section-intro about-section-intro--left">
-            Drug molecules can occupy different regions within an NLC: the lipid
+            Drug molecules can occupy different regions within an NLC, including the lipid
             core, interfacial regions, or amorphous pockets within the matrix.
-            Because NLCs are composed of blended solid and liquid lipids, this
-            internal structure creates multiple microenvironments where drugs may
-            reside. Where a drug localises strongly influences how the formulation behaves.
+            Because NLCs contain a blend of solid and liquid lipids, their internal structure
+            forms multiple microenvironments where molecules may reside. Where a drug
+            localises strongly influences how the formulation behaves.
           </p>
           <div className="why-grid">
             <div className="why-card">
@@ -101,15 +106,73 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── The science behind the model ──────────────────────────────────── */}
-      <section className="about-section">
+      {/* ── Section 3: The Challenge in Formulation Design ───────────────────── */}
+      <section className="about-section about-section--challenge">
         <div className="about-section-inner about-section-inner--full">
-          <h2 className="about-section-title">
-            The Science Behind the Model
-          </h2>
+          <div className="challenge-layout">
+            <div className="challenge-icon-col">
+              <div className="challenge-icon-wrap">
+                <span className="challenge-icon-glyph">⚗️</span>
+              </div>
+            </div>
+            <div className="challenge-text-col">
+              <div className="about-section-number">03</div>
+              <h2 className="about-section-title">The Challenge in Formulation Design</h2>
+              <p>
+                Formulators often need to predict how a molecule will behave within a lipid
+                nanoparticle before extensive experimental screening begins.
+              </p>
+              <p>
+                However, drug localisation is governed by several interacting physicochemical
+                factors, including lipophilicity, molecular compatibility with lipid phases,
+                and competition between the lipid core and surfactant interface.
+              </p>
+              <p>
+                Understanding how these properties combine to influence localisation can be
+                difficult, particularly for students or researchers new to lipid nanoparticle
+                formulation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 4: Introducing Lipid Logic ───────────────────────────────── */}
+      <section className="about-section about-section--introducing">
+        <div className="about-section-inner about-section-inner--full">
+          <div className="introducing-inner">
+            <div className="introducing-label">The Tool</div>
+            <div className="about-section-number about-section-number--light">04</div>
+            <h2 className="about-section-title about-section-title--light">Introducing Lipid Logic</h2>
+            <div className="introducing-divider" />
+            <p className="introducing-text">
+              Lipid Logic is an interactive educational tool designed to help explore how
+              molecular properties influence drug localisation within Nanostructured Lipid
+              Carriers.
+            </p>
+            <p className="introducing-text">
+              The model integrates key physicochemical descriptors to provide a conceptual
+              framework for understanding how compounds distribute between different regions
+              of the nanoparticle. By visualising these relationships, the tool helps users
+              build intuition about formulation design and the molecular factors that
+              influence nanoparticle performance.
+            </p>
+            <p className="introducing-text">
+              Rather than acting as a predictive black-box model, Lipid Logic is intended
+              to support learning and exploration of the underlying formulation principles.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 5: The Science Behind the Model ──────────────────────────── */}
+      <section className="about-section about-section--alt">
+        <div className="about-section-inner about-section-inner--full">
+          <div className="about-section-number about-section-number--alt">05</div>
+          <h2 className="about-section-title">The Science Behind the Model</h2>
           <p className="about-section-intro about-section-intro--left">
-            The model combines three physicochemical principles that govern
-            drug distribution in lipid nanoparticles.
+            The Lipid Logic model combines three physicochemical principles that influence
+            how molecules distribute within lipid nanoparticles.
           </p>
 
           <div className="hyp-grid">
@@ -135,13 +198,23 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="hyp-footer-note">
-            <span>💡</span>
-            <p>
-              Their relative weight shifts automatically based on the drug's
-              lipophilicity and lipid compatibility — so the most relevant
-              mechanism always has the greatest influence on the result.
+      {/* ── Section 6: Model Behaviour ────────────────────────────────────────── */}
+      <section className="about-section about-section--model-behaviour">
+        <div className="about-section-inner about-section-inner--full">
+          <div className="about-section-number">06</div>
+          <h2 className="about-section-title">How the Model Adapts</h2>
+          <div className="model-behaviour-box">
+            <div className="model-behaviour-icon-wrap">
+              <span className="model-behaviour-icon">💡</span>
+            </div>
+            <p className="model-behaviour-text">
+              The relative influence of these mechanisms changes depending on the molecular
+              properties of the drug and its compatibility with the lipid environment. The
+              model automatically adjusts the weighting of each mechanism so that the most
+              relevant process has the greatest influence on localisation.
             </p>
           </div>
         </div>

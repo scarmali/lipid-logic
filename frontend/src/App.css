@@ -2578,6 +2578,179 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════
+   ABOUT PAGE — section numbering
+═══════════════════════════════════════════════════════ */
+.about-section-number {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #2d5aa0;
+  opacity: 0.55;
+  margin-bottom: 8px;
+}
+.about-section-number--alt {
+  color: #2d5aa0;
+  opacity: 0.45;
+}
+.about-section-number--light {
+  color: rgba(255,255,255,0.55);
+  opacity: 1;
+}
+
+/* ─── Section 3: The Challenge ─────────────────────────────────────── */
+.about-section--challenge {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.challenge-layout {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+.challenge-icon-col {
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+
+.challenge-icon-wrap {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, #e8f0fe 0%, #dbeafe 100%);
+  border: 1.5px solid #bfdbfe;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.challenge-icon-glyph {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.challenge-text-col {
+  flex: 1;
+}
+
+.challenge-text-col p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: #334155;
+  margin: 0 0 14px;
+}
+.challenge-text-col p:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── Section 4: Introducing Lipid Logic ──────────────────────────── */
+.about-section--introducing {
+  background: linear-gradient(160deg, #0f2537 0%, #1e3a5f 45%, #2d5aa0 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-section--introducing::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.introducing-inner {
+  max-width: 720px;
+  position: relative;
+  z-index: 1;
+}
+
+.introducing-label {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.9);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 40px;
+  margin-bottom: 10px;
+}
+
+.about-section-title--light {
+  color: #ffffff;
+}
+
+.introducing-divider {
+  width: 48px;
+  height: 3px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 2px;
+  margin: 16px 0 20px;
+}
+
+.introducing-text {
+  font-size: 16px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.85);
+  margin: 0 0 16px;
+}
+.introducing-text:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── Section 6: How the Model Adapts ─────────────────────────────── */
+.about-section--model-behaviour {
+  background: #fff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.model-behaviour-box {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #f0f7ff 0%, #ede9fe 100%);
+  border: 1.5px solid #c7d9f5;
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-top: 8px;
+}
+
+.model-behaviour-icon-wrap {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  background: white;
+  border: 1.5px solid #c7d9f5;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(45,90,160,0.1);
+}
+
+.model-behaviour-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.model-behaviour-text {
+  font-size: 16px;
+  line-height: 1.75;
+  color: #334155;
+  margin: 0;
+  padding-top: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════
    VALIDATION PAGE
 ═══════════════════════════════════════════════════════ */
 
@@ -3013,6 +3186,15 @@ body {
   }
   .hyp-grid {
     flex-direction: column;
+  }
+  .challenge-layout {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .model-behaviour-box {
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px 20px;
   }
 }
 
