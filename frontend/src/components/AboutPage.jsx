@@ -37,6 +37,18 @@ export default function AboutPage() {
   return (
     <div className="about-page">
 
+      {/* ── Page hero ─────────────────────────────────────────────────────── */}
+      <div className="val-page-hero">
+        <div className="hero-content">
+          <div className="hero-badge">Background &amp; Science</div>
+          <h1 className="hero-title">About NLC Formulation Predictor</h1>
+          <p className="hero-subtitle">
+            Learn how nanostructured lipid carriers work, why drug localisation
+            matters, and the physicochemical principles that drive the prediction model.
+          </p>
+        </div>
+      </div>
+
       {/* ── What are NLCs? ────────────────────────────────────────────────── */}
       <section className="about-section">
         <div className="about-section-inner">

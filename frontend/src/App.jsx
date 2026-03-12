@@ -276,7 +276,7 @@ function App() {
       {showWalkthrough && <WalkthroughModal onClose={() => setShowWalkthrough(false)} />}
 
       {/* ── HEADER ────────────────────────────────────────────────────────── */}
-      <header className="main-header">
+      <header className={`main-header${page !== "tool" ? " main-header--subpage" : ""}`}>
         <div className="header-bar">
           <div className="header-brand">
             <img className="brand-icon-img" src="/logo.svg" alt="Lipid Logic logo" />
