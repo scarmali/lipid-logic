@@ -75,21 +75,6 @@ export default function ValidationPage() {
   return (
     <div className="about-page">
 
-      {/* ── Hero ─────────────────────────────────────────────────────── */}
-      <div className="val-page-hero">
-        <div className="hero-content">
-          <div className="hero-badge">Experimental Validation</div>
-          <h1 className="hero-title">Model Validation with Environment-Sensitive Fluorescent Probes</h1>
-          <p className="hero-subtitle">
-            Two polarity-sensitive fluorescent probes were used to experimentally
-            determine where small molecules localise within NLC formulations. Their
-            measured behaviour was compared with the NLC Formulation Predictor to
-            assess whether the model correctly identifies core- and
-            interface-dominated partitioning.
-          </p>
-        </div>
-      </div>
-
       {/* ── Two-panel intro ───────────────────────────────────────────── */}
       <section className="about-section">
         <div className="about-section-inner about-section-inner--full">
