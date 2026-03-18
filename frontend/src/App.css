@@ -2049,7 +2049,7 @@ body {
 
 /* NLC illustration image */
 .about-nlc-diagram {
-  flex: 0.7;
+  flex: 1.2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2059,7 +2059,7 @@ body {
 
 .nlc-illustration-img {
   width: 100%;
-  max-width: 380px;
+  max-width: 560px;
   height: auto;
   object-fit: contain;
   border-radius: 16px;
