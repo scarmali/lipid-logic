@@ -61,7 +61,7 @@ export default function AboutPage() {
 
           <div className="about-nlc-diagram">
             <img
-              src="/nlc-illustration.svg"
+              src="/nlc-illustration.png"
               alt="NLC structure — blue surfactant shell surrounding orange lipid core with green inner sphere"
               className="nlc-illustration-img"
             />
