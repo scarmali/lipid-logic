@@ -1,326 +1,211 @@
-# CADFD Learning Tool - Web Implementation
+# Lipid Logic Explorer
 
-Computer-Assisted Drug Formulation Design for Nanostructured Lipid Carriers
+**Computer-Assisted Drug Formulation Design (CADFD) for Nanostructured Lipid Carriers**
 
-## 🎯 Features
-
-- **Sandbox Mode**: Interactive formulation prediction with instant feedback
-- **Three Hypothesis Framework**: Compare lipophilic gradient, HSP core compatibility, and competitive partitioning predictions
-- **Validation Data**: Built-in pyrene and Nile Red experimental validation
-- **Visual Results**: Star ratings, rankings, and detailed analysis
-- **Educational**: Clear explanations for all predictions
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.8+ 
-- Node.js 16+ and npm
-- Modern web browser
-
-### Backend Setup (Flask API)
-
-```bash
-# 1. Navigate to project directory
-cd cadfd-tool
-
-# 2. Create virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# 3. Install Python dependencies
-pip install -r requirements.txt
-
-# 4. Run the backend server
-python app.py
-```
-
-Backend will run on http://localhost:5000
-
-### Frontend Setup (React)
-
-```bash
-# 1. Navigate to frontend directory
-cd frontend
-
-# 2. Install dependencies
-npm install
-
-# 3. Start development server
-npm start
-```
-
-Frontend will run on http://localhost:3000
-
-## 🚀 Deployment
-
-### Quick Deploy to Cloud (FREE!)
-
-Deploy your app to the internet in 20 minutes:
-
-1. **Push to GitHub** (5 min)
-2. **Deploy backend to Render** (5 min) - FREE tier
-3. **Deploy frontend to Cloudflare Pages** (5 min) - FREE tier
-4. **Test and share!** (5 min)
-
-**📖 See [DEPLOYMENT.md](DEPLOYMENT.md) for complete step-by-step instructions.**
-
-### Live Demo
-
-Once deployed, your students can access the tool at:
-- Frontend: `https://cadfd-tool.pages.dev`
-- Backend API: `https://cadfd-api.onrender.com`
-
-No installation needed! Works on any device with a browser.
+A research tool for predicting drug partitioning within NLC formulations using lipophilicity and Hansen Solubility Parameters. Built with Flask (Python) and React.
 
 ---
 
-## 📖 Usage
+## Features
 
-### Sandbox Mode
+- **Drug property input** — enter Log P manually, look up by drug name via PubChem, or calculate from a SMILES string
+- **Custom NLC formulation builder** — select solid lipid, liquid lipid, and surfactant components with a blending ratio slider
+- **Partition prediction** — predicts core vs. interface localisation using a three-hypothesis framework (lipophilic gradient, HSP compatibility, competitive partitioning)
+- **Validation page** — experimental fluorescence data (Pyrene, Nile Red) across four NLC formulations, with interactive bar charts
+- **Admin panel** — password-protected UI for adding and removing formulations from the database at runtime
+- **Lipid component library** — served from `lipid_db.json`, with a built-in fallback if the API is unavailable
 
-1. **Select a Drug**:
-   - Choose from validation compounds (Pyrene, Nile Red)
-   - Or enter custom drug properties (log P and HSP)
+---
 
-2. **Get Predictions**:
-   - Click "Predict Optimal Formulation"
-   - See instant results with all three hypotheses
-
-3. **Analyze Results**:
-   - View recommended formulation with confidence score
-   - Compare all 4 formulations (F1-F4)
-   - See detailed hypothesis analysis
-   - Access experimental validation data
-
-### Example: Pyrene
+## Architecture
 
 ```
-Input:
-- log P: 5.19
-- δD: 20.4 MPa½
-- δP: 5.0 MPa½
-- δH: 3.5 MPa½
+lipid-logic/
+├── app.py                  # Flask API server
+├── formulations.json       # NLC formulation database (editable via Admin panel)
+├── lipid_db.json           # Lipid component library (solid lipids, liquid lipids, surfactants)
+├── requirements.txt
+├── render.yaml             # Render deployment config
+└── frontend/
+    ├── src/
+    │   ├── App.jsx         # Main app, routing, tool page, admin key modal
+    │   ├── App.css
+    │   └── components/
+    │       ├── AdminPanel.jsx       # Formulation database management UI
+    │       ├── ValidationPage.jsx   # Experimental validation data and charts
+    │       ├── AboutPage.jsx        # Project background and science
+    │       └── WalkthroughModal.jsx # First-visit guide
+    └── build/              # Production build (served by Flask in deployment)
+```
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/predict` | Predict drug localisation given Log P, optional HSP, and NLC composition |
+| `POST` | `/api/logp` | Calculate Log P from a SMILES string (via ALOGPS fallback) |
+| `GET` | `/api/formulations` | List all formulations in the database |
+| `POST` | `/api/formulations` | Add a new formulation (requires `X-Admin-Key` header) |
+| `DELETE` | `/api/formulations/<id>` | Delete a formulation (requires `X-Admin-Key` header) |
+| `GET` | `/api/lipid-db` | Retrieve the lipid component library |
+
+---
+
+## Local Development
+
+### Prerequisites
+
+- Python 3.8+
+- Node.js 16+ and npm
+
+### Backend
+
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Run the Flask server
+python app.py
+```
+
+Backend runs on `http://localhost:5000`.
+
+### Frontend
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server (proxies API calls to localhost:5000)
+npm start
+```
+
+Frontend runs on `http://localhost:3000`. The `"proxy": "http://localhost:5000"` setting in `package.json` handles API routing in development.
+
+---
+
+## Deployment (Render)
+
+The app is deployed as a single Flask service on [Render](https://render.com) (`render.yaml`). The React frontend is built and served as static files by Flask in production.
+
+### Build and deploy
+
+```bash
+# Build the React frontend
+cd frontend && npm run build
+
+# Commit the build and push to GitHub
+# Render will auto-deploy on push to main
+```
+
+### Environment variables
+
+Set these in your Render service dashboard under **Environment**:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ADMIN_KEY` | Password for the Admin panel | `lipid-admin-2025` |
+| `PORT` | Port for the Flask server (auto-set by Render) | `5000` |
+
+> **Important:** The default `ADMIN_KEY` is visible in source code. Set a custom value in Render before making the app public.
+
+---
+
+## Admin Panel
+
+The Admin panel lets you add or remove NLC formulations from `formulations.json` without editing code.
+
+To access it:
+1. Click the **⚙** icon in the top-right navigation bar
+2. Enter the admin key when prompted (must match the `ADMIN_KEY` environment variable)
+3. Add formulations using the form, or delete existing ones
+
+Changes take effect immediately on the server. To make them permanent across deployments, commit the updated `formulations.json` to the repository.
+
+---
+
+## Customisation
+
+### Adding formulations
+
+Use the Admin panel UI (preferred), or add entries directly to `formulations.json`:
+
+```json
+"F5": {
+  "name": "F5 (C12-PS80)",
+  "core_logp": 4.5,
+  "surf_logp": 2.45,
+  "core_hsp": { "delta_d": 17.0, "delta_p": 4.0, "delta_h": 11.0 },
+  "surf_hsp": { "delta_d": 16.5, "delta_p": 5.0, "delta_h": 11.0 },
+  "structure": "Type II Amorphous",
+  "experimental_note": "Brief summary of observed behaviour."
+}
+```
+
+### Adding lipid components
+
+Edit `lipid_db.json` directly. The file has three sections: `solid_lipids`, `liquid_lipids`, and `surfactants`. Each entry requires `id`, `name`, `logp`, `delta_d`, `delta_p`, and `delta_h`.
+
+---
+
+## Example: Predicting Pyrene
+
+```
+Inputs:
+  Log P:  5.19
+  δd:     20.4 MPa½
+  δp:     5.0  MPa½
+  δh:     3.5  MPa½
+  NLC:    Glyceryl caprate (C10) / Soy lecithin / Polysorbate 80
 
 Prediction:
-✓ F4 (C10-PEG100) - ★★★★★
-- Best for highly lipophilic drugs
-- Optimizes core polarity
-- Matches experimental data (I₁/I₃ = 0.785)
+  Location:   Lipid Core
+  Confidence: ★★★★★
+  Validation: I₁/I₃ = 0.785 in F4 (experimental, confirmed)
 ```
 
-## 🏗️ Architecture
+---
 
-### Backend (Python/Flask)
+## Validation Data
 
-```
-app.py
-├── Formulation Database (F1-F4 with experimental data)
-├── Hypothesis Calculators
-│   ├── evaluate_hypothesis_1() - Lipophilic Gradient
-│   ├── evaluate_hypothesis_2() - HSP Core Compatibility
-│   └── evaluate_hypothesis_3() - Competitive Partitioning
-└── API Endpoints
-    ├── GET /api/formulations
-    ├── GET /api/validation-drugs
-    ├── POST /api/predict
-    └── POST /api/compare
-```
+The Validation page presents fluorescence data from two probe molecules tested across F1–F4:
 
-### Frontend (React)
+- **Pyrene** (Log P 5.19) — vibronic band ratio (I₁/I₃), confirms core localisation in F4
+- **Nile Red** (Log P 4.0) — solvatochromic emission shift (λmax), confirms interface localisation in F2
 
-```
-App.jsx
-├── Welcome Screen (mode selection)
-├── Sandbox Mode
-│   ├── Drug Input Panel
-│   ├── Prediction Engine
-│   └── Results Display
-└── Tutorial Mode (coming soon)
-```
+These probes were chosen to span the transition between core-dominated and interface-dominated partitioning.
 
-## 📊 API Documentation
+---
 
-### POST /api/predict
+## Tech Stack
 
-Predict optimal formulation for a drug
+- **Backend:** Python 3.10, Flask, flask-cors
+- **Frontend:** React 18, plain CSS
+- **Deployment:** Render (web service)
+- **Log P lookup:** PubChem REST API (primary), ALOGPS / VCCLAB (SMILES fallback)
 
-**Request:**
-```json
-{
-  "drug_logp": 5.19,
-  "drug_hsp": {
-    "delta_d": 20.4,
-    "delta_p": 5.0,
-    "delta_h": 3.5
-  }
-}
-```
+---
 
-**Response:**
-```json
-{
-  "recommendation": {
-    "top_formulation": "F4",
-    "formulation_name": "F4 (C10-PEG100)",
-    "confidence_score": 4.75,
-    "stars": 5,
-    "guidance": "Highly lipophilic drugs (log P > 5)",
-    "strategy": "Prioritize core polarity and Type I crystalline structures"
-  },
-  "results": {
-    "F1": { "h1": {...}, "h2": {...}, "h3": {...} },
-    ...
-  }
-}
-```
-
-## 🎓 Educational Use
-
-### For Students
-
-- Learn drug-lipid compatibility principles
-- Practice computational prediction
-- Understand Hansen Solubility Parameters
-- Connect theory to experimental data
-
-### For Instructors
-
-- Assign formulation design exercises
-- Compare student predictions to validation data
-- Demonstrate hypothesis testing
-- Integrate into pharmaceutical sciences curriculum
-
-### Sample Assignment
-
-"For curcumin (log P = 3.29, HSP provided), use the CADFD tool to:
-1. Predict the optimal formulation using all three hypotheses
-2. Explain why different hypotheses give different rankings
-3. Justify which hypothesis you trust most based on experimental validation"
-
-## 🔧 Customization
-
-### Adding New Drugs
-
-Edit `app.py` to add validation drugs:
-
-```python
-VALIDATION_DRUGS = {
-    'your_drug': {
-        'name': 'Your Drug Name',
-        'logp': 4.5,
-        'hsp': {'delta_d': 19.0, 'delta_p': 6.0, 'delta_h': 7.0},
-        'classification': 'Moderately lipophilic'
-    }
-}
-```
-
-### Adding New Formulations
-
-Extend the `FORMULATIONS` dictionary with experimental data:
-
-```python
-FORMULATIONS['F5'] = {
-    'name': 'F5 (Custom)',
-    'core_logp': 3.5,
-    'surf_logp': 2.8,
-    # ... add all required fields
-}
-```
-
-## 🚀 Deployment
-
-### Option 1: Local Network (for classroom)
-
-```bash
-# Backend: Allow network access
-python app.py --host=0.0.0.0 --port=5000
-
-# Frontend: Update API URL in App.jsx
-const API_URL = 'http://[your-ip]:5000'
-
-# Students access via: http://[your-ip]:3000
-```
-
-### Option 2: Cloud Deployment (Heroku)
-
-```bash
-# 1. Create Heroku account and install CLI
-
-# 2. Backend deployment
-cd cadfd-tool
-heroku create cadfd-api
-git push heroku main
-
-# 3. Frontend deployment
-cd frontend
-# Update API_URL to Heroku backend URL
-npm run build
-# Deploy to Netlify/Vercel
-```
-
-### Option 3: Docker (recommended)
-
-```dockerfile
-# Dockerfile (backend)
-FROM python:3.10-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY app.py .
-CMD ["python", "app.py"]
-```
-
-```bash
-# Build and run
-docker-compose up
-```
-
-## 📝 Future Enhancements
-
-- [ ] Tutorial Mode with interactive lessons
-- [ ] Challenge Mode with progressive difficulty
-- [ ] 3D Hansen Space Visualization
-- [ ] Batch drug processing
-- [ ] Export results as PDF reports
-- [ ] Machine learning predictions (with more data)
-- [ ] Integration with molecular drawing tools
-- [ ] Real-time collaboration features
-
-## 📚 Citation
+## Citation
 
 If you use this tool in your research or teaching, please cite:
 
 ```
-[Your Name]. (2026). CADFD Learning Tool: Computer-Assisted Drug 
-Formulation Design for Nanostructured Lipid Carriers. 
-[Your Institution/Journal].
+Carmali, S. (2026). Lipid Logic Explorer: Computer-Assisted Drug Formulation Design
+for Nanostructured Lipid Carriers. CADFD Research Tool.
+https://github.com/scarmali/lipid-logic
 ```
-
-## 🤝 Contributing
-
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
-
-## 📧 Support
-
-For questions or issues:
-- Email: [your-email]
-- Issues: [GitHub issues page]
-
-## 📄 License
-
-[Your chosen license - e.g., MIT, GPL-3.0]
-
-## 🙏 Acknowledgments
-
-- Experimental validation data from [Your Lab]
-- Based on research published in [Journal]
-- Built with Flask and React
 
 ---
 
-**Note**: This is a research and educational tool. Formulation predictions 
-should be validated experimentally before use in pharmaceutical development.
+## License
+
+See [LICENSE](LICENSE) for details.
+
+---
+
+*This is a research and educational tool. Predictions should be validated experimentally before use in pharmaceutical development.*

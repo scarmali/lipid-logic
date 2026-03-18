@@ -207,6 +207,9 @@ export default function ValidationPage() {
                     style={d.best ? { color: probe.colour } : {}}>
                     {d.label}
                   </span>
+                  <span className={`probe-bar-note ${d.best ? "probe-bar-note--best" : ""}`}>
+                    {d.note}
+                  </span>
                 </div>
               ))}
             </div>
