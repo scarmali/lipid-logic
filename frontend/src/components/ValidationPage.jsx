@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const formulations = [
   { id: "F1", name: "C8 / PEG-100",  core: "Glyceryl caprylate (C8)",  liquid: "Soy lecithin", surf: "PEG-100 Stearate", colour: "#3b82f6" },
@@ -72,8 +72,19 @@ function barPercent(probeName, value) {
 const formColours = Object.fromEntries(formulations.map(f => [f.id, f.colour]));
 
 function ProbeChart({ probe }) {
+  const [animated, setAnimated] = useState(false);
+  const [hoveredBar, setHoveredBar] = useState(null);
+  const chartRef = useRef(null);
+
+  // Animate bars in whenever probe changes
+  useEffect(() => {
+    setAnimated(false);
+    const t = setTimeout(() => setAnimated(true), 60);
+    return () => clearTimeout(t);
+  }, [probe.name]);
+
   return (
-    <div className="probe-detail">
+    <div className="probe-detail probe-detail--interactive" ref={chartRef}>
       {/* Header */}
       <div className="probe-detail-header">
         <div className="probe-detail-meta">
@@ -98,30 +109,39 @@ function ProbeChart({ probe }) {
           Measurements across all four formulations
           <span className="probe-chart-note">{probe.barNote}</span>
         </div>
-        {probe.data.map(d => (
-          <div key={d.id} className={`probe-bar-row ${d.best ? "probe-bar-row--best" : ""}`}>
-            <span className="probe-bar-label">
-              <span className="probe-bar-fid" style={{ background: formColours[d.id] }}>{d.id}</span>
-            </span>
-            <div className="probe-bar-track">
-              <div
-                className="probe-bar-fill"
-                style={{
-                  width: `${barPercent(probe.name, d.value)}%`,
-                  background: d.best ? probe.colour : "#cbd5e1",
-                }}
-              />
+        {probe.data.map(d => {
+          const isHovered = hoveredBar === d.id;
+          return (
+            <div
+              key={d.id}
+              className={`probe-bar-row ${d.best ? "probe-bar-row--best" : ""} ${isHovered ? "probe-bar-row--hovered" : ""}`}
+              onMouseEnter={() => setHoveredBar(d.id)}
+              onMouseLeave={() => setHoveredBar(null)}
+            >
+              <span className="probe-bar-label">
+                <span className="probe-bar-fid" style={{ background: formColours[d.id] }}>{d.id}</span>
+              </span>
+              <div className="probe-bar-track">
+                <div
+                  className="probe-bar-fill"
+                  style={{
+                    width: animated ? `${barPercent(probe.name, d.value)}%` : "0%",
+                    background: d.best ? probe.colour : isHovered ? "#94a3b8" : "#cbd5e1",
+                    transition: "width 0.55s cubic-bezier(0.4,0,0.2,1), background 0.2s",
+                  }}
+                />
+              </div>
+              <span
+                className={`probe-bar-value ${d.best ? "probe-bar-value--best" : ""}`}
+                style={d.best ? { color: probe.colour } : {}}>
+                {d.label}
+              </span>
+              <span className={`probe-bar-note ${d.best ? "probe-bar-note--best" : ""}`}>
+                {d.note}
+              </span>
             </div>
-            <span
-              className={`probe-bar-value ${d.best ? "probe-bar-value--best" : ""}`}
-              style={d.best ? { color: probe.colour } : {}}>
-              {d.label}
-            </span>
-            <span className={`probe-bar-note ${d.best ? "probe-bar-note--best" : ""}`}>
-              {d.note}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Key observation */}
@@ -147,6 +167,9 @@ function ProbeChart({ probe }) {
 }
 
 export default function ValidationPage() {
+  const [activeProbe, setActiveProbe] = useState("Pyrene");
+  const probe = probes.find(p => p.name === activeProbe);
+
   return (
     <div className="about-page">
 
