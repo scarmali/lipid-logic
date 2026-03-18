@@ -2049,7 +2049,7 @@ body {
 
 /* NLC illustration image */
 .about-nlc-diagram {
-  flex: 1.2;
+  flex: 1.5;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2059,7 +2059,7 @@ body {
 
 .nlc-illustration-img {
   width: 100%;
-  max-width: 560px;
+  max-width: 720px;
   height: auto;
   object-fit: contain;
   border-radius: 16px;
@@ -2581,22 +2581,10 @@ body {
 /* ═══════════════════════════════════════════════════════
    ABOUT PAGE — section numbering
 ═══════════════════════════════════════════════════════ */
-.about-section-number {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #2d5aa0;
-  opacity: 0.55;
-  margin-bottom: 8px;
-}
-.about-section-number--alt {
-  color: #2d5aa0;
-  opacity: 0.45;
-}
+.about-section-number,
+.about-section-number--alt,
 .about-section-number--light {
-  color: rgba(255,255,255,0.55);
-  opacity: 1;
+  display: none;
 }
 
 /* ─── Section 3: The Challenge ─────────────────────────────────────── */
