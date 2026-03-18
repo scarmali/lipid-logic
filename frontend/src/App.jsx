@@ -45,6 +45,7 @@ function App() {
     setShowKeyModal(true);
   };
   const submitKey = () => {
+    if (!adminKeyInput.trim()) return;
     setAdminKey(adminKeyInput.trim());
     setShowKeyModal(false);
     setShowAdmin(true);
