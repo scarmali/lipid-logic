@@ -2792,6 +2792,77 @@ body {
   margin-top: 0 !important;
 }
 
+/* Validation page — new narrative layout */
+.val-intro-body {
+  font-size: 15px;
+  color: #475569;
+  line-height: 1.75;
+  max-width: 780px;
+  margin: 0 0 14px;
+}
+
+.val-subsection-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f2537;
+  margin: 0 0 12px;
+}
+
+.val-probe-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+
+.val-key-observation {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 0 28px 0;
+}
+
+.val-key-obs-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.val-key-observation p {
+  font-size: 14px;
+  color: #0c4a6e;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.confirm-regime-line {
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 0 4px;
+}
+
+/* "Why this matters" section — dark background */
+.about-section--why-matters {
+  background: linear-gradient(135deg, #0f2537 0%, #1e3a5f 60%, #2d5aa0 100%);
+}
+
+.val-why-body {
+  font-size: 15.5px;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.8;
+  max-width: 780px;
+  margin: 0 0 16px;
+}
+
+.about-section--why-matters .about-section-title--light {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
 /* Probe list in intro panel */
 .val-probe-list {
   display: flex;
