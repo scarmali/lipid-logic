@@ -272,22 +272,30 @@ export default function ValidationPage() {
       <section className="about-section">
         <div className="about-section-inner about-section-inner--full">
           <h2 className="about-section-title">Experimental Evidence</h2>
-          <p className="val-intro-body" style={{ marginBottom: 32 }}>
+          <p className="val-intro-body">
             Fluorescence measurements provide insight into the local environment experienced
             by each probe, allowing localisation within the nanoparticle to be inferred.
           </p>
 
-          {/* Pyrene */}
-          <h3 className="val-probe-section-title" style={{ color: "#3b82f6" }}>
-            🔷 Pyrene: Core localisation behaviour
-          </h3>
-          <ProbeChart probe={probes[0]} />
+          {/* Probe toggle */}
+          <div className="val-probe-toggle">
+            {probes.map(p => (
+              <button
+                key={p.name}
+                className={`val-probe-toggle-btn ${activeProbe === p.name ? "val-probe-toggle-btn--active" : ""}`}
+                style={activeProbe === p.name ? { borderColor: p.colour, color: p.colour, background: `${p.colour}12` } : {}}
+                onClick={() => setActiveProbe(p.name)}
+              >
+                <span>{p.icon}</span>
+                <span>{p.name}</span>
+                <span className="val-toggle-logp">Log P ≈ {p.logp}</span>
+                <span className={`probe-tab-site ${p.siteClass}`}>{p.site}</span>
+              </button>
+            ))}
+          </div>
 
-          {/* Nile Red */}
-          <h3 className="val-probe-section-title" style={{ color: "#e11d48", marginTop: 48 }}>
-            🔴 Nile Red: Interface localisation behaviour
-          </h3>
-          <ProbeChart probe={probes[1]} />
+          {/* Active probe chart */}
+          <ProbeChart probe={probe} />
         </div>
       </section>
 

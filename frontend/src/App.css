@@ -2792,6 +2792,60 @@ body {
   margin-top: 0 !important;
 }
 
+/* Probe toggle (Evidence section) */
+.val-probe-toggle {
+  display: flex;
+  gap: 14px;
+  margin: 24px 0 28px;
+}
+
+.val-probe-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  border-radius: 50px;
+  padding: 10px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: border-color 0.18s, color 0.18s, background 0.18s, box-shadow 0.18s;
+}
+
+.val-probe-toggle-btn:hover {
+  border-color: #94a3b8;
+  color: #0f2537;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+}
+
+.val-probe-toggle-btn--active {
+  box-shadow: 0 2px 14px rgba(0,0,0,0.1);
+}
+
+.val-toggle-logp {
+  font-size: 11px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-left: 2px;
+}
+
+/* Bar hover */
+.probe-bar-row--hovered {
+  background: #f1f5f9;
+}
+
+/* Slide-in animation when switching probes */
+.probe-detail--interactive {
+  animation: probeSlideIn 0.28s ease;
+}
+
+@keyframes probeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* Validation page — new narrative layout */
 .val-intro-body {
   font-size: 15px;
